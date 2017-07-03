@@ -1,0 +1,16 @@
+.messageList {
+  padding: 8px 6px 0px;
+  width: 100%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.messageContainer {
+  overflow-y: auto;
+  padding: 5px;
+}

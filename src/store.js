@@ -1,0 +1,20 @@
+import {combineReducers, createStore, applyMiddleware, compose} from 'redux';
+import thunk from 'redux-thunk';
+import {conversationReducer, currentUserReducer, userListReducer, activeUsersReducer} from './reducers/index';
+
+export var configure = (initialState = {}) => {
+  var reducer = combineReducers({
+    conversations: conversationReducer,
+    currentUser: currentUserReducer,
+    userList: userListReducer,
+    activeUsers: activeUsersReducer
+  });
+
+  // Store
+  var store = createStore(reducer, compose(
+      applyMiddleware(thunk),
+      window.devToolsExtension ? window.devToolsExtension() : f => f
+  ));
+
+  return store;
+};

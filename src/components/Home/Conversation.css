@@ -1,0 +1,7 @@
+.ConversationScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  left: 0px;
+}

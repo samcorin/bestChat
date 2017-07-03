@@ -1,0 +1,138 @@
+.chatForm {
+  outline: none;
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  opacity: 0.95;
+  height: 50px;
+}
+
+.chatForm .form {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-around;
+}
+
+.chatInput {
+  outline: none;
+  box-sizing: border-box;
+  font-size: 1rem;
+  width: 85%;
+  margin: 0;
+  padding: 5px 11px;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 50px;
+  background-color: #F2F2F2;
+}
+
+::placeholder {
+  font-weight: 300;
+}
+
+#inputButton {
+  font-size: 25px;
+  color: #1289FE;
+}
+
+@media (max-width: 600px) {
+  #inputButton {
+    font-size: 30px;
+  }
+}
+
+/* Animations */
+.popout {
+  -webkit-animation-name: popout;
+  -webkit-animation-duration: 0.3s;
+  -webkit-animation-iteration-count: 1;
+  -moz-animation-name: popout;
+  -moz-animation-duration: 0.3s;
+  -moz-animation-iteration-count: 1;
+  animation-name: popout;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+}
+
+@-webkit-keyframes popout {
+  0% {
+    -webkit-transform: scale(1);
+  }
+  20% {
+    -webkit-transform: scale(0.90);
+    -webkit-animation-timing-function: ease-out;
+  }
+  50% {
+    -webkit-transform: scale(1.2);
+    -webkit-animation-timing-function: ease-in;
+  }
+  100% {
+    -webkit-transform: scale(1);
+    -webkit-animation-timing-function: ease-out;
+  }
+}
+
+@-moz-keyframes popout {
+  0% {
+    -moz-transform: scale(1);
+  }
+  20% {
+    -moz-transform: scale(0.90);
+    -moz-animation-timing-function: ease-out;
+  }
+  50% {
+    -moz-transform: scale(1.2);
+    -moz-animation-timing-function: ease-in;
+  }
+  100% {
+    -moz-transform: scale(1);
+    -moz-animation-timing-function: ease-out;
+  }
+}
+
+@keyframes popout {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(0.90);
+    animation-timing-function: ease-out;
+  }
+  50% {
+    transform: scale(1.2);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    transform: scale(1);
+    animation-timing-function: ease-out;
+  }
+}
+
+.fadeIn {
+  -webkit-animation-name: fadeIn;
+  -webkit-animation-duration: 0.3s;
+  -webkit-animation-iteration-count: 1;
+  -moz-animation-name: fadeIn;
+  -moz-animation-duration: 0.3s;
+  -moz-animation-iteration-count: 1;
+  animation-name: fadeIn;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+}
+
+@-webkit-keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-moz-keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@-o-keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}

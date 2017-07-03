@@ -1,0 +1,41 @@
+.dText {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 40px 50px 40px 0;
+  overflow-y: scroll;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+  /*color: #6b7c93;*/
+  color: #626262;
+}
+
+.dHeader h1 {
+  margin-bottom: 0;
+}
+
+.dHeader p {
+  margin-bottom: 0;
+}
+
+.dText h4 {
+  margin-bottom: 10px;
+}
+
+.dText ul {
+  margin: 0;
+}
+
+.dHeader {
+  display: flex;
+  align-items: baseline;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+.why {
+  margin-bottom: 10px;
+}
+

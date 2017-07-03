@@ -1,0 +1,28 @@
+#MiitWrapper {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+#mapWrapper {
+  pointer-events: none;
+  width: 100%;
+  height: 380px;
+  bottom: 50px;
+  /*touch-action: pan-y pan-x;*/
+}
+
+@media (max-width: 600px) {
+  #mapWrapper {
+    height: 100%;
+    position: absolute;
+    bottom: 50px;
+  }
+}
+
+#map {
+  width: 100%;
+  height: 300px;
+}

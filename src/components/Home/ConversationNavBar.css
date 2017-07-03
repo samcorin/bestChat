@@ -1,0 +1,54 @@
+#ConversationNavBar {
+  height: 50px;
+  background-color: rgb(0, 188, 212);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  flex-direction: row;
+}
+
+.LinkStyle {
+  text-decoration: none;
+  font-size: 14px;
+}
+
+#backButton {
+  position: relative;
+  left: 10px;
+  vertical-align: middle;
+  font-size: 30px;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#room {
+  text-align: center;
+  margin: auto;
+}
+/*#ConversationNavBar {
+  height: 46px;
+  background-color: #F5F5F5;
+  text-align: center;
+  top: 0;
+  border-bottom: 1px solid rgba(0,0,0,0.2);
+}*/
+
+/*ul {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
+}*/
+
+
+/*.headline {
+  font-size: 24;
+  padding-top: 16;
+  margin-bottom: 12;
+  font-weight: 400;
+}
+
+.slide {
+  padding: 10;
+}
+*/

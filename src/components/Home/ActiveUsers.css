@@ -1,0 +1,78 @@
+.listItem {
+  padding: 7px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.name {
+  margin: 0;
+  padding-bottom: 7px;
+  flex: 2;
+  margin: auto;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.userList {
+  margin: 5px 0 0;
+  padding: 0;
+  padding-bottom: 40px;
+  flex: 1 0 auto;
+  overflow-y: scroll;
+  /*WebkitOverflowScrolling: 'touch',*/
+  padding-bottom: 50px;
+}
+
+
+.LinkStyle {
+  text-decoration: none;
+  color: black;
+}
+
+.avatarWrapper {
+  position: relative;
+  margin-right: 10px;
+}
+
+.activeAvatar {
+  border-radius: 50%;
+  height: 30px;
+}
+
+.online {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #55ea27;
+  border: 2px solid #fff;
+  position: absolute;
+  bottom: 0;
+  right: 0
+}
+
+.chatScreen {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+@media (min-width: 600px) {
+  .userList {
+    height: 333px;
+  }
+  .listItem {
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .listItem {
+    padding: 7px 15px;
+    display: flex;
+    align-items: center;
+  }
+  .listItem p {
+    font-size: 15px;
+  }
+}

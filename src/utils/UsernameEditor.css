@@ -1,0 +1,28 @@
+.usernameEditor {
+  background-color: #0A84C1;
+  position: absolute;
+  z-index: 10;
+  width: inherit;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+}
+.usernameEditor h1 {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+#usernameInput {
+  outline: none;
+  font-size: 1.4rem;
+  border: none;
+  border-radius: 50px;
+  padding: 10px;
+}
+
+.usernameSuccess {
+  color: #fff;
+}
