@@ -15,7 +15,6 @@ let username = '';
 
 const getConversations = (user, store) => {
   usersRef.child(user + "/conversations").once('value', snapshot => {
-    console.log("----------------------- ", snapshot.val())
 
     // if DB is not empty
     if(snapshot.val() !== null) {
@@ -31,7 +30,7 @@ const getConversations = (user, store) => {
           store.dispatch(startFetchMessages({ id: user, data: messageArray }));
         })
       })
-      const filteredArr = usersList.filter((user) => user !== username);
+      const filteredArr = usersList.filter((user) => user !== username && user !== 'admin-bot');
       store.dispatch(addUserList(filteredArr))
 
     } else {
