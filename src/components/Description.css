@@ -26,9 +26,13 @@
   margin: 0;
 }
 
-.dHeader {
+.dHeader, .dSubHeader {
   display: flex;
   align-items: baseline;
+}
+
+.dSubHeader h3, .dSubHeader p {
+  margin-bottom: 0;
 }
 
 ul {
@@ -39,3 +43,27 @@ ul {
   margin-bottom: 10px;
 }
 
+.headerSpace {
+  width: 10px;
+}
+
+.strikethrough {
+  position: relative;
+  color: #929292;
+  text-decoration: none;
+}
+.strikethrough:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 55%;
+  right: 0;
+  border-top: 2px solid;
+  border-color: inherit;
+
+  -webkit-transform:rotate(-5deg);
+  -moz-transform:rotate(-5deg);
+  -ms-transform:rotate(-5deg);
+  -o-transform:rotate(-5deg);
+  transform:rotate(-5deg);
+}

@@ -16,6 +16,7 @@ export const addUserList = (userList) => {
 
 // Add active users to store
 export const addActiveUsers = (users) => {
+  console.log("ACTION: ", users)
   return {
     type: 'ADD_ACTIVE_USERS',
     activeUsers: users
@@ -45,7 +46,6 @@ export const addMessageToStore = (message) => {
 
 // Prepare to add current user's messages to store
 export const startFetchMessages = (conversations) => {
-  console.log("CONVERSATIONSSSS: ", conversations)
   return (dispatch, getState) => {
     dispatch(fetchMessages({ id: conversations.id, data: conversations.data }));
   };
