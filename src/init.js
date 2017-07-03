@@ -15,24 +15,32 @@ let username = '';
 
 const getConversations = (user, store) => {
   usersRef.child(user + "/conversations").once('value', snapshot => {
+    console.log("----------------------- ", snapshot.val())
 
     // if DB is not empty
     if(snapshot.val() !== null) {
+      console.log("Welcome back, " + username);
       var conversationsObj = snapshot.val();
+      var usersList = [];
 
       const messages = Object.keys(conversationsObj).map(function(user, i) {
         const messageArray = [];
+        usersList.push(user);
         database.child('conversations/' + conversationsObj[user]).once('value', snapshot => {
           const messageArray = objToArray(snapshot.val());
           store.dispatch(startFetchMessages({ id: user, data: messageArray }));
         })
       })
 
+      const filteredArr = usersList.filter((user) => user !== username);
+      store.dispatch(addUserList(filteredArr))
+
     } else {
-      // DB is empty, need to start again.
-      setUsername()
-      // ??
-      // store.dispatch(startFetchMessages(snapshot.val()));
+      // Start again
+      setUsername(store)
+      // localStorage.setItem("username", '');
+      // No need to do this, start off by saving admin-bots conversations in store, no need to fetch from a fresh DB
+      // getConversations(username, store);
     }
   })
 
@@ -41,8 +49,12 @@ const getConversations = (user, store) => {
 }
 
 // TODO: Refactor
-const setUsername = () => {
+// NEW USERS
+const setUsername = (store) => {
+
   username = nameGen();
+  localStorage.setItem("username", username);
+
   const initMessage = {
     username: 'admin-bot',
     sender: 'admin-bot',
@@ -85,6 +97,7 @@ const setUsername = () => {
   const newPostKey = database.child('conversations').push().key;
   usersRef.child(username + '/conversations').update({'admin-bot': newPostKey});
   conversationsRef.child(newPostKey).push(initMessage);
+  store.dispatch(startFetchMessages({ id: 'admin-bot', data: [initMessage] }));
 
   // Conversation 2
   const newPostKey2 = database.child('conversations').push().key;
@@ -92,30 +105,33 @@ const setUsername = () => {
   conversationsRef.child(newPostKey2).push(initMessage2);
   conversationsRef.child(newPostKey2).push(initMessage3);
 
-  localStorage.setItem("username", username);
+  store.dispatch(startFetchMessages({ id: 'random-user', data: [initMessage2] }));
+  store.dispatch(startFetchMessages({ id: 'random-user', data: [initMessage3] }));
+
+  console.log(`Welcome, ${username}!`);
 }
 
 const init = (store) => {
   // check if username(uuid?) is saved in localStorage
   if(lsUsername) {
+    console.log("#1")
     username = lsUsername;
-    console.log("Welcome back, " + lsUsername);
-    getConversations(username, store);
-
+    getConversations(lsUsername, store);
   } else {
+    console.log("#2")
     // New User
-    setUsername()
-    console.log(`Welcome, ${username}!`);
+    setUsername(store)
     getConversations(username, store);
-    store.dispatch(addCurrentUser(username))
   }
 
+  // maybe could move this somehwhere, no need to call this again? maybe after fetch messages?
   // Store list of users minus current user
-  usersRef.once('value', snapshot => {
-    const usersList = objKeysToArray(snapshot.val());
-    const filteredArr = usersList.filter((user) => user !== username);
-    store.dispatch(addUserList(filteredArr))
-  })
+  // usersRef.once('value', snapshot => {
+  //   console.log("ADD USER LIST: ************** ", snapshot.val())
+  //   const usersList = objKeysToArray(snapshot.val());
+  //   const filteredArr = usersList.filter((user) => user !== username);
+  //   store.dispatch(addUserList(filteredArr))
+  // })
 
   // Watch for db changes: new users
   // usersRef.on("child_added", function(snapshot, prevChildKey) {
