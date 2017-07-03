@@ -154,6 +154,10 @@ const init = (store) => {
     }
   });
 
+  connectedRef.once('value', snapshot => {
+    console.log("ACTIVE USER LIST: ", snapshot.val());
+  })
+
   // Last Connect
   // var userLastOnlineRef = firebase.database().ref("users/joe/lastOnline");
   // userLastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
