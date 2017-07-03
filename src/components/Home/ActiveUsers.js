@@ -13,6 +13,8 @@ class ActiveUsers extends React.Component {
   }
 
   render() {
+    console.log("userList prop: ", this.props.userList)
+    console.log("ACTIVE USERS: ", this.props.activeUsers)
     // console.log("Active users: ", this.props.activeUsers)
     // console.log("user list: ", this.props.userList)
 

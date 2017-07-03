@@ -42,12 +42,6 @@ class Description extends React.Component {
             <li className="why">- No Login. No email. No passwords to remember. Each instance is tied to your device.</li>
           </ul>
 
-
-          <h4>Release Notes</h4>
-          <ul>
-            <li><h4>v0.1</h4></li>
-            <li>Basic chat works</li>
-          </ul>
         </div>
       );
     } else {
@@ -60,13 +54,14 @@ class Description extends React.Component {
 
           <h4>Features</h4>
           <ul>
-            <li> - Evergreen, self-updating.</li>
-            <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts. (TBA)</li>
-            <li> - Video and audio calls.</li>
-            <li> - Compatible across the board.</li>
             <li> - Lightweight.</li>
+            <li> - Evergreen, self-updating.</li>
+            <li> - Video and audio calls.</li>
+            <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts.</li>
+            <li> - Compatible across all browsers (90%).</li>
+            <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
             <li> - It's fast.</li>
-            <li> - 100% JavaScript.</li>
+            <li> - 100% JavaScript (back and front end).</li>
 
           </ul>
 
