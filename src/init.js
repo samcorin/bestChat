@@ -31,16 +31,12 @@ const getConversations = (user, store) => {
           store.dispatch(startFetchMessages({ id: user, data: messageArray }));
         })
       })
-
       const filteredArr = usersList.filter((user) => user !== username);
       store.dispatch(addUserList(filteredArr))
 
     } else {
       // Start again
       setUsername(store)
-      // localStorage.setItem("username", '');
-      // No need to do this, start off by saving admin-bots conversations in store, no need to fetch from a fresh DB
-      // getConversations(username, store);
     }
   })
 
@@ -71,14 +67,6 @@ const setUsername = (store) => {
     roomId: 'random-user'
   };
 
-  const initMessage3 = {
-    username: 'random-user',
-    sender: 'random-user',
-    text: 'last!',
-    createdAt: Date.now(),
-    roomId: 'random-user'
-  };
-
   // var postData = {
   //   author: username,
   //   uid: uid,
@@ -97,16 +85,17 @@ const setUsername = (store) => {
   const newPostKey = database.child('conversations').push().key;
   usersRef.child(username + '/conversations').update({'admin-bot': newPostKey});
   conversationsRef.child(newPostKey).push(initMessage);
+
+  // Add directly to store, skip fetching uselessly from db
   store.dispatch(startFetchMessages({ id: 'admin-bot', data: [initMessage] }));
 
-  // Conversation 2
+  // Conversation 2 (TEMP)
   const newPostKey2 = database.child('conversations').push().key;
   usersRef.child(username + '/conversations').update({'random-user': newPostKey2});
   conversationsRef.child(newPostKey2).push(initMessage2);
-  conversationsRef.child(newPostKey2).push(initMessage3);
 
+  // Add directly to store, skip fetching uselessly from db
   store.dispatch(startFetchMessages({ id: 'random-user', data: [initMessage2] }));
-  store.dispatch(startFetchMessages({ id: 'random-user', data: [initMessage3] }));
 
   console.log(`Welcome, ${username}!`);
 }
