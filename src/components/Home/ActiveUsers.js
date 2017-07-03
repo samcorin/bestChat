@@ -33,8 +33,8 @@ class ActiveUsers extends React.Component {
         }
       }
 
+      // These should be displayed separately: Online / Offline
       var result = result1.concat(result2);
-      result = result.filter(item => item !== undefined);
 
       // with a divider, have 2 separate loops
       const users = result.map((user, i) => {

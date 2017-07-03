@@ -1,5 +1,5 @@
 import firebase, {usersRef, conversationsRef, database, connectedRef} from './firebase/index';
-import {startFetchMessages, addCurrentUser, addUserList, addUserToList} from './actions/index';
+import {startFetchMessages, addCurrentUser, addUserList, addUserToList, addActiveUsers} from './actions/index';
 import nameGen from './utils/nameGen'
 import {objKeysToArray, objToArray} from './utils/objToArray';
 import injectTapEventPlugin from 'react-tap-event-plugin';
@@ -9,7 +9,8 @@ import webSocketsClient from './utils/webSocketsClient'
 // import setUsername from '.utils/setUsername';
 
 let lsUsername = localStorage.getItem("username") || null;
-let username = '';
+let currentUser = '';
+var activeUsers = [];
 // const lsUsernameID = localStorage.getItem("usernameID") || null;
 // let usernameID = '';
 
@@ -18,7 +19,7 @@ const getConversations = (user, store) => {
 
     // if DB is not empty
     if(snapshot.val() !== null) {
-      console.log("Welcome back, " + username);
+      console.log("Welcome back, " + currentUser);
       var conversationsObj = snapshot.val();
       var usersList = [];
 
@@ -30,8 +31,13 @@ const getConversations = (user, store) => {
           store.dispatch(startFetchMessages({ id: user, data: messageArray }));
         })
       })
-      const filteredArr = usersList.filter((user) => user !== username && user !== 'admin-bot');
-      store.dispatch(addUserList(filteredArr))
+
+      // =========== FETCH USERLIST ===========
+      // Abstract function?
+      // const filteredArr = usersList.filter((user) => user !== currentUser && user !== 'admin-bot');
+      // // USER LIST is only fetching users from my message history
+      // console.log("filteredArr: ", filteredArr)
+      // store.dispatch(addUserList(filteredArr))
 
     } else {
       // Start again
@@ -40,20 +46,28 @@ const getConversations = (user, store) => {
   })
 
   // Add current user to store
-  store.dispatch(addCurrentUser(username));
+  store.dispatch(addCurrentUser(currentUser));
 }
 
 // TODO: Refactor
 // NEW USERS
 const setUsername = (store) => {
 
-  username = nameGen();
-  localStorage.setItem("username", username);
+  currentUser = nameGen();
+  localStorage.setItem("username", currentUser);
 
   const initMessage = {
     username: 'admin-bot',
     sender: 'admin-bot',
     text: 'Welcome to bestChat v2!',
+    createdAt: Date.now(),
+    roomId: 'admin-bot'
+  };
+
+  const initMessage4 = {
+    username: 'admin-bot',
+    sender: 'admin-bot',
+    text: 'hellooo!',
     createdAt: Date.now(),
     roomId: 'admin-bot'
   };
@@ -77,81 +91,69 @@ const setUsername = (store) => {
 
   // conversation memebers
   const conversationMembers = {}
-  conversationMembers[username] = true;
+  conversationMembers[currentUser] = true;
   conversationMembers['admin-bot'] = true;
 
   // Conversation 1
   const newPostKey = database.child('conversations').push().key;
-  usersRef.child(username + '/conversations').update({'admin-bot': newPostKey});
+  usersRef.child(currentUser + '/conversations').update({'admin-bot': newPostKey});
   conversationsRef.child(newPostKey).push(initMessage);
+  conversationsRef.child(newPostKey).push(initMessage4);
 
   // Add directly to store, skip fetching uselessly from db
   store.dispatch(startFetchMessages({ id: 'admin-bot', data: [initMessage] }));
+  store.dispatch(startFetchMessages({ id: 'admin-bot', data: [initMessage4] }));
 
   // Conversation 2 (TEMP)
   const newPostKey2 = database.child('conversations').push().key;
-  usersRef.child(username + '/conversations').update({'random-user': newPostKey2});
+  usersRef.child(currentUser + '/conversations').update({'random-user': newPostKey2});
   conversationsRef.child(newPostKey2).push(initMessage2);
 
   // Add directly to store, skip fetching uselessly from db
   store.dispatch(startFetchMessages({ id: 'random-user', data: [initMessage2] }));
 
-  console.log(`Welcome, ${username}!`);
+  console.log(`Welcome, ${currentUser}!`);
 }
 
 const init = (store) => {
   // check if username(uuid?) is saved in localStorage
   if(lsUsername) {
-    console.log("#1")
-    username = lsUsername;
+    currentUser = lsUsername;
     getConversations(lsUsername, store);
   } else {
-    console.log("#2")
     // New User
     setUsername(store)
-    getConversations(username, store);
+    getConversations(currentUser, store);
   }
-
-  // maybe could move this somehwhere, no need to call this again? maybe after fetch messages?
-  // Store list of users minus current user
-  // usersRef.once('value', snapshot => {
-  //   console.log("ADD USER LIST: ************** ", snapshot.val())
-  //   const usersList = objKeysToArray(snapshot.val());
-  //   const filteredArr = usersList.filter((user) => user !== username);
-  //   store.dispatch(addUserList(filteredArr))
-  // })
-
-  // Watch for db changes: new users
-  // usersRef.on("child_added", function(snapshot, prevChildKey) {
-  //   console.log("CHILD added: ", snapshot.val(), prevChildKey)
-  //   // if(prevChildKey) {
-  //   //   store.dispatch(addUserToList(prevChildKey))
-  //   // }
-  // });
 
   // For activeUsers: set up Presence
   // listens for changes
   firebase.database().ref(".info/connected").on('value', snapshot => {
     if (snapshot.val()) {
-      var ref = connectedRef.child(username);
-      ref.onDisconnect().set(false);
+      var ref = connectedRef.child(currentUser);
+      ref.set(true);
+      // ref.onDisconnect().set(false);
+      ref.onDisconnect().remove();
       console.log("CONNECTED USERS: ", snapshot.val())
     }
   });
 
+  // Update Active users
   connectedRef.on("value", function(snapshot) {
     var connected = snapshot.val();
-    if(connected) {
-      console.log("User connected: ",  connected);
-      var userObj = {}
-      userObj[username] = true;
-      connectedRef.update(userObj);
-    } else {
-      console.log("User disconnected: ", connected);
-      var userObj = {}
-      userObj[username] = false;
-      connectedRef.update(userObj);
-    }
+    activeUsers = objKeysToArray(connected);
+
+    activeUsers.splice(activeUsers.indexOf(currentUser), 1);
+    console.log("*****activeUsers SPLICED: ", activeUsers)
+    store.dispatch(addActiveUsers(activeUsers));
+
+  });
+
+  // ========= USER LIST ===========
+  usersRef.once('value', snapshot => {
+    const filteredArr = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
+    console.log("filteredArr: ", filteredArr)
+    store.dispatch(addUserList(filteredArr))
   });
 
   // connectedRef.once('value', snapshot => {
@@ -169,10 +171,10 @@ const init = (store) => {
   // connectedRef.on("value", function(snapshot) {}) <---- REMOVE REFERENCE IN ONLINE USERS,
   // keep ONLINE_USERS and users list in sync
 
-  injectTapEventPlugin();
 
+  injectTapEventPlugin();
   // Could probably replace this with firebase.
-  webSocketsClient(username, store)
+  webSocketsClient(currentUser, store)
 }
 
 export default init;

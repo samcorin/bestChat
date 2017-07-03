@@ -16,6 +16,7 @@ export const addUserList = (userList) => {
 
 // Add active users to store
 export const addActiveUsers = (users) => {
+  console.log("ACTION: ", users)
   return {
     type: 'ADD_ACTIVE_USERS',
     activeUsers: users
