@@ -125,3 +125,20 @@ class Miit extends Component {
 }
 
 export default Miit;
+
+
+
+
+
+// ============ CENTER =================
+
+
+// var bound = new google.maps.LatLngBounds();
+
+// for (i = 0; i < locations.length; i++) {
+//   bound.extend( new google.maps.LatLng(locations[i][2], locations[i][3]) );
+
+//   // OTHER CODE
+// }
+
+// console.log( bound.getCenter() );

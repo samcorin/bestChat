@@ -5,7 +5,9 @@ import {addMessageToStore} from './../../actions/index';
 import MessagesView from './MessagesView';
 import ConversationNavBar from './ConversationNavBar';
 import ChatInput from './ChatInput';
-import {usersRef} from './../../firebase/index';
+import {usersRef, conversationsRef} from './../../firebase/index';
+// import firebase, {usersRef, conversationsRef, database, connectedRef} from './firebase/index';
+// import {startFetchMessages, addCurrentUser, addUserList, addUserToList, addActiveUsers} from './actions/index';
 import './Conversation.css';
 
 // render()
@@ -19,6 +21,8 @@ class Conversation extends React.Component{
     this.sendHandler = this.sendHandler.bind(this);
   }
 
+  // *********************************************************************
+  // *********************************************************************
   sendHandler(message, room) {
     // sending the message out, it gets relayed to others, receiver gets it.. (then add to store, db for them too)
     if(message === 'like') {
@@ -32,18 +36,28 @@ class Conversation extends React.Component{
       roomId: room
     }
 
-    socket.send(JSON.stringify({
-      type: 'message',
-      message: messageObject
-    }));
+    // waht if room id is the actual room id?, no, it should be changed to roomName
 
     this.addMessage(messageObject);
   }
 
   addMessage(message) {
+
     // Adds to DB for self after sending, not the
     this.props.dispatch(addMessageToStore(message));
-    usersRef.child(message.sender + '/conversations/' + message.roomId).push(message);
+
+    // check is conversation exists
+
+
+    // usersRef.child(message.sender + '/conversations/' + message.roomId).push(message);
+    usersRef.child(this.props.currentUser + '/conversations/' + message.roomId).once('value', snapshot => {
+      console.log("KEYS: ", snapshot.val())
+      // there's got to be a better way to do this, i.e: store the conversatoin id in the store.
+      // *** PROBLEM ***
+      // if no message ref exists, throws error
+      conversationsRef.child(snapshot.val()).push(message)
+    })
+    // console.log("KEY KEY KEY KEY ", KEY)
 
     // save for <Description />
     this.setState({

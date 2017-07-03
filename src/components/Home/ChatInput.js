@@ -1,11 +1,8 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import './ChatInput.css';
-
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
-// import MdSend from 'react-icons/lib/md/send';
-
+import './ChatInput.css';
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -13,11 +10,11 @@ class ChatInput extends React.Component {
     this.state = {
       chatInput: ''
     };
-
     this.submitHandler = this.submitHandler.bind(this);
     this.textChangeHandler = this.textChangeHandler.bind(this);
   }
 
+  // Fade animations for Send and Like icons
   fade() {
     document.getElementById("inputButton").classList.add('fadeIn');
     setTimeout(function() {
@@ -67,7 +64,6 @@ class ChatInput extends React.Component {
               <div><FaThumbsOUp /></div>
             </div>
           }
-
         </form>
       </div>
     );
