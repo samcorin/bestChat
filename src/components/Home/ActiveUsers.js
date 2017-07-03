@@ -13,8 +13,8 @@ class ActiveUsers extends React.Component {
   }
 
   render() {
-    console.log("Active users: ", this.props.activeUsers)
-    console.log("user list: ", this.props.userList)
+    // console.log("Active users: ", this.props.activeUsers)
+    // console.log("user list: ", this.props.userList)
 
     if (Object.keys(this.props.userList).length > 0) {
       var result1 = [], result2 = [];

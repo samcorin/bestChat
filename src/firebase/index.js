@@ -24,5 +24,6 @@ try {
 // export const firebaseRef = firebase.database().ref();
 export const usersRef = firebase.database().ref('users');
 export const conversationsRef = firebase.database().ref('conversations');
+export const connectedRef = firebase.database().ref("ONLINE_USERS");
 export const database = firebase.database().ref();
 export default firebase;

@@ -1,4 +1,4 @@
-import firebase, {usersRef, conversationsRef, database} from './firebase/index';
+import firebase, {usersRef, conversationsRef, database, connectedRef} from './firebase/index';
 import {startFetchMessages, addCurrentUser, addUserList, addUserToList} from './actions/index';
 import nameGen from './utils/nameGen'
 import {objKeysToArray, objToArray} from './utils/objToArray';
@@ -129,20 +129,30 @@ const init = (store) => {
   //   // }
   // });
 
-  // For activeUsers:
-  // Check connection state
-  // var connectedRef = firebase.database().ref(".info/connected");
-  // connectedRef.on("value", function(snap) {
-  //   if (snap.val() === true) {
-  //     // store.dispatch(connectionState(true))
-  //     // set state connected: true/false
-  //     console.log("connected");
-  //   } else {
-  //     // store.dispatch(connectionState(false))
-  //     // set state connected: true/false
-  //     console.log("not connected");
-  //   }
-  // });
+  // For activeUsers: set up Presence
+  // listens for changes
+  firebase.database().ref(".info/connected").on('value', snapshot => {
+    if (snapshot.val()) {
+      var ref = connectedRef.child(username);
+      ref.onDisconnect().set(false);
+      console.log("CONNECTED USERS: ", snapshot.val())
+    }
+  });
+
+  connectedRef.on("value", function(snapshot) {
+    var connected = snapshot.val();
+    if(connected) {
+      console.log("User connected: ",  connected);
+      var userObj = {}
+      userObj[username] = true;
+      connectedRef.update(userObj);
+    } else {
+      console.log("User disconnected: ", connected);
+      var userObj = {}
+      userObj[username] = false;
+      connectedRef.update(userObj);
+    }
+  });
 
   // Last Connect
   // var userLastOnlineRef = firebase.database().ref("users/joe/lastOnline");
@@ -152,6 +162,8 @@ const init = (store) => {
   // database.ref('users/' + userId).set({
   //   username: username
   // });
+  // connectedRef.on("value", function(snapshot) {}) <---- REMOVE REFERENCE IN ONLINE USERS,
+  // keep ONLINE_USERS and users list in sync
 
   injectTapEventPlugin();
 
