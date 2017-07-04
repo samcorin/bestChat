@@ -116,15 +116,17 @@ const init = (store) => {
 
   // ========= USER LIST =========== Fetch user list and listen for new users
   usersRef.on('value', snapshot => {
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%% : ", snapshot.val())
     const filteredArr = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
     store.dispatch(addUserList(filteredArr))
   });
 
+
+  // Maybe this is for new conversations only
   // ========= CONVESTATIONS LIST =========== Fetch user conversations and listen for new ones created
-  usersRef.on('value', snapshot => {
-    const filteredArr = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
-    store.dispatch(addUserList(filteredArr))
+  usersRef.child(currentUser + '/conversations').on('value', snapshot => {
+    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%% : ", snapshot.val())
+    // returns each conversation with matching ID
+    // store....
   });
 
 

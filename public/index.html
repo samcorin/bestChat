@@ -31,9 +31,9 @@
     -->
 
     <!-- Speed this up somehow... -->
-    <script async defer
+    <!-- <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A">
-    </script>
+    </script> -->
 
     <!-- #1 - Not working.. -->
     <!-- <script type="text/javascript">
@@ -47,6 +47,26 @@
       else if (window.attachEvent)
       window.attachEvent("onload", downloadJSAtOnload);
       else window.onload = downloadJSAtOnload;
+    </script> -->
+    <!-- <script async defer>
+      function getScript(source, callback) {
+        var script = document.createElement('script');
+        var prior = document.getElementsByTagName('script')[0];
+        script.async = 1;
+
+        script.onload = script.onreadystatechange = function( _, isAbort ) {
+          if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+            script.onload = script.onreadystatechange = null;
+            script = undefined;
+
+            if(!isAbort) { if(callback) callback(); }
+          }
+        };
+
+        script.src = source;
+        prior.parentNode.insertBefore(script, prior);
+      }
+      getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A");
     </script> -->
   </body>
 </html>

@@ -47,6 +47,11 @@ ul {
   width: 10px;
 }
 
+.iconSpace {
+  width: 20px;
+}
+
+
 .strikethrough {
   position: relative;
   color: #929292;
@@ -66,4 +71,15 @@ ul {
   -ms-transform:rotate(-5deg);
   -o-transform:rotate(-5deg);
   transform:rotate(-5deg);
+}
+
+.tech, .compatability {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tech svg, .compatability svg {
+  width: 65px;
+  height: 65px;
+  margin-bottom: 25px;
 }
