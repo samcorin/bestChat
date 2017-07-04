@@ -67,7 +67,7 @@ class App extends Component {
             <div className={isMobile ? 'chatScreenMob' : 'chatScreen'} id="chatScreen">
               {this.props.currentUser === 'ok' && <UsernameEditor />}
               {!isMobile &&
-                <img src={require("../utils/img/ios_template.png")}
+                <img src={require("../utils/img/ios_template_min_3.png")}
                      alt="iPhone6s"
                      className="iphoneImg" />}
               <Switch>
