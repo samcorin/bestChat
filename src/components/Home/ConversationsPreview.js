@@ -12,13 +12,15 @@ class ConversationsPreview extends Component {
       return obj[item]
     }).sort((a, b) => a[a.length -1].createdAt < b[b.length -1].createdAt);
 
-    if(sortedMessages.length > 0) {
+    if(sortedMessages.length > 0 && this.props.userTable) {
       return (
         <div className="conversationPreviewWrapper">
           {sortedMessages.map((user, i) => {
             const propsRef = user[user.length - 1];
             const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
             const time = timely(propsRef.createdAt);
+
+            // this.props.userTable takes a while to load
             const roomName = this.props.userTable[propsRef.roomId];
 
             // in case text is too long..

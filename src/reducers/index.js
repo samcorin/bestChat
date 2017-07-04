@@ -1,18 +1,19 @@
 // What the heck is state? == messages: conversationReducer
 function addMessage(state, action) {
   const {payload} = action;
-  const {roomId} = payload;
+  const roomName = action.roomName;
+
   // if the conversation exists
-  if(state[roomId]) {
+  if(state[roomName]) {
     return {
       ...state,
-      [roomId]: state[roomId].concat(action.payload)
+      [roomName]: state[roomName].concat(action.payload)
     };
   } else {
     // create a new 'room'
     return {
     ...state,
-    [roomId]: [action.payload]
+    [roomName]: [action.payload]
   };
   }
 }
@@ -43,7 +44,6 @@ export var currentUserReducer = (state = {}, action) => {
 }
 
 export var userTableReducer = (state = {}, action) => {
-  console.log(state, action)
   switch(action.type) {
     case 'UPDATE_USER_TABLE':
       return action.payload;

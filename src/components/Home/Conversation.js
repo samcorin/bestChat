@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import {socket} from './../../utils/webSocketsClient';
+import {objSwap} from './../../utils/objFunctions';
 import {addMessageToStore} from './../../actions/index';
 import MessagesView from './MessagesView';
 import ConversationNavBar from './ConversationNavBar';
@@ -29,41 +29,39 @@ class Conversation extends React.Component{
     const messageObject = {
       sender: this.props.currentUser,
       text: message,
-      createdAt: Date.now(),
-      room: this.props.match.params.room
+      createdAt: Date.now()
     }
     this.addMessage(messageObject);
   }
 
   addMessage(message) {
+    const swapped = objSwap(this.props.userTable);
+    // console.log("********** addMessage **********", swapped[this.props.match.params.room]) // ID
 
-    // Wait for room key to send to store.
-    // this.props.dispatch(addMessageToStore(message));
-    console.log("######## NEW MESSAGE ####### ", message)
-    // Checks wether currentUser has a reference to a conversation with the receiver: returns ID
+    usersRef.child(this.props.currentUser + '/conversations/' + swapped[this.props.match.params.room]).once('value', snapshot => {
+      const roomName = snapshot.val();
 
-    usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).once('value', snapshot => {
-      const messageRef = snapshot.val();
+      // If a reference exists in currentUser/conversations/:id, send the message there.
+      if(roomName) {
+        message.roomId = swapped[roomName];
+        // console.log("message.roomId ", message.roomId, roomName)
+        // message.roomId  -KoC_pzpR0uFHnvvPqbb, sticky-literature
 
-      if(messageRef) {
-        message.roomId = messageRef;
+        // add username..
+        message.roomName = roomName;
         this.props.dispatch(addMessageToStore(message));
-        conversationsRef.child(messageRef).push(message);
-        // const tempRoomId = message.roomId;
-        // message.roomId = message.sender;
-        // then add it for the other person
-        // usersRef.child(message.roomId + '/conversations/' + this.props.currentUser).set(cRef);
-
+        conversationsRef.child(message.roomId).push(message);
       } else {
+        // No reference exists, so one needs to be created.
         console.log("## SEND NEW ## >>> ", message)
         const cRef = usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).push().key;
         message.roomId = cRef;
         this.props.dispatch(addMessageToStore(message));
 
-        usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).set(cRef);
+        usersRef.child(this.props.currentUser + '/conversations/' + cRef).set(this.props.match.params.room);
         conversationsRef.child(cRef).push(message)
 
-        usersRef.child(this.props.match.params.room + '/conversations/' + this.props.currentUser).set(cRef);
+        usersRef.child(this.props.match.params.room + '/conversations/' + cRef).set(this.props.currentUser);
       }
     })
 
@@ -86,7 +84,8 @@ class Conversation extends React.Component{
 // export default Conversation;
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser,
-  conversations: state.conversations
+  conversations: state.conversations,
+  userTable: state.userTable
 });
 
 export default connect(mapStateToProps)(Conversation);

@@ -39,7 +39,8 @@ export const addMessageToStore = (message) => {
       text: message.text,
       roomId: message.roomId,
       createdAt: message.createdAt
-    }
+    },
+    roomName: message.roomName
   }
 }
 
@@ -50,12 +51,6 @@ export const updateUserTable = (data) => {
   }
 }
 
-    // payload: {
-    //   sender: message.sender,
-    //   text: message.text,
-    //   roomId: message.roomId,
-    //   createdAt: message.createdAt
-    // }
 // Prepare to add current user's messages to store
 export const startFetchMessages = (conversations) => {
   return (dispatch, getState) => {

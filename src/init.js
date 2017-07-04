@@ -1,9 +1,10 @@
 import firebase, {usersRef, conversationsRef, database, connectedRef} from './firebase/index';
 import {startFetchMessages, addCurrentUser, addUserList, addUserToList, addActiveUsers, updateUserTable} from './actions/index';
 import nameGen from './utils/nameGen'
-import {objKeysToArray, objToArray} from './utils/objToArray';
+import {objKeysToArray, objToArray} from './utils/objFunctions';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import trace from './utils/trace';
+// import getConversations from './utils/getConversations';
 
 // login & username selection
 // import setUsername from '.utils/setUsername';
@@ -16,15 +17,13 @@ var activeUsers = [];
 
 // This already handles fetching the conversations, so I could just run this on event fire?
 const getConversations = (user, store) => {
-  usersRef.child(user + "/conversations").on('value', snapshot => {
-    // if DB is not empty
+  usersRef.child(user + "/conversations").once('value', snapshot => {
+    // if DB is not empty, if it is, it deltes the user
     if(snapshot.val() !== null) {
       const conversationsObj = snapshot.val();
-      console.log("UPDATING MESSAGES")
-      console.log(conversationsObj)
+      store.dispatch(updateUserTable(conversationsObj));
       // Create a hash list, add to store
       // var usersList = [];
-      store.dispatch(updateUserTable(conversationsObj));
 
       // usersRef.child(currentUser + '/conversations').on('child_added', snapshot => {
       //     // child+added, add that one, dont dp extraneous stuff
@@ -41,8 +40,9 @@ const getConversations = (user, store) => {
         const messageArray = [];
         // should I store the hash in store?
 
-        database.child('conversations/' + roomId).on('value', snapshot => {
+        database.child('conversations/' + roomId).once('value', snapshot => {
           const messageArray = objToArray(snapshot.val());
+          // INEFFICIENT: needs to just add one, not repeat all the time, too many conversations
           store.dispatch(startFetchMessages({ id: conversationsObj[roomId], data: messageArray }));
         })
       })
@@ -117,6 +117,7 @@ const init = (store) => {
 
   // ========= USER LIST =========== Fetch user list and listen for new users
   usersRef.on('value', snapshot => {
+    // NEW USER ADDED
     const filteredArr = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
     store.dispatch(addUserList(filteredArr))
   });
@@ -124,10 +125,18 @@ const init = (store) => {
 
   // Maybe this is for new conversations only
   // ========= CONVESTATIONS LIST =========== Fetch user conversations and listen for new ones created
+  usersRef.child(currentUser).on('child_changed', snapshot => {
+    // New conversation initiated
+    const conversationsObj = snapshot.val();
+    // Update userTable with new user key:value pair
+    store.dispatch(updateUserTable(conversationsObj));
+  });
 
-  // // Abstract this out to listen to new conversations
-  usersRef.child(currentUser + '/conversations').on('child_added', snapshot => {
-    console.log("NEW CONVERSATION KEY:VALUE: ", snapshot.val())
+
+    // usersRef.child(currentUser + '/conversations/' + snapshot.val()).once('value', snapshot => {
+    //   console.log("CONVERSATION CHILD CHANGED ++++++++: ", snapshot.val())
+    // })
+
     // HERE
   //   // child+added, add that one, dont dp extraneous stuff
   //   console.log("New Messages Obj : ", snapshot.val())
@@ -136,7 +145,6 @@ const init = (store) => {
   //   const filteredNewMessages = newMessages.filter(user => user !== currentUser && user !== 'admin-bot');
   //   // console.log(":::::::::::", filteredNewMessages);
   //   // returns an obj of all my conversations + new
-  });
 
 
 
