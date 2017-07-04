@@ -42,6 +42,16 @@ export var currentUserReducer = (state = {}, action) => {
   }
 }
 
+export var userTableReducer = (state = {}, action) => {
+  console.log(state, action)
+  switch(action.type) {
+    case 'UPDATE_USER_TABLE':
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 // Add active users to store
 export var activeUsersReducer = (state = [], action) => {
   switch(action.type) {

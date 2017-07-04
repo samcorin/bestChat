@@ -16,97 +16,16 @@ app.use(helmet())
 //   includeSubDomains: true
 // }));
 
-// app.all('/*', function(req, res){
-//   console.log(req.baseUrl)
-// });
-
-// app.use(function(req, res, next) {
-//   // redirect to secure address
-//   if (req.headers['x-forwarded-proto'] === 'https' || req.headers.host === 'localhost:3000') {
-//     next();
-//   } else {
-//     res.redirect(301, 'https://chat.samcor.in');
-//   }
-// });
-
 app.use(express.static(__dirname + '/build'));
-
-// Routes =============================================
 
 app.all('*', function(req, res) {
   if (req.headers['x-forwarded-proto'] === 'https' || req.headers.host === 'localhost:3000') {
     res.set('Cache-Control', 'public, max-age=31536000');
     res.sendFile(__dirname + '/build/index.html');
-    // next();
   } else {
     res.redirect(301, 'https://chat.samcor.in');
   }
-  // failed to decode para %....% in index.html
 });
 
-
-// Start the server =====================
-// var server = require('http').Server(app);
 server.listen(PORT);
 console.log(`Listening on port ${PORT}`);
-
-
-// ----------- WebSockets ----------- (temporary)
-const WebSocketServer = require("ws").Server;
-const wss = new WebSocketServer({server});
-const activeUsers = [];
-
-
-wss.broadcast = (data, ws, all) => {
-  wss.clients.forEach(function each(client) {
-    if(all) {
-      if (client.readyState === ws.OPEN) {
-        client.send(JSON.stringify(data));
-      }
-    } else {
-      if (client !== ws && client.readyState === ws.OPEN) {
-        client.send(JSON.stringify(data));
-      }
-    }
-  });
-}
-
-// User connect
-wss.on("connection", (ws, req) => {
-  ws.on('message', function(message) {
-    data = JSON.parse(message);
-
-    switch(data.type) {
-      case 'connect':
-        console.log(`'${data.username}' connected.`)
-        ws.username = data.username
-        activeUsers.push(data.username)
-        console.log("Active users: ", activeUsers)
-        wss.broadcast({
-          type: 'activeUsers',
-          activeUsers: activeUsers
-        }, ws, true);
-
-        break;
-      case 'message':
-        console.log("SERVER MESSAGE: ", data.message)
-        wss.broadcast(data, ws, false);
-        break;
-      default:
-        break;
-    }
-  });
-
-  // ws.ping('0x9')
-  // User disconnect
-  // Not showing in heroku logs
-  ws.on('close', () => {
-    console.log(`'${ws.username}' disconnected. 🔥`)
-    activeUsers.splice(activeUsers.indexOf(ws.username), 1);
-    console.log("Active users: ", activeUsers)
-    wss.broadcast({
-      type: 'activeUsers',
-      activeUsers: activeUsers
-    }, ws, true);
-  })
-});

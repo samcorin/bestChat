@@ -32,7 +32,6 @@ class ChatInput extends React.Component {
   submitHandler(event) {
     event.preventDefault();
     document.getElementById("chat-input").focus();
-    console.log("PTOPS: SEND: ", this.props)
     this.fade()
     this.setState({ chatInput: '' });
     this.props.onSend(this.state.chatInput, this.props.room);
@@ -40,7 +39,6 @@ class ChatInput extends React.Component {
 
   likeHandler(event) {
     event.preventDefault();
-    console.log("PTOPS: LIKE: ", this.props)
     this.props.onSend('like', this.props.room);
   }
 

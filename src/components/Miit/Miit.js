@@ -6,12 +6,20 @@ import BottomNav from './../BottomNav';
 import MiitNavBar from './MiitNavBar';
 import './Miit.css';
 
+var bgImg = {
+  backgroundImage: `url(${require('../../utils/img/miit_alley_bg.jpg')})`,
+  backgroundRepeat: 'none',
+  height: '400px',
+  width: '300px'
+};
+
 class Miit extends Component {
   constructor(props) {
     super(props);
     this.state = {
       latitude: null,
-      longitude: null
+      longitude: null,
+      showMap: false
     }
   }
 
@@ -112,17 +120,28 @@ class Miit extends Component {
   }
 
   render() {
-    return (
-      <div id="MiitWrapper">
+    if(this.state.showMap) {
+      return (
+        <div id="MiitWrapper">
+            <MiitNavBar />
+            <div id="mapWrapper">
+              <div id="map"></div>
+            </div>
+          <BottomNav />
+        </div>
+      );
+    } else {
+      return (
+        <div id="MiitWrapper">
           <MiitNavBar />
-          <div id="mapWrapper">
-            <div id="map"></div>
-          </div>
-        <BottomNav />
-      </div>
-    );
+          <BottomNav />
+        </div>
+      )
+    }
   }
 }
+          // <div style={bgImg}></div>
+          // <img className="bgImg" src={require('../../utils/img/miit_alley_bg.jpg')} />
 
 export default Miit;
 

@@ -6,8 +6,6 @@ import MessagesView from './MessagesView';
 import ConversationNavBar from './ConversationNavBar';
 import ChatInput from './ChatInput';
 import {usersRef, conversationsRef} from './../../firebase/index';
-// import firebase, {usersRef, conversationsRef, database, connectedRef} from './firebase/index';
-// import {startFetchMessages, addCurrentUser, addUserList, addUserToList, addActiveUsers} from './actions/index';
 import './Conversation.css';
 
 // render()
@@ -21,45 +19,54 @@ class Conversation extends React.Component{
     this.sendHandler = this.sendHandler.bind(this);
   }
 
-  // *********************************************************************
-  // *********************************************************************
   sendHandler(message, room) {
     // sending the message out, it gets relayed to others, receiver gets it.. (then add to store, db for them too)
     if(message === 'like') {
       console.log("SOMEONE LIKES THIS")
     }
-    // ?>moment
+
+    // Can't send this until I get the conversation.key
     const messageObject = {
       sender: this.props.currentUser,
       text: message,
       createdAt: Date.now(),
-      roomId: room
+      room: this.props.match.params.room
     }
-
-    // waht if room id is the actual room id?, no, it should be changed to roomName
-
     this.addMessage(messageObject);
   }
 
   addMessage(message) {
 
-    // Adds to DB for self after sending, not the
-    this.props.dispatch(addMessageToStore(message));
+    // Wait for room key to send to store.
+    // this.props.dispatch(addMessageToStore(message));
+    console.log("######## NEW MESSAGE ####### ", message)
+    // Checks wether currentUser has a reference to a conversation with the receiver: returns ID
 
-    // check is conversation exists
+    usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).once('value', snapshot => {
+      const messageRef = snapshot.val();
 
+      if(messageRef) {
+        message.roomId = messageRef;
+        this.props.dispatch(addMessageToStore(message));
+        conversationsRef.child(messageRef).push(message);
+        // const tempRoomId = message.roomId;
+        // message.roomId = message.sender;
+        // then add it for the other person
+        // usersRef.child(message.roomId + '/conversations/' + this.props.currentUser).set(cRef);
 
-    // usersRef.child(message.sender + '/conversations/' + message.roomId).push(message);
-    usersRef.child(this.props.currentUser + '/conversations/' + message.roomId).once('value', snapshot => {
-      console.log("KEYS: ", snapshot.val())
-      // there's got to be a better way to do this, i.e: store the conversatoin id in the store.
-      // *** PROBLEM ***
-      // if no message ref exists, throws error
-      conversationsRef.child(snapshot.val()).push(message)
+      } else {
+        console.log("## SEND NEW ## >>> ", message)
+        const cRef = usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).push().key;
+        message.roomId = cRef;
+        this.props.dispatch(addMessageToStore(message));
+
+        usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).set(cRef);
+        conversationsRef.child(cRef).push(message)
+
+        usersRef.child(this.props.match.params.room + '/conversations/' + this.props.currentUser).set(cRef);
+      }
     })
-    // console.log("KEY KEY KEY KEY ", KEY)
 
-    // save for <Description />
     this.setState({
       lastMessage: message
     })

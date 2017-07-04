@@ -1,9 +1,9 @@
 import firebase, {usersRef, conversationsRef, database, connectedRef} from './firebase/index';
-import {startFetchMessages, addCurrentUser, addUserList, addUserToList, addActiveUsers} from './actions/index';
+import {startFetchMessages, addCurrentUser, addUserList, addUserToList, addActiveUsers, updateUserTable} from './actions/index';
 import nameGen from './utils/nameGen'
 import {objKeysToArray, objToArray} from './utils/objToArray';
 import injectTapEventPlugin from 'react-tap-event-plugin';
-import webSocketsClient from './utils/webSocketsClient'
+import trace from './utils/trace';
 
 // login & username selection
 // import setUsername from '.utils/setUsername';
@@ -14,26 +14,39 @@ var activeUsers = [];
 // const lsUsernameID = localStorage.getItem("usernameID") || null;
 // let usernameID = '';
 
+// This already handles fetching the conversations, so I could just run this on event fire?
 const getConversations = (user, store) => {
-  usersRef.child(user + "/conversations").once('value', snapshot => {
-    console.log("-------------------- GET CONV -------------------------")
-    console.log(snapshot.val())
-    // should add these to store
-    //
+  usersRef.child(user + "/conversations").on('value', snapshot => {
     // if DB is not empty
     if(snapshot.val() !== null) {
-      console.log("Welcome back, " + currentUser);
-      var conversationsObj = snapshot.val();
-      var usersList = [];
+      const conversationsObj = snapshot.val();
+      console.log("UPDATING MESSAGES")
+      console.log(conversationsObj)
+      // Create a hash list, add to store
+      // var usersList = [];
+      store.dispatch(updateUserTable(conversationsObj));
 
-      const messages = Object.keys(conversationsObj).map(function(user, i) {
+      // usersRef.child(currentUser + '/conversations').on('child_added', snapshot => {
+      //     // child+added, add that one, dont dp extraneous stuff
+      //     console.log("---------------------------------------------------------")
+      //     const newMessagesObj = snapshot.val();
+      //     console.log("NEW MESSAGES: ", newMessagesObj)
+      //     // const filteredNewMessages = newMessages.filter(user => user !== currentUser && user !== 'admin-bot');
+      //     // console.log("Filtered messages: ", filteredNewMessages)
+      //     console.log("--------------------------- END -------------------------")
+        // })
+
+      // Iterates through roomIds using data from users/conversations,
+      Object.keys(conversationsObj).map(function(roomId, i) {
         const messageArray = [];
-        usersList.push(user);
-        database.child('conversations/' + conversationsObj[user]).once('value', snapshot => {
+        // should I store the hash in store?
+
+        database.child('conversations/' + roomId).on('value', snapshot => {
           const messageArray = objToArray(snapshot.val());
-          store.dispatch(startFetchMessages({ id: user, data: messageArray }));
+          store.dispatch(startFetchMessages({ id: conversationsObj[roomId], data: messageArray }));
         })
       })
+
     } else {
       // Start fresh
       setUsername(store)
@@ -47,39 +60,28 @@ const getConversations = (user, store) => {
 // TODO: Refactor
 // NEW USERS
 const setUsername = (store) => {
-
   currentUser = nameGen();
   localStorage.setItem("username", currentUser);
 
-  const initMessage = {
-    username: 'admin-bot',
+  const message = {
     sender: 'admin-bot',
-    text: 'Welcome to bestChat v2!',
-    createdAt: Date.now(),
-    roomId: 'admin-bot'
+    text: `Welcome to bestChat, ${currentUser}!`,
+    createdAt: Date.now()
   };
-
-  // var postData = {
-  //   author: username,
-  //   uid: uid,
-  //   body: body,
-  //   title: title,
-  //   starCount: 0,
-  //   authorPic: picture
-  // };
-
-  // conversation memebers
-  const conversationMembers = {}
-  conversationMembers[currentUser] = true;
-  conversationMembers['admin-bot'] = true;
 
   // Conversation 1
   const newPostKey = database.child('conversations').push().key;
-  usersRef.child(currentUser + '/conversations').update({'admin-bot': newPostKey});
-  conversationsRef.child(newPostKey).push(initMessage);
+
+  // Ensure an { ID: NAME } pairing
+  const newPostObj = {};
+  newPostObj[newPostKey] = 'admin-bot';
+
+  usersRef.child(currentUser + '/conversations').update(newPostObj);
+  message.roomId = newPostKey;
+  conversationsRef.child(newPostKey).push(message);
 
   // Add directly to store, skip fetching uselessly from db
-  store.dispatch(startFetchMessages({ id: 'admin-bot', data: [initMessage] }));
+  store.dispatch(startFetchMessages({ id: 'admin-bot', data: [message] }));
 
   console.log(`Welcome, ${currentUser}!`);
 }
@@ -101,7 +103,6 @@ const init = (store) => {
       var ref = connectedRef.child(currentUser);
       ref.set(true);
       ref.onDisconnect().remove();
-      console.log("CONNECTED USERS: ", snapshot.val())
     }
   });
 
@@ -123,10 +124,18 @@ const init = (store) => {
 
   // Maybe this is for new conversations only
   // ========= CONVESTATIONS LIST =========== Fetch user conversations and listen for new ones created
-  usersRef.child(currentUser + '/conversations').on('value', snapshot => {
-    console.log("%%%%%%%%%%%%%%%%%%%%%%%%%% : ", snapshot.val())
-    // returns each conversation with matching ID
-    // store....
+
+  // // Abstract this out to listen to new conversations
+  usersRef.child(currentUser + '/conversations').on('child_added', snapshot => {
+    console.log("NEW CONVERSATION KEY:VALUE: ", snapshot.val())
+    // HERE
+  //   // child+added, add that one, dont dp extraneous stuff
+  //   console.log("New Messages Obj : ", snapshot.val())
+  //   const newMessagesObj = snapshot.val();
+  //   const newMessages = objKeysToArray(newMessagesObj);
+  //   const filteredNewMessages = newMessages.filter(user => user !== currentUser && user !== 'admin-bot');
+  //   // console.log(":::::::::::", filteredNewMessages);
+  //   // returns an obj of all my conversations + new
   });
 
 
@@ -141,9 +150,6 @@ const init = (store) => {
   // });
 
   injectTapEventPlugin();
-
-  // Could probably replace this with firebase.
-  webSocketsClient(currentUser, store)
 }
 
 export default init;

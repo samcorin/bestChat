@@ -6,7 +6,6 @@
   font-weight: 400;
   font-size: 17px;
   line-height: 26px;
-  /*color: #6b7c93;*/
   color: #626262;
 }
 
@@ -82,4 +81,28 @@ ul {
   width: 65px;
   height: 65px;
   margin-bottom: 25px;
+}
+
+.headerIcon svg {
+  width: 50px;
+  height: 50px;
+}
+
+#firebase {
+  -ms-align-items: initial;
+  align-items: initial;
+}
+
+.metrics {
+  display: flex;
+}
+
+.stats {
+  color: lime;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.dSubHeader + p {
+  margin-top: 0;
 }

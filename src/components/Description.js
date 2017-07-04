@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Description.css';
-import {JavaScriptIcon, ReactIcon, FirebaseIcon, NodeIcon, ExpressIcon, GithubIcon} from './Description/TechIcons';
+import {JavaScriptIcon, ReactIcon, ReduxIcon, FirebaseIcon, NodeIcon, ExpressIcon, GithubIcon} from './Description/TechIcons';
 
 class Description extends Component {
   constructor(props) {
@@ -8,6 +8,21 @@ class Description extends Component {
     this.state = {
       show: false
     }
+  }
+
+  componentDidMount() {
+    var _this = this;
+    window.onload = function(){
+      setTimeout(function(){
+        const t = performance.timing;
+        const domComplete = t.domComplete - t.responseEnd;
+        const navigationStart = t.loadEventEnd - t.navigationStart;
+        _this.setState({
+          domLoadTime: domComplete,
+          navigationStart: navigationStart
+        })
+      }, 0)
+    };
   }
 
   render() {
@@ -49,9 +64,21 @@ class Description extends Component {
       return (
         <div className="dText">
           <div className="dHeader">
-            <h1>bestChat</h1><p>v0.2</p><div className="headerSpace"></div><p>(200kb~)</p>
+            <h1>bestChat</h1><p>v0.2</p>
           </div>
-          <p><em>Mobile-ready</em>, <em>evergreen</em>, <em>fast.</em></p>
+          <p>A <em>mobile-first</em>, <em>evergreen</em>, <em>superfast </em> webapp.</p>
+
+          <p>bestChat started as a playground. A few hours for me to learn how to use socket.io to make a simple communication client,
+          but it grew into much more than that.</p>
+
+          <div className="dSubHeader">
+            <h3>Stats</h3>
+          </div>
+          <ul>
+            <li className="metrics">domComplete: <span className="stats"> {this.state.domLoadTime}ms</span></li>
+            <li className="metrics">navigationStart: <span className="stats"> {this.state.navigationStart}ms</span></li>
+            <li className="metrics">bundle.js: <span className="stats">200kb~</span></li>
+          </ul>
 
           <h3>The Stack</h3>
           <div className="tech">
@@ -59,6 +86,9 @@ class Description extends Component {
             <div className="iconSpace"></div>
 
             <ReactIcon />
+            <div className="iconSpace"></div>
+
+            <ReduxIcon />
             <div className="iconSpace"></div>
 
             <FirebaseIcon />
@@ -102,10 +132,7 @@ class Description extends Component {
             <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
             <li> - It's fast.</li>
             <li> - 100% JavaScript (back and front end).</li>
-
           </ul>
-
-          <p>bestChat started as a playground. A few hours for me to learn how to use socket.io to make a simple communication client. But it grew into much more than that.</p>
 
           <div className="dSubHeader">
             <h3>Cool thing</h3>
@@ -128,38 +155,31 @@ class Description extends Component {
           </div>
           <p>Building a web app means forfeiting some features. Right now it's an interesting time for developers made true by Apple and the release of iOS11, with Mobile Safari adopting several web APIs. For example, getUserMedia.</p>
 
-
-          <div className="dSubHeader">
-            <h3>Service workers.</h3>
-          </div>
-          <p>Can you use this web app offline? It's possible but not yet. </p>
-
-          <div className="dSubHeader">
+          <div className="dSubHeader" id="firebase">
+            <div className="headerIcon">
+              <FirebaseIcon />
+            </div>
             <h3>Firebase </h3><div className="headerSpace"></div><p>(storage, communication, presence)</p>
           </div>
 
-          <p>There are times that writing code is hard and you end up wasting a lot of time. Investing in the wrong technology is one example. For the communication part of this project it went like this: <a href="https://socket.io" className="strikethrough">socket.io</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" className="strikethrough">WebSockets</a>, emotional plunge into the depths of hell and finally Firebase.</p>
+          <p>Thanks to web sockets, changes to the database are pushed to the client so there is no need for the user to reload or refresh the app, only receiving little messages instead of downloading big chunks of data. Events like new messages, users connecting and disconnecting all happen real-time.</p>
+          <p>Initially, I only used Firebase to store user and message data, and used another layer of websockets for communication. There are times that writing code is hard and you end up wasting a lot of time. Investing in the wrong technology is one example. For the communication part of this project it went like this: <a href="https://socket.io" className="strikethrough">socket.io</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" className="strikethrough">WebSockets</a> then Firebase.</p>
+          <p>The whole process took a lot of time. It meant rewriting large parts of the application, twice. Socket.io is a simple solution for real-time bidirectional event-based communication. But it's just an additional layer of abstraction that took up valuable space. As for WebSockets, all browsers, with the exception of IE, offer full RFC 6455 support, and were an improvement in size and performance on the client side. But seeing as Firebase was already handling data storage and it's capable of real-time bidirectional event-based communication, I used that instead.</p>
+          <p>One downside though, it's a little heavy. The database module takes up 54kb~ of the bundle file. If you want to user any other modules, say 'auth', you're going to pay.</p>
 
-          <p>The whole process took a lot of time. Too much to be exact. It meant rewriting large parts of the application, twice. Socket.io was meant as a simple solution for handling communication between clients, but I figure it's just an additional layer of abstraction that isn't needed. WebSockets cut down the excess space socket.io was taking up. </p>
-          <p>One downside though, it's a little heavy. It takes up 54kb~ of the bundle. That's only the database module... If for whatever reason you want to user any other modules, say 'auth', you're going to pay.</p>
-
-          <p>Seeing as Firebase was already handling data storage and it's capable of doing everything else a chat app needs, I used this instead.</p>
+          <div className="dSubHeader">
+            <h3>Future improvements</h3>
+          </div>
+          <ul>
+            <li>UX/UI</li>
+            <li>Games</li>
+          </ul>
 
           <h3>Changelog</h3>
           <ul className="toc">
             <li>v0.2 - Firebase now handles communication. Performance tweaks </li>
             <li>v0.1 - Basic chat. Basic styling.</li>
           </ul>
-
-          <div className="dSubHeader">
-            <h3>Service workers.</h3>
-          </div>
-          <p>Can you use this web app offline? It's possible but not yet. </p>
-
-          <div className="dSubHeader">
-            <h3>Future improvements</h3>
-          </div>
-          <p>Can you use this web app offline? It's possible but not yet. </p>
 
         </div>
       );

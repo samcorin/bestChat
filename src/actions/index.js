@@ -16,7 +16,6 @@ export const addUserList = (userList) => {
 
 // Add active users to store
 export const addActiveUsers = (users) => {
-  console.log("ACTION: ", users)
   return {
     type: 'ADD_ACTIVE_USERS',
     activeUsers: users
@@ -44,6 +43,19 @@ export const addMessageToStore = (message) => {
   }
 }
 
+export const updateUserTable = (data) => {
+  return {
+    type: 'UPDATE_USER_TABLE',
+    payload: data
+  }
+}
+
+    // payload: {
+    //   sender: message.sender,
+    //   text: message.text,
+    //   roomId: message.roomId,
+    //   createdAt: message.createdAt
+    // }
 // Prepare to add current user's messages to store
 export const startFetchMessages = (conversations) => {
   return (dispatch, getState) => {

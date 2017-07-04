@@ -97,11 +97,11 @@ class Calls extends Component {
     var _pc1 = this.pc1;
     var _localStream = this.localStream;
 
-    this.localStream.getTracks().forEach(
+    _localStream.getTracks().forEach(
       function(track) {
-        this.pc1.addTrack(
+        _pc1.addTrack(
           track,
-          this.localStream
+          _localStream
         );
       }
     ).bind(this.localStream, this.pc1);
