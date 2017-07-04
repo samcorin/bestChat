@@ -19,22 +19,23 @@ class ConversationsPreview extends Component {
             const propsRef = user[user.length - 1];
             const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
             const time = timely(propsRef.createdAt);
+            const roomName = this.props.userTable[propsRef.roomId];
 
             // in case text is too long..
             const trimmedText = (propsRef.text.length + author.length) > 50 ?
             `${propsRef.text.substring(0, 50)}...` : propsRef.text;
 
             return (
-              <Link key={i} to={`/${propsRef.roomId}`} className="LinkStyle">
+              <Link key={i} to={`/${roomName}`} className="LinkStyle">
                 <div className="conversationsPreview">
                   <img
-                    alt={propsRef.roomId}
-                    src={propsRef.roomId == 'admin-bot' ?
+                    alt={roomName}
+                    src={roomName == 'admin-bot' ?
                          require('../../utils/img/admin-bot.svg') :
-                         `https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`}
+                         `https://api.adorable.io/avatars/60/${roomName}@adorable.io.png`}
                     className="previewPhoto" />
                   <div className="previewBody">
-                    <p className="previewHeader">{propsRef.roomId}</p>
+                    <p className="previewHeader">{roomName}</p>
                     <p className="previewText">{author}: {trimmedText}</p>
                   </div>
                   <p className="previewTime">{ time }</p>
@@ -55,7 +56,8 @@ class ConversationsPreview extends Component {
 // export default ConversationsPreview;
 const mapStateToProps = (state) => ({
   conversations: state.conversations,
-  currentUser: state.currentUser
+  currentUser: state.currentUser,
+  userTable: state.userTable
 });
 
 export default connect(mapStateToProps)(ConversationsPreview);
