@@ -1,8 +1,8 @@
-import { objToArray, objKeysToArray } from './../utils/objToArray.js';
+import { objToArray, objKeysToArray, objSwap} from './../utils/objFunctions';
 
 const objKeys = { one: {},  two: {}};
 
-describe('Convert Objects to Arrays', () => {
+describe('Perform changes to objects', () => {
   it('should return an array of objects', () => {
     expect(
       objToArray({ message1: { text: 'Hello!' }, message2: { text: 'Welcome!' }}))
@@ -13,4 +13,10 @@ describe('Convert Objects to Arrays', () => {
     expect(objKeysToArray(objKeys))
     .toEqual(['one', 'two']);
   });
+
+  it('should swap keys and values', () => {
+    expect(objSwap({ 'someID': 1}))
+    .toEqual({'1': 'someID'});
+  });
+
 });

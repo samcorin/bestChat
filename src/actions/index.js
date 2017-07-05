@@ -7,16 +7,15 @@ export const addCurrentUser = (username) => {
 }
 
 // Adds all users in DB to store
-export const addUserList = (userList) => {
+export const updateUserList = (userList) => {
   return {
-    type: 'ADD_USER_LIST',
-    userList: userList
+    type: 'UPDATE_USER_LIST',
+    userList
   }
 }
 
 // Add active users to store
 export const addActiveUsers = (users) => {
-  console.log("ACTION: ", users)
   return {
     type: 'ADD_ACTIVE_USERS',
     activeUsers: users
@@ -33,6 +32,7 @@ export const addUserToList = (username) => {
 
 // User sends a message, it's added to store
 export const addMessageToStore = (message) => {
+  console.log("*********** ACTOIN : ADD MESSGE: ", message)
   return {
     type: 'ADD_MESSAGE',
     payload: {
@@ -40,7 +40,15 @@ export const addMessageToStore = (message) => {
       text: message.text,
       roomId: message.roomId,
       createdAt: message.createdAt
-    }
+    },
+    roomName: message.roomName
+  }
+}
+
+export const updateUserTable = (data) => {
+  return {
+    type: 'UPDATE_USER_TABLE',
+    payload: data
   }
 }
 

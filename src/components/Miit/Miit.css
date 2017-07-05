@@ -26,3 +26,7 @@
   width: 100%;
   height: 300px;
 }
+
+.bgImg {
+  filter: blur(5px);
+}

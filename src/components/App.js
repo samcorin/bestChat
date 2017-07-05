@@ -38,6 +38,19 @@ class App extends Component {
     window.removeEventListener('resize', this.handleWindowSizeChange);
   }
 
+  componentDidMount() {
+    // const getScript = (source, callback) => {
+    //   var el = document.createElement('script');
+    //   el.onload = callback;
+    //   el.src = source;
+    //   document.body.appendChild(el);
+    // }
+
+    // getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", function() {
+    //   console.log("LOADING MAPS API")
+    // });
+  }
+
   handleWindowSizeChange() {
     this.setState({
       width: window.innerWidth
@@ -54,7 +67,7 @@ class App extends Component {
             <div className={isMobile ? 'chatScreenMob' : 'chatScreen'} id="chatScreen">
               {this.props.currentUser === 'ok' && <UsernameEditor />}
               {!isMobile &&
-                <img src={require("../utils/img/ios_template.png")}
+                <img src={require("../utils/img/ios_template_min_3.png")}
                      alt="iPhone6s"
                      className="iphoneImg" />}
               <Switch>

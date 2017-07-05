@@ -1,29 +1,24 @@
 import firebase from 'firebase/app';
 require('firebase/database');
 
-// Defer loading:
-// await componentDidMount() {
-//  const auth = await require('firebase/auth');
-//  ....
-// } ?????
-// export const googleLogin  = new firebase.auth.GoogleAuthProvider();
-
 try {
   var config = {
-    apiKey: process.env.API_KEY,
-    authDomain: process.env.AUTH_DOMAIN,
-    databaseURL: "https://bestchat-81de1.firebaseio.com",
-    projectId: process.env.PROJECT_ID,
-    storageBucket: process.env.STORAGE_BUCKET,
-    messagingSenderId: process.env.MESSAGING_SENDER_ID
+    apiKey: process.env.REACT_APP_API_KEY,
+    authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_DATABASE_URL,
+    projectId: process.env.REACT_APP_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID
   };
   firebase.initializeApp(config);
 } catch (e) {
+
 }
 
-// export const firebaseRef = firebase.database().ref();
+// Export firebase references
+// Trim doen on these ??
 export const usersRef = firebase.database().ref('users');
 export const conversationsRef = firebase.database().ref('conversations');
-export const connectedRef = firebase.database().ref("ONLINE_USERS");
 export const database = firebase.database().ref();
+export const connectedRef = firebase.database().ref('ONLINE_USERS');
 export default firebase;

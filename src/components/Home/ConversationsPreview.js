@@ -12,7 +12,7 @@ class ConversationsPreview extends Component {
       return obj[item]
     }).sort((a, b) => a[a.length -1].createdAt < b[b.length -1].createdAt);
 
-    if(sortedMessages.length > 0) {
+    if(sortedMessages.length > 0 && Object.keys(this.props.userTable).length) {
       return (
         <div className="conversationPreviewWrapper">
           {sortedMessages.map((user, i) => {
@@ -20,21 +20,24 @@ class ConversationsPreview extends Component {
             const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
             const time = timely(propsRef.createdAt);
 
+            // this.props.userTable takes a while to load
+            const roomName = this.props.userTable[propsRef.roomId];
+
             // in case text is too long..
             const trimmedText = (propsRef.text.length + author.length) > 50 ?
             `${propsRef.text.substring(0, 50)}...` : propsRef.text;
 
             return (
-              <Link key={i} to={`/${propsRef.roomId}`} className="LinkStyle">
+              <Link key={i} to={`/${roomName}`} className="LinkStyle">
                 <div className="conversationsPreview">
                   <img
-                    alt={propsRef.roomId}
-                    src={propsRef.roomId == 'admin-bot' ?
+                    alt={roomName}
+                    src={roomName == 'admin-bot' ?
                          require('../../utils/img/admin-bot.svg') :
-                         `https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`}
+                         `https://api.adorable.io/avatars/60/${roomName}@adorable.io.png`}
                     className="previewPhoto" />
                   <div className="previewBody">
-                    <p className="previewHeader">{propsRef.roomId}</p>
+                    <p className="previewHeader">{roomName}</p>
                     <p className="previewText">{author}: {trimmedText}</p>
                   </div>
                   <p className="previewTime">{ time }</p>
@@ -55,7 +58,8 @@ class ConversationsPreview extends Component {
 // export default ConversationsPreview;
 const mapStateToProps = (state) => ({
   conversations: state.conversations,
-  currentUser: state.currentUser
+  currentUser: state.currentUser,
+  userTable: state.userTable
 });
 
 export default connect(mapStateToProps)(ConversationsPreview);

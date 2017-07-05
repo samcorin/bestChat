@@ -13,11 +13,6 @@ class ActiveUsers extends React.Component {
   }
 
   render() {
-    console.log("userList prop: ", this.props.userList)
-    console.log("ACTIVE USERS: ", this.props.activeUsers)
-    // console.log("Active users: ", this.props.activeUsers)
-    // console.log("user list: ", this.props.userList)
-
     if (Object.keys(this.props.userList).length > 0) {
       var result1 = [], result2 = [];
       const arr = this.props.userList;
@@ -35,6 +30,9 @@ class ActiveUsers extends React.Component {
 
       // These should be displayed separately: Online / Offline
       var result = result1.concat(result2);
+
+      let onlineUsers = [];
+      let offlineUsers = [];
 
       // with a divider, have 2 separate loops
       const users = result.map((user, i) => {
@@ -66,6 +64,7 @@ class ActiveUsers extends React.Component {
 
       return (
         <div>
+          <div>online______</div>
           <ul className="userList">
             {users}
           </ul>
