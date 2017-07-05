@@ -23,12 +23,9 @@ const getConversations = (user, store) => {
       // Iterates through roomIds using data from users/conversations,
       Object.keys(conversationsObj).map(function(roomId, i) {
         const messageArray = [];
-        // should I store the hash in store?
 
         database.child('conversations/' + roomId).once('value', snapshot => {
           const messageArray = objToArray(snapshot.val());
-          console.log("MESSAGE ARRAY: INIT: ", messageArray);
-          // INEFFICIENT: needs to just add one, not repeat all the time, too many conversations
           store.dispatch(startFetchMessages({ id: conversationsObj[roomId], data: messageArray }));
         })
       })
