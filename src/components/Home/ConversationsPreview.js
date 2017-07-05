@@ -31,16 +31,18 @@ class ConversationsPreview extends Component {
               <Link key={i} to={`/${roomName}`} className="LinkStyle">
                 <div className="conversationsPreview">
                   <img
-                    alt={roomName}
                     src={roomName == 'admin-bot' ?
                          require('../../utils/img/admin-bot.svg') :
                          `https://api.adorable.io/avatars/60/${roomName}@adorable.io.png`}
+                    alt={roomName}
                     className="previewPhoto" />
                   <div className="previewBody">
-                    <p className="previewHeader">{roomName}</p>
+                    <div className="previewHeader">
+                      <span className="previewName">{roomName}</span>
+                      <p className="previewTime">{ time }</p>
+                    </div>
                     <p className="previewText">{author}: {trimmedText}</p>
                   </div>
-                  <p className="previewTime">{ time }</p>
                 </div>
               </Link>
             )

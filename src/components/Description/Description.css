@@ -1,0 +1,121 @@
+.dText {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 40px 50px 40px 0;
+  overflow-y: scroll;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 26px;
+  color: #626262;
+  /*font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,sans-serif !important;*/
+}
+
+.dHeader h1 {
+  margin-bottom: 0;
+}
+
+.dHeader p {
+  margin-bottom: 0;
+}
+
+.dText h4 {
+  margin-bottom: 10px;
+}
+
+.dText ul {
+  margin: 0;
+}
+
+.dHeader, .dSubHeader {
+  display: flex;
+  align-items: baseline;
+}
+
+.dSubHeader h3, .dSubHeader p {
+  margin-bottom: 0;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+.why {
+  margin-bottom: 10px;
+}
+
+.headerSpace {
+  width: 10px;
+}
+
+.iconSpace {
+  width: 20px;
+}
+
+
+.strikethrough {
+  position: relative;
+  color: #929292;
+  text-decoration: none;
+}
+.strikethrough:before {
+  position: absolute;
+  content: "";
+  left: 0;
+  top: 55%;
+  right: 0;
+  border-top: 2px solid;
+  border-color: inherit;
+
+  -webkit-transform:rotate(-5deg);
+  -moz-transform:rotate(-5deg);
+  -ms-transform:rotate(-5deg);
+  -o-transform:rotate(-5deg);
+  transform:rotate(-5deg);
+}
+
+.tech, .compatability {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tech svg, .compatability svg {
+  width: 65px;
+  height: 65px;
+  margin-bottom: 25px;
+}
+
+.headerIcon svg {
+  width: 50px;
+  height: 50px;
+}
+
+#firebase {
+  -ms-align-items: initial;
+  align-items: initial;
+}
+
+.metrics {
+  display: flex;
+}
+
+.stats {
+  color: lime;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+.dSubHeader + p {
+  margin-top: 0;
+}
+
+.feature .title {
+  font-size: 12px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.feature {
+  width: 100%;
+  margin: 20px 25px;
+}
