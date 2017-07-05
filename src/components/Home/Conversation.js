@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux'
 import {objSwap} from './../../utils/objFunctions';
-import {addMessageToStore} from './../../actions/index';
+import {addMessageToStore, updateUserTable} from './../../actions/index';
 import MessagesView from './MessagesView';
 import ConversationNavBar from './ConversationNavBar';
 import ChatInput from './ChatInput';
@@ -36,7 +36,6 @@ class Conversation extends React.Component{
 
   addMessage(message) {
     const swapped = objSwap(this.props.userTable);
-    // console.log("********** addMessage **********", swapped[this.props.match.params.room]) // ID
 
     usersRef.child(this.props.currentUser + '/conversations/' + swapped[this.props.match.params.room]).once('value', snapshot => {
       const roomName = snapshot.val();
@@ -53,14 +52,23 @@ class Conversation extends React.Component{
         conversationsRef.child(message.roomId).push(message);
       } else {
         // No reference exists, so one needs to be created.
-        console.log("## SEND NEW ## >>> ", message)
         const cRef = usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).push().key;
         message.roomId = cRef;
+
+        // Push message to store
+        message.roomName = this.props.match.params.room;
         this.props.dispatch(addMessageToStore(message));
 
-        usersRef.child(this.props.currentUser + '/conversations/' + cRef).set(this.props.match.params.room);
+        // Push message to db
         conversationsRef.child(cRef).push(message)
 
+        // Update userTable with -> { ID: NAME }
+        var userTableObj = {};
+        userTableObj[swapped[this.props.match.params.room]] = this.props.match.params.room
+        this.props.dispatch(updateUserTable(userTableObj));
+
+        // Add a reference to this conversation for both users
+        usersRef.child(this.props.currentUser + '/conversations/' + cRef).set(this.props.match.params.room);
         usersRef.child(this.props.match.params.room + '/conversations/' + cRef).set(this.props.currentUser);
       }
     })

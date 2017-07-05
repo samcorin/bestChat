@@ -46,7 +46,10 @@ export var currentUserReducer = (state = {}, action) => {
 export var userTableReducer = (state = {}, action) => {
   switch(action.type) {
     case 'UPDATE_USER_TABLE':
-      return action.payload;
+      return {
+        ...state,
+        [action.payload.id]: action.payload.name
+      }
     default:
       return state;
   }
@@ -68,7 +71,7 @@ export var activeUsersReducer = (state = [], action) => {
 // Add user list to store
 export var userListReducer = (state = {}, action) => {
   switch(action.type) {
-    case 'ADD_USER_LIST':
+    case 'UPDATE_USER_LIST':
       return action.userList
     case 'ADD_USER_TO_LIST':
       return [

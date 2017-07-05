@@ -12,7 +12,7 @@ class ConversationsPreview extends Component {
       return obj[item]
     }).sort((a, b) => a[a.length -1].createdAt < b[b.length -1].createdAt);
 
-    if(sortedMessages.length > 0 && this.props.userTable) {
+    if(sortedMessages.length > 0 && Object.keys(this.props.userTable).length) {
       return (
         <div className="conversationPreviewWrapper">
           {sortedMessages.map((user, i) => {
