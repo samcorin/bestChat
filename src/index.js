@@ -7,9 +7,9 @@ import registerServiceWorker from './registerServiceWorker';
 const store = require('./store').configure();
 
 // Listen for changes to store
-var unsubscribe = store.subscribe(() => {
-  console.log("Subscribe State: ", store.getState());
-});
+// var unsubscribe = store.subscribe(() => {
+//   console.log("Subscribe State: ", store.getState());
+// });
 
 init(store)
 
@@ -19,5 +19,5 @@ render(
   </Provider>,
   document.getElementById('root'));
 
-registerServiceWorker();
+// registerServiceWorker();
 
