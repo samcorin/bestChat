@@ -13,8 +13,6 @@ import MessagesPin from 'material-ui/svg-icons/communication/chat';
 import Active from 'material-ui/svg-icons/notification/sync';
 import Group from 'material-ui/svg-icons/social/group';
 
-// temporarily remove swipeable views.
-
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -37,15 +35,20 @@ class Home extends Component {
             onChange={this.handleChange}
             value={this.state.slideIndex}
             className="homeTabs">
-            <Tab label="Messages" disableTouchRipple={true} value={0} icon={<MessagesPin />} >
+            <Tab
+              style={{backgroundColor: '#2196F3'}}
+              label="Messages" disableTouchRipple={true} value={0} icon={<MessagesPin />} >
               <ConversationsPreview slideIndex={this.state.slideIndex} />
             </Tab>
             <Tab
+              style={{backgroundColor: '#2196F3'}}
               label={this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
               disableTouchRipple={true} value={1} icon={<Active />}>
               <ActiveUsers slideIndex={this.state.slideIndex} />
             </Tab>
-            <Tab label="Groups" disableTouchRipple={true} value={2}icon={<Group />} >
+            <Tab
+              style={{backgroundColor: '#2196F3'}}
+              label="Groups" disableTouchRipple={true} value={2}icon={<Group />} >
               <Groups />
             </Tab>
           </Tabs>

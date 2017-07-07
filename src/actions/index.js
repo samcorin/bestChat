@@ -32,7 +32,6 @@ export const addUserToList = (username) => {
 
 // User sends a message, it's added to store
 export const addMessageToStore = (message) => {
-  console.log("*********** ACTOIN : ADD MESSGE: ", message)
   return {
     type: 'ADD_MESSAGE',
     payload: {

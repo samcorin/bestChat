@@ -4,6 +4,11 @@ import Message from './Message';
 import './MessagesView.css'
 
 class MessagesView extends React.Component {
+  constructor(props) {
+    super(props);
+
+  }
+
   componentDidMount() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
@@ -17,12 +22,15 @@ class MessagesView extends React.Component {
   render() {
     if(this.props.conversations[this.props.room] === undefined) {
       return (
-        <ul id='messageList' className="messageList">
-        </ul>
-        )
+        <ul id='messageList' className="messageList"></ul>
+      )
     } else {
       const messages = Object.keys(this.props.conversations[this.props.room]).map((message, i) => {
         var msg = this.props.conversations[this.props.room][message];
+        var prevMsg = null;
+        if(i > 0) {
+          prevMsg = this.props.conversations[this.props.room][i-1];
+        }
 
         return (
           <Message
@@ -30,7 +38,8 @@ class MessagesView extends React.Component {
             currentUser={this.props.currentUser}
             sender={msg.sender}
             text={msg.text}
-            createdAt={msg.createdAt} />
+            createdAt={msg.createdAt}
+            prevMsg={prevMsg && prevMsg.createdAt} />
           );
         });
 

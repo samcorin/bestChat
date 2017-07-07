@@ -1,16 +1,25 @@
+
+// Friday, 7 Jul
+export const humanReadable = (unix) => {
+  const newDate = new Date(unix);
+  const el = newDate.toDateString().split(' ');
+  return `${el[0]}, ${el[2]} ${el[1]}`;
+}
+
+// export const dateCheck = (unix) => {
+//   const newDate = new Date(unix);
+//   const el = newDate.toDateString().split(' ');
+//   return `${el[0]}, ${el[2]} ${el[1]}`;
+// }
+
+
 export const timely = (time) => {
   const timeObj = new Date(time);
-
   const minutes = timeObj.getMinutes();
-  // '0' prepend, there must be a better way
   const convertMinutes = minutes < 10 ? `0${minutes}` : minutes;
-
   const hour = timeObj.getHours();
-  // 12-hour convert
   const convertHour = hour > 12 ? hour % 12 : hour;
-
   const ampm = hour >= 12 ? 'PM' : 'AM';
-
   return `${convertHour}:${convertMinutes} ${ampm}`;
 }
 

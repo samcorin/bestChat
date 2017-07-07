@@ -7,11 +7,25 @@ li {
   max-width: 160px;
   word-break: break-word;
   display: inline-block;
-  padding: 7px 10px;
+  padding: 7px 12px;
   margin: 0;
   border-radius: 1em;
   clear: both;
   position: relative;
+}
+
+/*#MessageBody a,
+#MessageBody a:visited,
+#MessageBody a:hover,
+#MessageBody a:active {
+}*/
+
+.myMessageBody a {
+  color: white;
+}
+
+.theirMessageBody a {
+  color: #1289fe;
 }
 
 .myMessage {
@@ -50,4 +64,46 @@ li {
   font-size: 11px;
   text-transform: uppercase;
   color: rgba(136, 152, 170, 0.8);
+}
+
+.divider {
+  margin: 5px auto;
+  overflow: hidden;
+  width: 90%;
+  text-align: center;
+}
+
+/*@media (min-width: 600px) {
+  .divider {
+    width: 90%;
+  }
+}*/
+
+.innerDivider {
+  position: relative !important;
+  padding: 0 12px !important;
+}
+
+.innerDivider:before {
+  content: '' !important;
+  position: absolute !important;
+  border-bottom: 1px solid #e4e4e4 !important;
+  top: 50% !important;
+  right: 100% !important;
+  width: 5000px !important;
+}
+
+.innerDivider:after {
+  content: '' !important;
+  position: absolute !important;
+  border-bottom: 1px solid #e4e4e4 !important;
+  top: 50% !important;
+  left: 100% !important;
+  width: 5000px !important;
+}
+
+.dividerText {
+  font-size: 12px;
+  font-weight: bold;
+  color: #354052;
 }
