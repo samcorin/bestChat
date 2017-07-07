@@ -37,7 +37,15 @@
 
 @media (max-width: 600px) {
   #inputButton {
-    font-size: 30px;
+    font-size: 33px;
+    height: 55px;
+    margin: 0 auto;
+  }
+  .chatForm .form {
+    align-items: center;
+  }
+  .chatInput {
+    width: 90%;
   }
 }
 
