@@ -14,6 +14,20 @@ li {
   position: relative;
 }
 
+/*#MessageBody a,
+#MessageBody a:visited,
+#MessageBody a:hover,
+#MessageBody a:active {
+}*/
+
+.myMessageBody a {
+  color: white;
+}
+
+.theirMessageBody a {
+  color: #1289fe;
+}
+
 .myMessage {
   float: right;
   margin-bottom: 10px;
