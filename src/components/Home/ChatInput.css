@@ -23,8 +23,8 @@
   padding: 5px 11px;
   border-radius: 50px;
   background-color: #F2F2F2;
-  /*border: 1px solid rgba(0,0,0,0.1);*/
   border: none;
+  height: 25px;
 }
 
 ::placeholder {
@@ -53,7 +53,28 @@
   }
 }
 
+[contenteditable] {
+  /*border: 1px solid #000;*/
+  /*line-height: 1.4em;*/
+  -webkit-appearance: textfield;
+  appearance: textfield
+}
+
+[contenteditable=true]:empty:before{
+  content: attr(data-placeholder);
+  display: block;
+}
+
+div[contenteditable=true] {
+  border: 1px dashed #AAA;
+  width: 290px;
+  padding: 5px;
+}
+
+
+/* ======================================================================== */
 /* Animations */
+/* ======================================================================== */
 .popout {
   -webkit-animation-name: popout;
   -webkit-animation-duration: 0.3s;

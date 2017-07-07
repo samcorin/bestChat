@@ -105,5 +105,6 @@ li {
 .dividerText {
   font-size: 12px;
   font-weight: bold;
-  color: #354052;
+  /*color: #354052;*/
+  color: #afafaf;
 }

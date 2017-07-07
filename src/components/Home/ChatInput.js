@@ -4,6 +4,8 @@ import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
 import './ChatInput.css';
 
+const emojione = () => import('emojione');
+
 class ChatInput extends React.Component {
   constructor(props) {
     super(props);
@@ -17,6 +19,13 @@ class ChatInput extends React.Component {
   componentDidMount() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
+    emojione().then(loadedModule => {
+       window.emojione = loadedModule;
+    })
+
+    document.getElementById("chat-input").addEventListener('input', function(e) {
+        console.log("EVENT: ", e.target.innerText)
+    }, false);
   }
 
   componentDidUpdate() {
@@ -33,6 +42,11 @@ class ChatInput extends React.Component {
   }
 
   textChangeHandler(event)  {
+    // event.target.value
+    const input = document.getElementById('chat-input').value;
+    const output = window.emojione.toImage(input);
+    document.getElementById('chat-input').value = output;
+
     this.setState({ chatInput: event.target.value });
     if(this.state.chatInput.length === 0) {
       this.fade()
@@ -43,26 +57,28 @@ class ChatInput extends React.Component {
     event.preventDefault();
     document.getElementById("chat-input").focus();
     this.fade()
-    this.setState({ chatInput: '' });
     this.props.onSend(this.state.chatInput, this.props.room);
+    this.setState({ chatInput: '' });
   }
 
   likeHandler(event) {
     event.preventDefault();
-    this.props.onSend('like', this.props.room);
+    // this.props.onSend('like', this.props.room);
   }
 
   render() {
     return (
       <div className="chatForm">
         <form className="form" onSubmit={this.submitHandler} autoComplete="off">
-          <input type="text"
+          <div
+          contentEditable="true"
           id="chat-input"
           onChange={this.textChangeHandler}
           value={this.state.chatInput}
-          placeholder="Type a message"
+          data-placeholder="Type a message"
           required
-          className="chatInput" />
+          className="chatInput"></div>
+
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>
               <div><FaPaperPlane /></div>
@@ -78,6 +94,13 @@ class ChatInput extends React.Component {
 }
 
 // autoFocus
+// <input type="text"
+//           id="chat-input"
+//           onChange={this.textChangeHandler}
+//           value={this.state.chatInput}
+//           placeholder="Type a message"
+//           required
+//           className="chatInput" />
 
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser
