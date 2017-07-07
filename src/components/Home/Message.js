@@ -8,12 +8,9 @@ class Message extends React.Component {
   render() {
     const msgDate = new Date(this.props.createdAt);
     const prevMsgDate = new Date(this.props.prevMsg);
+    const text = this.props.text;
 
-    var text = this.props.text;
-    console.log(urlify(text))
-
-
-
+    // ?>There's got to be a better way...
     if(msgDate.getDate() > prevMsgDate.getDate() || msgDate.getMonth() > prevMsgDate.getMonth()) {
       if (this.props.sender === this.props.currentUser) {
         return (
