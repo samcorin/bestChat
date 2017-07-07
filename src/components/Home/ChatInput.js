@@ -14,6 +14,16 @@ class ChatInput extends React.Component {
     this.textChangeHandler = this.textChangeHandler.bind(this);
   }
 
+  componentDidMount() {
+    const messageDiv = document.getElementById('messageList');
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+  }
+
+  componentDidUpdate() {
+    const messageDiv = document.getElementById('messageList');
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+  }
+
   // Fade animations for Send and Like icons
   fade() {
     document.getElementById("inputButton").classList.add('fadeIn');
@@ -52,7 +62,6 @@ class ChatInput extends React.Component {
           value={this.state.chatInput}
           placeholder="Type a message"
           required
-          autoFocus
           className="chatInput" />
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>
@@ -67,6 +76,8 @@ class ChatInput extends React.Component {
     );
   }
 }
+
+// autoFocus
 
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser
