@@ -17,6 +17,7 @@ class Conversation extends React.Component{
     super(props);
 
     this.sendHandler = this.sendHandler.bind(this);
+    this.roomOnline = this.roomOnline.bind(this);
   }
 
   sendHandler(message, room) {
@@ -78,12 +79,17 @@ class Conversation extends React.Component{
     })
   }
 
+  roomOnline() {
+    return this.props.activeUsers.indexOf(this.props.match.params.room) !== -1;
+  }
+
   render() {
+    const room = this.props.match.params.room;
     return (
       <div className="ConversationScreen">
-        <ConversationNavBar room={this.props.match.params.room} />
-        <MessagesView room={this.props.match.params.room} />
-        <ChatInput onSend={this.sendHandler} room={this.props.match.params.room} />
+        <ConversationNavBar online={this.roomOnline()} room={room} />
+        <MessagesView room={room} />
+        <ChatInput onSend={this.sendHandler} room={room} />
       </div>
     )
   }
@@ -93,7 +99,8 @@ class Conversation extends React.Component{
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser,
   conversations: state.conversations,
-  userTable: state.userTable
+  userTable: state.userTable,
+  activeUsers: state.activeUsers
 });
 
 export default connect(mapStateToProps)(Conversation);

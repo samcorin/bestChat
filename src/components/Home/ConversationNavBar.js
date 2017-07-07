@@ -7,10 +7,14 @@ import FaVideoCamera from 'react-icons/lib/fa/video-camera';
 class ConversationNavBar extends React.Component {
         // <img src={`https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`} className="previewPhoto" />
   render() {
+    console.log("PROPS: ", this.props.online)
     return (
-      <div id="ConversationNavBar">
+      <div style={{backgroundColor: '#2196F3'}} id="ConversationNavBar">
         <NavLink id="backButton" className="LinkStyle" to="/"><FaArrowLeft /></NavLink>
-        <p id="room">{this.props.room}</p>
+        <div id="room">
+          <h4 className="roomName">{this.props.room}</h4>
+          <p className="roomStatus">is {this.props.online ? 'online' : 'offline'}</p>
+        </div>
         <FaVideoCamera />
       </div>
     );
