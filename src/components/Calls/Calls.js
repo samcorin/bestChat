@@ -289,15 +289,8 @@ class Calls extends Component {
       <div className="waiting">
         <CallsNavBar />
         <div>
-          <section>
-            <button id="startCallButton" onClick={this.startCall}>Start Call</button>
-            <button id="callButton" onClick={this.call}>Call</button>
-            <button id="upgradeButton" onClick={this.upgrade}>Upgrade</button>
-
-          </section>
-          <video id="localVideo" autoPlay muted></video>
-          <video id="remoteVideo" autoPlay muted></video>
-          <div>
+          <div className="waiting">
+          Coming soon...
           </div>
         </div>
         <BottomNav />
@@ -305,6 +298,16 @@ class Calls extends Component {
     );
   }
 }
+          // <section>
+          //   <button id="startCallButton" onClick={this.startCall}>Start Call</button>
+          //   <button id="callButton" onClick={this.call}>Call</button>
+          //   <button id="upgradeButton" onClick={this.upgrade}>Upgrade</button>
+
+          // </section>
+          // <video id="localVideo" autoPlay muted></video>
+          // <video id="remoteVideo" autoPlay muted></video>
+          //
+          //
           // {this.state.available && <video id="video" width="259" height="200"></video>}
           // <button onClick={this.handleAvailability}>Press</button>
             // <canvas id="canvas" width="160" height="100"></canvas>

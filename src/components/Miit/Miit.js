@@ -5,6 +5,7 @@ import BottomNav from './../BottomNav';
 // import Map from './Map';
 import MiitNavBar from './MiitNavBar';
 import './Miit.css';
+import './../App.css';
 
 var bgImg = {
   backgroundImage: `url(${require('../../utils/img/miit_alley_bg.jpg')})`,
@@ -23,7 +24,8 @@ class Miit extends Component {
     }
   }
 
-  componentDidMount() {
+  // componentDidMount() {
+  functionA() {
     console.log('Geolocation: ', !!window.google)
     // if (navigator.geolocation) {
     //     navigator.geolocation.getCurrentPosition(success, error, options)
@@ -31,7 +33,7 @@ class Miit extends Component {
     //     console.log("Geolocation is not supported by this browser.");
     // }
 
-    var bounds = new window.google.maps.LatLngBounds();
+    // var bounds = new window.google.maps.LatLngBounds();
     var koenji = {lat: 35.7059, lng: 139.6486};
     var map = new window.google.maps.Map(document.getElementById('map'), {
       zoom: 16,
@@ -71,7 +73,7 @@ class Miit extends Component {
 
     for( i = 0; i < markers.length; i++ ) {
       var position = new window.google.maps.LatLng(markers[i][1], markers[i][2]);
-      bounds.extend(position);
+      // bounds.extend(position);
       marker = new window.google.maps.Marker({
           position: position,
           map: map,
@@ -89,7 +91,7 @@ class Miit extends Component {
       })(marker, i));
 
       // Automatically center the map fitting all markers on the screen
-      map.fitBounds(bounds);
+      // map.fitBounds(bounds);
     }
 
     var boundsListener = window.google.maps.event.addListener((map), 'bounds_changed', function(event) {
@@ -134,6 +136,9 @@ class Miit extends Component {
       return (
         <div id="MiitWrapper">
           <MiitNavBar />
+          <div className="waiting">
+            Coming soon...
+          </div>
           <BottomNav />
         </div>
       )

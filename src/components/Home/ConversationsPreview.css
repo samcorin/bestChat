@@ -61,7 +61,8 @@
 
 @media (min-width: 600px) {
   .conversationPreviewWrapper {
-    height: 414px;
+    height: 390px;
+    padding-bottom: 40px;
   }
 }
 
