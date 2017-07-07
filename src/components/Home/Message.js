@@ -1,5 +1,6 @@
 import React from 'react';
 import timely , {humanReadable} from './../../utils/timely';
+import {urlify} from './../../utils/message';
 import './Message.css';
 import MessageDivider from './MessageDivider';
 
@@ -7,6 +8,10 @@ class Message extends React.Component {
   render() {
     const msgDate = new Date(this.props.createdAt);
     const prevMsgDate = new Date(this.props.prevMsg);
+
+    var text = this.props.text;
+    console.log(urlify(text))
+
 
 
     if(msgDate.getDate() > prevMsgDate.getDate() || msgDate.getMonth() > prevMsgDate.getMonth()) {
@@ -17,7 +22,7 @@ class Message extends React.Component {
             <li>
               <div className='myMessage'>
                 <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
-                <span className='myMessageBody' id="MessageBody">{ this.props.text }</span>
+                <span className='myMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
               </div>
             </li>
           </div>
@@ -28,7 +33,7 @@ class Message extends React.Component {
             <MessageDivider date={humanReadable(this.props.createdAt)}/>
             <li>
               <div className='theirMessage'>
-                <span className='theirMessageBody' id="MessageBody">{ this.props.text }</span>
+                <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
                 <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
               </div>
             </li>
@@ -41,7 +46,7 @@ class Message extends React.Component {
         <li>
           <div className='myMessage'>
             <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
-            <span className='myMessageBody' id="MessageBody">{ this.props.text }</span>
+            <span className='myMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
           </div>
         </li>
       );
@@ -49,7 +54,7 @@ class Message extends React.Component {
       return (
         <li>
           <div className='theirMessage'>
-            <span className='theirMessageBody' id="MessageBody">{ this.props.text }</span>
+            <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
             <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
           </div>
         </li>
