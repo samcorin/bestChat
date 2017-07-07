@@ -11,6 +11,7 @@ import Calls from './Calls/Calls';
 import Miit from './Miit/Miit';
 import Settings from './Settings';
 import Description from './Description';
+import Games from './Games/Games';
 import UsernameEditor from './../utils/UsernameEditor';
 import './App.css';
 
@@ -74,6 +75,7 @@ class App extends Component {
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/calls" component={Calls}/>
                 <Route exact path="/Miit" component={Miit}/>
+                <Route exact path="/games" component={Games}/>
                 <Route exact path="/settings" component={Settings}/>
                 <Route path="/:room" render={(params) => (
                   <Conversation {...params} />

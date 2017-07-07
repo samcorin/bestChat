@@ -4,6 +4,7 @@
   background-color: #fff;
   opacity: 0.95;
   height: 50px;
+  padding: 0 5px;
 }
 
 .chatForm .form {
@@ -36,6 +37,9 @@
 }
 
 @media (max-width: 600px) {
+  .chatForm {
+    padding: 0 10px;
+  }
   #inputButton {
     font-size: 33px;
     height: 55px;
