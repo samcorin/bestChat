@@ -11,8 +11,18 @@ import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 
+const styles = {
+  iconButton: {
+    padding: '0',
+    margin: '0 auto',
+    width: '28px',
+    textAlign: 'center'
+  }
+}
+
 class ConversationNavBar extends React.Component {
-        // <img src={`https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`} className="previewPhoto" />
+  // <img src={`https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`} className="previewPhoto" />
+
   render() {
     return (
       <MuiThemeProvider>
@@ -23,7 +33,8 @@ class ConversationNavBar extends React.Component {
             <p className="roomStatus">is {this.props.online ? 'online' : 'offline'}</p>
           </div>
           <IconMenu
-            iconButtonElement={<IconButton disableTouchRipple={true}><MoreVertIcon /></IconButton>}
+            iconButtonElement={<IconButton style={styles.iconButton}
+            disableTouchRipple={true}><MoreVertIcon style={{color: '#fff'}} /></IconButton>}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
             targetOrigin={{horizontal: 'right', vertical: 'top'}}>
             <MenuItem disableTouchRipple={true} primaryText="Video Call" />
