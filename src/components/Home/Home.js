@@ -34,7 +34,8 @@ class Home extends Component {
           <Tabs
             onChange={this.handleChange}
             value={this.state.slideIndex}
-            className="homeTabs">
+            className="Tabs"
+            style={{bottom:'0'}}>
             <Tab
               style={{backgroundColor: '#2196F3'}}
               label="Messages" disableTouchRipple={true} value={0} icon={<MessagesPin />} >
