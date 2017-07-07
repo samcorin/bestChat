@@ -1,0 +1,128 @@
+/*@import url(https://fonts.googleapis.com/css?family=Walter+Turncoat);*/
+
+.sidebar {
+    position: absolute;
+}
+
+.data {
+    top: 50px;
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+    padding: 6px;
+}
+
+/*span {
+    margin-bottom: 10px;
+}*/
+
+/*button {
+    float: left;
+    margin-top: 20px;
+    border: none;
+    background: none;
+    outline: 0;
+    font-size: 1.2em;
+}*/
+
+.winner {
+    background: #A5F686;
+}
+
+.modal-backdrop {
+    opacity: 0.4 !important;
+}
+
+.modal-body {
+    width: 100%;
+    display: inline-block;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.options {
+    float: left;
+    display: inline-block;
+    border: none;
+    border-radius: 0;
+    width: 50%;
+    font-size: 25vh;
+    height: 200px;
+}
+
+/*button,
+button:active,
+button:focus,
+button:hover {
+    outline: none !important;
+    outline-style: none;
+    outline-width: 0;
+    text-decoration: none;
+}*/
+
+/*a,
+a:active,
+a:focus,
+a:hover {
+    outline: none !important;
+    outline-style: none;
+    outline-width: 0;
+    text-decoration: none;
+}*/
+
+/*a.options {
+    color: #111;
+    opacity: 1;
+}*/
+
+.btn {
+        background-color: none !important;
+    }
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.modal-content h3 {
+    font-size: 5rem;
+}
+
+#restart {
+    position: absolute;
+    float: left;
+    clear: right;
+    font-size: 2em;
+    margin: 20px;
+}
+
+.v {
+    border-left: 3px solid #F6F6F6;
+    border-right: 3px solid #F6F6F6;
+}
+
+.h {
+    border-top: 3px solid #F6F6F6;
+    border-bottom: 3px solid #F6F6F6;
+}
+.gameTable tr td {
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    vertical-align: middle;
+}
+/*td p {
+    font-size: 8.9em;
+    margin: -20px;
+}*/
+
+/*.container-centered {
+   position: fixed;
+   top: 50%;
+   left: 50%;
+   -webkit-transform: translate(-50%, -50%);
+   -moz-transform: translate(-50%, -50%);
+   -ms-transform: translate(-50%, -50%);
+   -o-transform: translate(-50%, -50%);
+   transform: translate(-50%, -50%);
+}
+*/

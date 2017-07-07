@@ -16,7 +16,13 @@ const styles = {
     padding: '0',
     margin: '0 auto',
     width: '28px',
-    textAlign: 'center'
+    textAlign: 'center',
+    minHeight: '52px',
+    color: '#fff !important'
+  },
+  button: {
+    minHeight: '52px',
+    color: '#fff !important'
   }
 }
 
@@ -34,9 +40,10 @@ class ConversationNavBar extends React.Component {
           </div>
           <IconMenu
             iconButtonElement={<IconButton style={styles.iconButton}
-            disableTouchRipple={true}><MoreVertIcon style={{color: '#fff'}} /></IconButton>}
+            disableTouchRipple={true}><MoreVertIcon style={styles.button} /></IconButton>}
             anchorOrigin={{horizontal: 'right', vertical: 'bottom'}}
-            targetOrigin={{horizontal: 'right', vertical: 'top'}}>
+            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+            className="iconButton">
             <MenuItem disableTouchRipple={true} primaryText="Video Call" />
             <MenuItem disableTouchRipple={true} primaryText="Play 'Game'" />
           </IconMenu>
