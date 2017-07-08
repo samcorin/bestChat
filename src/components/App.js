@@ -21,6 +21,8 @@ import {
   Switch
 } from 'react-router-dom'
 
+// const Conversation = () => import('./Home/Conversation');
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -40,6 +42,10 @@ class App extends Component {
   }
 
   componentDidMount() {
+    // Conversation().then(loadedModule => {
+       // console.log(loadedModule);
+       // import Conversation from loadedModule;
+    // })
     // const getScript = (source, callback) => {
     //   var el = document.createElement('script');
     //   el.onload = callback;

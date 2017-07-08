@@ -3,8 +3,7 @@ import {connect} from 'react-redux'
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
 import './ChatInput.css';
-
-const emojione = () => import('emojione');
+import EmojiDependency from './../../utils/EmojiDependency';
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -16,16 +15,22 @@ class ChatInput extends React.Component {
     this.textChangeHandler = this.textChangeHandler.bind(this);
   }
 
+  // componentWillUnmount() {
+    // remove unecessary listeners, et...
+  // }
+
   componentDidMount() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
-    emojione().then(loadedModule => {
-       window.emojione = loadedModule;
-    })
 
-    document.getElementById("chat-input").addEventListener('input', function(e) {
-        console.log("EVENT: ", e.target.innerText)
-    }, false);
+    EmojiDependency().then((library) => {
+      console.log(library.emojione)
+      // this.marked = deps.marked.setOptions({
+      //   highlight: (code) => deps.hljs.highlightAuto(code).value
+      // });
+
+      this.forceUpdate();
+    });
   }
 
   componentDidUpdate() {
@@ -42,11 +47,6 @@ class ChatInput extends React.Component {
   }
 
   textChangeHandler(event)  {
-    // event.target.value
-    const input = document.getElementById('chat-input').value;
-    const output = window.emojione.toImage(input);
-    document.getElementById('chat-input').value = output;
-
     this.setState({ chatInput: event.target.value });
     if(this.state.chatInput.length === 0) {
       this.fade()
@@ -57,28 +57,26 @@ class ChatInput extends React.Component {
     event.preventDefault();
     document.getElementById("chat-input").focus();
     this.fade()
-    this.props.onSend(this.state.chatInput, this.props.room);
     this.setState({ chatInput: '' });
+    this.props.onSend(this.state.chatInput, this.props.room);
   }
 
   likeHandler(event) {
     event.preventDefault();
-    // this.props.onSend('like', this.props.room);
+    this.props.onSend('like', this.props.room);
   }
 
   render() {
     return (
       <div className="chatForm">
         <form className="form" onSubmit={this.submitHandler} autoComplete="off">
-          <div
-          contentEditable="true"
+          <input type="text"
           id="chat-input"
           onChange={this.textChangeHandler}
           value={this.state.chatInput}
-          data-placeholder="Type a message"
+          placeholder="Type a message"
           required
-          className="chatInput"></div>
-
+          className="chatInput" />
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>
               <div><FaPaperPlane /></div>
@@ -94,13 +92,6 @@ class ChatInput extends React.Component {
 }
 
 // autoFocus
-// <input type="text"
-//           id="chat-input"
-//           onChange={this.textChangeHandler}
-//           value={this.state.chatInput}
-//           placeholder="Type a message"
-//           required
-//           className="chatInput" />
 
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser

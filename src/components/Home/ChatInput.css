@@ -15,7 +15,7 @@
 }
 
 .chatInput {
-  outline: none;
+  outline: none !important;
   box-sizing: border-box;
   font-size: 1rem;
   width: 85%;
@@ -66,8 +66,7 @@
 }
 
 div[contenteditable=true] {
-  border: 1px dashed #AAA;
-  width: 290px;
+  /*width: 290px;*/
   padding: 5px;
 }
 
