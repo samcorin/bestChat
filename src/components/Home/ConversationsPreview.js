@@ -19,13 +19,13 @@ class ConversationsPreview extends Component {
           {sortedMessages.map((user, i) => {
             const propsRef = user[user.length - 1];
             const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
-            const time = timely(propsRef.createdAt);
             const type = propsRef.type;
+
+            const time = timely(propsRef.createdAt);
+            // check it time was before today.
 
             // this.props.userTable takes a while to load
             const roomName = this.props.userTable[propsRef.roomId];
-
-            console.log("PREV: ", propsRef)
 
             // in case text is too long..
             const trimmedText = (propsRef.text.length + author.length) > 50 ?
@@ -55,7 +55,6 @@ class ConversationsPreview extends Component {
               </Link>
             )
           })}
-          <div className="previewSpacer"></div>
         </div>
       );
     } else {

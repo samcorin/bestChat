@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
 import './ChatInput.css';
-import EmojiDependency from './../../utils/EmojiDependency';
+// import EmojiDependency from './../../utils/EmojiDependency';
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -24,14 +24,14 @@ class ChatInput extends React.Component {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
 
-    EmojiDependency().then((library) => {
-      console.log("Emojione loaded?: ", !!library)
-      // this.marked = deps.marked.setOptions({
-      //   highlight: (code) => deps.hljs.highlightAuto(code).value
-      // });
+    // EmojiDependency().then((library) => {
+    //   console.log("Emojione loaded?: ", !!library)
+    //   // this.marked = deps.marked.setOptions({
+    //   //   highlight: (code) => deps.hljs.highlightAuto(code).value
+    //   // });
 
-      this.forceUpdate();
-    });
+    //   this.forceUpdate();
+    // });
   }
 
   componentDidUpdate() {
