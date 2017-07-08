@@ -146,6 +146,9 @@ button, button:focus {
     position: relative;
     top: 25vh;
   }
+  body, html {
+    overflow: hidden;
+  }
 }
 
 @-webkit-keyframes load4 {

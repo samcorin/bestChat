@@ -16,30 +16,12 @@ class Message extends React.Component {
     const divider = (msgDate.getDate() > prevMsgDate.getDate() || msgDate.getMonth() > prevMsgDate.getMonth());
     const myMessage = this.props.sender === this.props.currentUser;
 
-    // <div>
-    //   <MessageDivider date={humanReadable(this.props.createdAt)}/>
-    //   <li>
-    //     <div className={`${myMessage ? 'myMessage' : 'theirMessage'}`}>
-    //       <span className={`${myMessage ? 'myMessageTime' : 'theirMessageTime'}`}>
-    //         { timely(this.props.createdAt) }
-    //       </span>
-    //       <span className={`${myMessage ? 'myMessageBody' : 'theirMessageBody'}`}
-    //         id="MessageBody"
-    //         dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}>
-    //       </span>
-    //     </div>
-    //   </li>
-    // </div>
-
-
-    // ?>There's got to be a better way...
-    // This is gettign really messy......
     if (myMessage) {
       return (
         <div>
           {divider && <MessageDivider date={humanReadable(this.props.createdAt)}/> }
           <li>
-            <div className='myMessage'>
+            <div className={myMessage ? 'myMessage' : 'theirMessage'}>
               {type === 'like' ? (
                 <FaThumbsOUp className='likeIcon' />
               ) : (
@@ -57,7 +39,7 @@ class Message extends React.Component {
         <div>
           {divider && <MessageDivider date={humanReadable(this.props.createdAt)}/> }
           <li>
-            <div className='theirMessage'>
+            <div className={myMessage ? 'myMessage' : 'theirMessage'}>
               {type === 'like' ? (
                 <FaThumbsOUp className='likeIcon' />
               ) : (
