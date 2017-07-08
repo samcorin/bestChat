@@ -49,6 +49,8 @@
   font-size: 12px;
   margin: 0;
   word-wrap: break-word;
+  display: flex;
+  align-items: center;
 }
 
 .previewTime {
@@ -88,4 +90,10 @@
   .previewText {
     font-size: 14px;
   }
+}
+
+.previewLike {
+  font-size: 14px;
+  color: #1289fe;
+  margin-left: 5px;
 }
