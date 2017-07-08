@@ -51,6 +51,8 @@ const setUsername = (store) => {
     createdAt: Date.now()
   };
 
+  // ?>Need to separate this. initDatabase or something..
+
   // Conversation 1
   const newPostKey = database.child('conversations').push().key;
 

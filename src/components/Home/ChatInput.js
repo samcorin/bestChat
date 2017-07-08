@@ -63,7 +63,8 @@ class ChatInput extends React.Component {
 
   likeHandler(event) {
     event.preventDefault();
-    this.props.onSend('like', this.props.room);
+    console.log("LIKE CLICKED")
+    // this.props.onSend('like', this.props.room);
   }
 
   render() {

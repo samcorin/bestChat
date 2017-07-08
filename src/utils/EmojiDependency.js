@@ -1,4 +1,5 @@
 // Code splitting
+// Load this only when ChatInput component mounts
 
 export default () => {
   return new Promise(resolve => {
