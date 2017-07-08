@@ -5,6 +5,7 @@
   opacity: 0.95;
   height: 50px;
   padding: 0 5px;
+  flex: 1 1 50px;
 }
 
 .chatForm .form {
