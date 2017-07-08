@@ -8,31 +8,17 @@ import {sortMessages, latestMessages} from './../../utils/objFunctions';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 
 class ConversationsPreview extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      latestMessages: []
-    }
-  }
-
-  // this.setState({
-  //   latestMessages: latestMessages(this.props.conversations)
-  // })
-
   // INEFFICIENT!!
   // Abstract this out, and figure out how to make it faster
   render() {
-    // NEEDS IMPROVEMENT
-
-    // returns an array of messages for each conversation. Newest conversation on top.
     let convLen = Object.keys(this.props.conversations).length;
     let tableLen = Object.keys(this.props.userTable).length;
 
-    // do stuff then render to page
     // if(previewMessages.length > 0 && Object.keys(this.props.userTable).length) {
     if(convLen > 0 && tableLen === convLen) {
       let previewMessages = latestMessages(this.props.conversations)
-      console.log("RENDER")
+
+      // Clean up this code
       return (
         <div className="conversationPreviewWrapper">
           {previewMessages.map((message) => {
