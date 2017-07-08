@@ -4,19 +4,21 @@ import './ConversationsPreview.css';
 import './../App.css';
 import { Link } from 'react-router-dom';
 import timely from './../../utils/timely';
+import {sortMessages} from './../../utils/objFunctions';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 
 class ConversationsPreview extends Component {
 
   // INEFFICIENT!!
+  // Abstract this out, and figure out how to make it faster
 
   render() {
     const obj = this.props.conversations;
-    const sortedMessages = Object.keys(obj).map((item) => {
-      return obj[item]
-    }).sort((a, b) => a[a.length -1].createdAt < b[b.length -1].createdAt);
 
-    // Shows New on top
+    // returns an array of messages for each conversation. Newest conversation on top.
+    const sortedMessages = sortMessages(obj);
+
+    // NEEDS IMPROVEMENT
     if(sortedMessages.length > 0 && Object.keys(this.props.userTable).length) {
       return (
         <div className="conversationPreviewWrapper">
@@ -25,9 +27,6 @@ class ConversationsPreview extends Component {
             const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
             const type = propsRef.type;
 
-            // Convert UNIX to humam readable time: '1:11 PM'
-            // const humanTime = new Date(propsRef.createdAt);
-            // console.log(humanTime.toDateString()) // Fri Jul 07 2017
             // if less than a week, display day name
             const msgDate = new Date(propsRef.createdAt);
             const today = new Date();
@@ -37,7 +36,6 @@ class ConversationsPreview extends Component {
 
             // Day, Month, Date, Year
             const timeElements = msgDate.toDateString().split(' ')
-            console.log("BEFORE: ", beforeToday)
 
             // Default time display
             const time = beforeToday ?
