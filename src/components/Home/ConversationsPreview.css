@@ -13,6 +13,9 @@
   width: 100%;
 }
 
+.previewSpacer {
+  height: 50px;
+}
 
 .LinkStyle {
   text-decoration: none;
@@ -77,6 +80,12 @@
     padding: 0 15px;
     margin-top: 12px;
   }
+  .conversationPreviewWrapper {
+    height: calc(100vh - 72px);
+    position: relative;
+    text-align: initial;
+    overflow-y: scroll;
+  }
   .previewBody {
     padding-left: 14px;
     max-width: 90%;
@@ -90,6 +99,9 @@
   .previewText {
     font-size: 14px;
   }
+  .previewSpacer {
+    height: 60px;
+  }
 }
 
 .previewLike {
@@ -97,3 +109,4 @@
   color: #1289fe;
   margin-left: 5px;
 }
+

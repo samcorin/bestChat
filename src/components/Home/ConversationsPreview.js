@@ -55,6 +55,7 @@ class ConversationsPreview extends Component {
               </Link>
             )
           })}
+          <div className="previewSpacer"></div>
         </div>
       );
     } else {
