@@ -108,3 +108,9 @@ li {
   /*color: #354052;*/
   color: #afafaf;
 }
+
+.likeIcon {
+  font-size: 40px;
+  color: #2196F3;
+  padding: 2px;
+}

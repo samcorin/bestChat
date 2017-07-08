@@ -22,7 +22,7 @@ class ConversationsPreview extends Component {
 
             // this.props.userTable takes a while to load
             const roomName = this.props.userTable[propsRef.roomId];
-
+            console.log("PREV: ", propsRef)
             // in case text is too long..
             const trimmedText = (propsRef.text.length + author.length) > 50 ?
             `${propsRef.text.substring(0, 50)}...` : propsRef.text;

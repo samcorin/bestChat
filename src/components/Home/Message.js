@@ -3,73 +3,75 @@ import timely , {humanReadable} from './../../utils/timely';
 import {urlify} from './../../utils/message';
 import './Message.css';
 import MessageDivider from './MessageDivider';
+import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 
 class Message extends React.Component {
   render() {
     const msgDate = new Date(this.props.createdAt);
     const prevMsgDate = new Date(this.props.prevMsg);
     const text = this.props.text;
+    const type = this.props.type;
+
+    // Conditions
+    const divider = (msgDate.getDate() > prevMsgDate.getDate() || msgDate.getMonth() > prevMsgDate.getMonth());
+    const myMessage = this.props.sender === this.props.currentUser;
+
+    // <div>
+    //   <MessageDivider date={humanReadable(this.props.createdAt)}/>
+    //   <li>
+    //     <div className={`${myMessage ? 'myMessage' : 'theirMessage'}`}>
+    //       <span className={`${myMessage ? 'myMessageTime' : 'theirMessageTime'}`}>
+    //         { timely(this.props.createdAt) }
+    //       </span>
+    //       <span className={`${myMessage ? 'myMessageBody' : 'theirMessageBody'}`}
+    //         id="MessageBody"
+    //         dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}>
+    //       </span>
+    //     </div>
+    //   </li>
+    // </div>
+
 
     // ?>There's got to be a better way...
-    if(msgDate.getDate() > prevMsgDate.getDate() || msgDate.getMonth() > prevMsgDate.getMonth()) {
-      if (this.props.sender === this.props.currentUser) {
-        return (
-          <div>
-            <MessageDivider date={humanReadable(this.props.createdAt)}/>
-            <li>
-              <div className='myMessage'>
-                <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
-                <span className='myMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
-              </div>
-            </li>
-          </div>
-        );
-      } else {
-        return (
-          <div>
-            <MessageDivider date={humanReadable(this.props.createdAt)}/>
-            <li>
-              <div className='theirMessage'>
-                <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
-                <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
-              </div>
-            </li>
-          </div>
-        );
-      }
-
-    } else if (this.props.sender === this.props.currentUser) {
+    // This is gettign really messy......
+    if (myMessage) {
       return (
-        <li>
-          <div className='myMessage'>
-            <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
-            <span className='myMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
-          </div>
-        </li>
+        <div>
+          {divider && <MessageDivider date={humanReadable(this.props.createdAt)}/> }
+          <li>
+            <div className='myMessage'>
+              {type === 'like' ? (
+                <FaThumbsOUp className='likeIcon' />
+              ) : (
+                <div>
+                  <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
+                  <span className='myMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
+                </div>
+              )}
+            </div>
+          </li>
+        </div>
       );
     } else {
       return (
-        <li>
-          <div className='theirMessage'>
-            <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
-            <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
-          </div>
-        </li>
+        <div>
+          {divider && <MessageDivider date={humanReadable(this.props.createdAt)}/> }
+          <li>
+            <div className='theirMessage'>
+              {type === 'like' ? (
+                <FaThumbsOUp className='likeIcon' />
+              ) : (
+                <div>
+                  <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
+                  <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
+                </div>
+              )}
+            </div>
+          </li>
+        </div>
       );
     }
   }
 }
 
 export default Message;
-
-// createdAt
-// 1498375371
-// roomId
-// :
-// "admin-bot"
-// text
-// :
-// "Welcome!"
-// username
-// :
-// "admin-bot"

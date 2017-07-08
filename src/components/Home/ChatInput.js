@@ -13,6 +13,7 @@ class ChatInput extends React.Component {
     };
     this.submitHandler = this.submitHandler.bind(this);
     this.textChangeHandler = this.textChangeHandler.bind(this);
+    this.likeHandler = this.likeHandler.bind(this);
   }
 
   // componentWillUnmount() {
@@ -24,7 +25,7 @@ class ChatInput extends React.Component {
     messageDiv.scrollTop = messageDiv.scrollHeight;
 
     EmojiDependency().then((library) => {
-      console.log(library.emojione)
+      console.log("Emojione loaded?: ", !!library)
       // this.marked = deps.marked.setOptions({
       //   highlight: (code) => deps.hljs.highlightAuto(code).value
       // });
@@ -63,8 +64,7 @@ class ChatInput extends React.Component {
 
   likeHandler(event) {
     event.preventDefault();
-    console.log("LIKE CLICKED")
-    // this.props.onSend('like', this.props.room);
+    this.props.onSend('like', this.props.room);
   }
 
   render() {
