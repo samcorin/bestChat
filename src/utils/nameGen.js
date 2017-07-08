@@ -7,8 +7,8 @@ const nameGen = () => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
-  var one = ['agreeable', 'brave', 'calm', 'delightful', 'eager', 'faithful', 'gentle', 'happy', 'jolly', 'kind', 'lively', 'nice', 'obedient', 'proud', 'relieved', 'silly', 'thankful', 'victorious', 'witty', 'zealous', 'bitter', 'delicious', 'fresh', 'greasy', 'juicy', 'hot', 'icy', 'loose', 'melted', 'nutritious', 'prickly', 'rainy', 'rotten', 'salty', 'sticky', 'strong', 'sweet', 'tart', 'tasteless', 'uneven', 'weak', 'wet', 'wooden', 'yummy'];
-  var two = ['revolution','investment','reading','airport','debt','success','apple','confusion','bath','grandmother','strategy','chocolate','tradition','marketing','cookie','interaction','tea','speaker','king','buyer','presence','law','procedure','permission','art','basket','addition','farmer','suggestion','manager','employee','dirt','thing','literature','data','delivery','blood','alcohol','historian','union','love','sample','analysis','secretary','media','elevator','departure','birthday','beer','combination'];
+  var one = [ 'brave', 'calm', 'eager', 'gentle', 'happy', 'jolly', 'kind', 'lively', 'nice', 'proud', 'silly', 'witty', 'bitter', 'fresh', 'greasy', 'juicy', 'hot', 'icy', 'loose', 'melted', 'rainy', 'rotten', 'salty', 'sticky', 'strong', 'sweet', 'tart', 'uneven', 'weak', 'wet', 'wooden', 'yummy'];
+  var two = ['debt', 'apple', 'bath', 'cookie', 'tea', 'king', 'buyer', 'law', 'art', 'basket', 'farmer', 'dirt', 'thing', 'data', 'blood', 'union', 'love', 'sample', 'media', 'beer'];
 
   return Generator(one) + "-" + Generator(two);
 }

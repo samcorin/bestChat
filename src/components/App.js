@@ -21,6 +21,8 @@ import {
   Switch
 } from 'react-router-dom'
 
+// const Conversation = () => import('./Home/Conversation');
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +31,7 @@ class App extends Component {
       currentUser: ''
     }
     this.handleWindowSizeChange = this.handleWindowSizeChange.bind(this);
+    this.getScript = this.getScript.bind(this);
   }
 
   componentWillMount() {
@@ -39,7 +42,29 @@ class App extends Component {
     window.removeEventListener('resize', this.handleWindowSizeChange);
   }
 
+  getScript(source, callback) {
+    var script = document.createElement('script');
+    var prior = document.getElementsByTagName('script')[0];
+    script.async = 1;
+
+    script.onload = script.onreadystatechange = function( _, isAbort ) {
+        if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+            script.onload = script.onreadystatechange = null;
+            script = undefined;
+
+            if(!isAbort) { if(callback) callback(); }
+        }
+    };
+
+    script.src = source;
+    prior.parentNode.insertBefore(script, prior);
+  }
+
   componentDidMount() {
+    // Conversation().then(loadedModule => {
+       // console.log(loadedModule);
+       // import Conversation from loadedModule;
+    // })
     // const getScript = (source, callback) => {
     //   var el = document.createElement('script');
     //   el.onload = callback;
@@ -50,6 +75,7 @@ class App extends Component {
     // getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", function() {
     //   console.log("LOADING MAPS API")
     // });
+    this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A")
   }
 
   handleWindowSizeChange() {
@@ -100,3 +126,25 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps)(App);
+
+
+// append to .wrapper
+
+// function getScript(source, callback) {
+//     var script = document.createElement('script');
+//     var prior = document.getElementsByTagName('script')[0];
+//     script.async = 1;
+
+//     script.onload = script.onreadystatechange = function( _, isAbort ) {
+//         if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+//             script.onload = script.onreadystatechange = null;
+//             script = undefined;
+
+//             if(!isAbort) { if(callback) callback(); }
+//         }
+//     };
+
+//     script.src = source;
+//     prior.parentNode.insertBefore(script, prior);
+// }
+

@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
 import './ChatInput.css';
+import EmojiDependency from './../../utils/EmojiDependency';
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -12,6 +13,30 @@ class ChatInput extends React.Component {
     };
     this.submitHandler = this.submitHandler.bind(this);
     this.textChangeHandler = this.textChangeHandler.bind(this);
+    this.likeHandler = this.likeHandler.bind(this);
+  }
+
+  // componentWillUnmount() {
+    // remove unecessary listeners, et...
+  // }
+
+  componentDidMount() {
+    const messageDiv = document.getElementById('messageList');
+    messageDiv.scrollTop = messageDiv.scrollHeight;
+
+    EmojiDependency().then((library) => {
+      console.log("Emojione loaded?: ", !!library)
+      // this.marked = deps.marked.setOptions({
+      //   highlight: (code) => deps.hljs.highlightAuto(code).value
+      // });
+
+      this.forceUpdate();
+    });
+  }
+
+  componentDidUpdate() {
+    const messageDiv = document.getElementById('messageList');
+    messageDiv.scrollTop = messageDiv.scrollHeight;
   }
 
   // Fade animations for Send and Like icons
@@ -52,7 +77,6 @@ class ChatInput extends React.Component {
           value={this.state.chatInput}
           placeholder="Type a message"
           required
-          autoFocus
           className="chatInput" />
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>
@@ -67,6 +91,8 @@ class ChatInput extends React.Component {
     );
   }
 }
+
+// autoFocus
 
 const mapStateToProps = (state) => ({
   currentUser: state.currentUser

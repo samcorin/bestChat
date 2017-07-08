@@ -3,7 +3,10 @@ import BottomNav from './../BottomNav';
 // import {connect} from 'react-redux'
 // import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 // import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
+import GamesNavBar from './GamesNavBar';
+import './Games.css';
 import './TicTacToe.css';
+import './../App.css';
 
 class Games extends React.Component {
   constructor(props) {
@@ -38,8 +41,20 @@ class Games extends React.Component {
 }
 
   render() {
+    if(true) {
+      return (
+        <div id="GamesWrapper">
+          <GamesNavBar />
+          <div className="waiting">
+            Coming soon...
+          </div>
+          <BottomNav />
+        </div>
+      )
+    }
     return (
       <div>
+      <GamesNavBar />
         <table className="gameTable">
           <tr>
             <td id="tl" className=""></td>

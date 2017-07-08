@@ -33,7 +33,7 @@
 .bottomNavButton {
   height: 100%;
   text-align: center;
-  flex-grow: 1;
+  flex: 1 1 20%;
 }
 
 .bottomNavButton p {

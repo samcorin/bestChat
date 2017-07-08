@@ -39,6 +39,7 @@ class MessagesView extends React.Component {
             sender={msg.sender}
             text={msg.text}
             createdAt={msg.createdAt}
+            type={msg.type}
             prevMsg={prevMsg && prevMsg.createdAt} />
           );
         });

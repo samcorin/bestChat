@@ -27,8 +27,10 @@
 
 .previewBody {
   width: 100%;
+  max-width: 194px;
   padding-left: 10px;
 }
+
 
 .previewHeader {
   width: 100%;
@@ -46,6 +48,9 @@
   color: #929292;
   font-size: 12px;
   margin: 0;
+  word-wrap: break-word;
+  display: flex;
+  align-items: center;
 }
 
 .previewTime {
@@ -74,6 +79,7 @@
   }
   .previewBody {
     padding-left: 14px;
+    max-width: 90%;
   }
   .previewTime {
     position: absolute;
@@ -84,4 +90,10 @@
   .previewText {
     font-size: 14px;
   }
+}
+
+.previewLike {
+  font-size: 14px;
+  color: #1289fe;
+  margin-left: 5px;
 }

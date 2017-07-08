@@ -30,41 +30,16 @@ class Description extends Component {
       return (
         <div className="dText">
           <div>
-            <h1>bestChat</h1><p>v0.1</p>
+            <h1>bestChat</h1><p>v0.4</p>
           </div>
-
           <p><em>What if 'Apps' were URLs?</em></p>
-
-          <h4><em>bestChat is intended for mobile devices.</em></h4>
-
-          <h2>Features</h2>
-
-          <h4>Messaging</h4>
-          <p>Real time, WebSocket powered communication.</p>
-
-          <h4>Calls</h4>
-          <p>Video and audio chat is moslty available on mobile browsers thanks to the <em>navigator.getUserMedia API</em>. Just waiting for you, iOS 11.</p>
-
-          <h4>Miit</h4>
-          <p>Recommends convenient places of interest for you and your friends, </p>
-
-          <h4>Why another *#@?&$ chat app?</h4>
-
-          <p>It's fun to try stuff.</p>
-
-          <ul>
-            <li className="why">- bestChat is a Progressive Web App. It works just like a native application.</li>
-            <li className="why">- It's <strong>Evergreen</strong>. Self updating. No need to download any updates.</li>
-            <li className="why">- No Login. No email. No passwords to remember. Each instance is tied to your device.</li>
-          </ul>
-
         </div>
       );
     } else {
       return (
         <div className="dText">
           <div className="dHeader">
-            <h1>bestChat</h1><p>v0.2</p>
+            <h1>bestChat</h1><p>v0.4</p>
           </div>
           <p>A <em>mobile-first</em>, <em>evergreen</em>, <em>superfast </em> webapp.</p>
 
@@ -126,6 +101,7 @@ class Description extends Component {
           <ul>
             <li> - Lightweight.</li>
             <li> - Evergreen, self-updating.</li>
+            <li> - Emojis! Thanks to <a href="https://www.emojione.com/" target="_blank">emojione</a></li>
             <li> - Video and audio calls.</li>
             <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts.</li>
             <li> - Compatible across all browsers (90%).</li>
@@ -177,6 +153,7 @@ class Description extends Component {
 
           <h3>Changelog</h3>
           <ul className="toc">
+            <li>v0.3 - Link parsing. New look. </li>
             <li>v0.2 - Firebase now handles communication. Performance tweaks </li>
             <li>v0.1 - Basic chat. Basic styling.</li>
           </ul>

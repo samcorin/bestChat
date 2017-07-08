@@ -38,7 +38,8 @@ export const addMessageToStore = (message) => {
       sender: message.sender,
       text: message.text,
       roomId: message.roomId,
-      createdAt: message.createdAt
+      createdAt: message.createdAt,
+      type: message.type || null
     },
     roomName: message.roomName
   }

@@ -4,6 +4,7 @@ import './ConversationsPreview.css';
 import './../App.css';
 import { Link } from 'react-router-dom';
 import timely from './../../utils/timely';
+import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 
 class ConversationsPreview extends Component {
   render() {
@@ -19,9 +20,12 @@ class ConversationsPreview extends Component {
             const propsRef = user[user.length - 1];
             const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
             const time = timely(propsRef.createdAt);
+            const type = propsRef.type;
 
             // this.props.userTable takes a while to load
             const roomName = this.props.userTable[propsRef.roomId];
+
+            console.log("PREV: ", propsRef)
 
             // in case text is too long..
             const trimmedText = (propsRef.text.length + author.length) > 50 ?
@@ -41,7 +45,11 @@ class ConversationsPreview extends Component {
                       <span className="previewName">{roomName}</span>
                       <p className="previewTime">{ time }</p>
                     </div>
-                    <p className="previewText">{author}: {trimmedText}</p>
+                    {type === 'like' ? (
+                      <p className="previewText">{author}: <FaThumbsOUp className="previewLike" /></p>
+                    ) : (
+                      <p className="previewText">{author}: {trimmedText}</p>
+                    )}
                   </div>
                 </div>
               </Link>
