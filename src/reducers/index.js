@@ -1,6 +1,4 @@
-// What the heck is state? == messages: conversationReducer
 function addMessage(state, action) {
-  const {payload} = action;
   const roomName = action.roomName;
 
   // if the conversation exists

@@ -9,7 +9,6 @@ class Message extends React.Component {
   render() {
     const msgDate = new Date(this.props.createdAt);
     const prevMsgDate = new Date(this.props.prevMsg);
-    const text = this.props.text;
     const type = this.props.type;
 
     // Conditions

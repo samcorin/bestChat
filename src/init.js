@@ -22,9 +22,8 @@ const getConversations = (user, store) => {
 
       // Iterates through roomIds using data from users/conversations,
       Object.keys(conversationsObj).map(function(roomId, i) {
-        const messageArray = [];
 
-        database.child('conversations/' + roomId).once('value', snapshot => {
+        return database.child('conversations/' + roomId).once('value', snapshot => {
           const messageArray = objToArray(snapshot.val());
           store.dispatch(startFetchMessages({ id: conversationsObj[roomId], data: messageArray }));
         })
