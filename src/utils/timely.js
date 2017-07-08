@@ -3,13 +3,22 @@
 export const humanReadable = (unix) => {
   const newDate = new Date(unix);
   const el = newDate.toDateString().split(' ');
-  return `${el[0]}, ${el[2]} ${el[1]}`;
+  console.log("humanReadable: ", )
+
+  return `${el[0]}, ${el[2].replace(/^0+/, '')} ${el[1]}`;
 }
+
+// remove leading 0s
+// .replace(/^0+/, '')
 
 // export const dateCheck = (unix) => {
 //   const newDate = new Date(unix);
 //   const el = newDate.toDateString().split(' ');
 //   return `${el[0]}, ${el[2]} ${el[1]}`;
+// }
+
+// export const beforeToday = (time) => {
+
 // }
 
 
