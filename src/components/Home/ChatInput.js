@@ -40,7 +40,8 @@ class ChatInput extends React.Component {
   }
 
   componentDidMount() {
-    document.activeElement.blur();
+    const input = document.getElementById('chat-input');
+    input.blur();
 
     // Shows the last message
     this.scrollToBottom();
