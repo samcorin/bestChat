@@ -39,6 +39,12 @@
 
 @media (max-width: 600px) {
   .chatForm {
+    flex: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .chatForm {
     padding: 0 10px;
   }
   #inputButton {
@@ -50,13 +56,15 @@
     align-items: center;
   }
   .chatInput {
-    width: 90%;
+    width: 89%;
+    font-size: 1.1rem;
+    height: 32px;
   }
 }
 
-[contenteditable] {
-  /*border: 1px solid #000;*/
-  /*line-height: 1.4em;*/
+
+/* EMOJI DISPLAY IN INPUT HACKS */
+/*[contenteditable] {
   -webkit-appearance: textfield;
   appearance: textfield
 }
@@ -67,13 +75,12 @@
 }
 
 div[contenteditable=true] {
-  /*width: 290px;*/
   padding: 5px;
-}
+}*/
 
 
 /* ======================================================================== */
-/* Animations */
+/* Animations Send/Like Button */
 /* ======================================================================== */
 .popout {
   -webkit-animation-name: popout;
