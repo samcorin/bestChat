@@ -11,6 +11,11 @@
   flex: auto;
 }
 
+@media (max-width: 600px) {
+  .messageList {
+    height: calc(100vh - 50px);
+  }
+}
 /* Where's this? */
 .messageContainer {
   overflow-y: auto;
