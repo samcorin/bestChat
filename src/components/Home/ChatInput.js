@@ -15,6 +15,7 @@ class ChatInput extends React.Component {
     this.textChangeHandler = this.textChangeHandler.bind(this);
     this.likeHandler = this.likeHandler.bind(this);
     this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.pushInputUp = this.pushInputUp.bind(this);
     this.focusUpdate = this.focusUpdate.bind(this);
   }
 
@@ -27,17 +28,26 @@ class ChatInput extends React.Component {
     messageDiv.scrollTop = messageDiv.scrollHeight;
   }
 
+  pushInputUp() {
+    const inputDiv = document.getElementById('chat-input');
+    inputDiv.scrollTop = inputDiv.scrollHeight;
+  }
+
   focusUpdate(fn) {
     const input = document.getElementById("chat-input");
     input.addEventListener('focus', fn);
   }
 
   componentDidMount() {
+
     // Shows the last message
     this.scrollToBottom();
 
     // Add listener for when chat input is focused, keyboard pops up, you want last message to be visible.
     this.focusUpdate(this.scrollToBottom)
+
+    // do the same for the keybaord
+    // on update and on focus, push keyboard up
 
     // EmojiDependency().then((library) => {
     //   console.log("Emojione loaded?: ", !!library)
@@ -91,6 +101,7 @@ class ChatInput extends React.Component {
           value={this.state.chatInput}
           placeholder="Type a message"
           required
+          autoFocus
           className="chatInput" />
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>
