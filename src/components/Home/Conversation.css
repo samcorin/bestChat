@@ -2,6 +2,6 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  position: relative;
-  left: 0px;
+  /*position: relative;*/
+  /*left: 0px;*/
 }
