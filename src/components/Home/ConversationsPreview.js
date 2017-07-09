@@ -4,38 +4,57 @@ import './ConversationsPreview.css';
 import './../App.css';
 import { Link } from 'react-router-dom';
 import timely from './../../utils/timely';
+import {sortMessages, latestMessages} from './../../utils/objFunctions';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 
 class ConversationsPreview extends Component {
+  // INEFFICIENT!!
+  // Abstract this out, and figure out how to make it faster
   render() {
-    const obj = this.props.conversations;
-    const sortedMessages = Object.keys(obj).map((item) => {
-      return obj[item]
-    }).sort((a, b) => a[a.length -1].createdAt < b[b.length -1].createdAt);
+    let convLen = Object.keys(this.props.conversations).length;
+    let tableLen = Object.keys(this.props.userTable).length;
 
-    if(sortedMessages.length > 0 && Object.keys(this.props.userTable).length) {
+    // if(previewMessages.length > 0 && Object.keys(this.props.userTable).length) {
+    if(convLen > 0 && tableLen === convLen) {
+      let previewMessages = latestMessages(this.props.conversations)
+
+      // Clean up this code
       return (
         <div className="conversationPreviewWrapper">
-          {sortedMessages.map((user, i) => {
-            const propsRef = user[user.length - 1];
-            const author = propsRef.sender === this.props.currentUser ? 'You' : propsRef.sender;
-            const time = timely(propsRef.createdAt);
-            const type = propsRef.type;
+          {previewMessages.map((message) => {
+
+            const author = message.sender === this.props.currentUser ? 'You' : message.sender;
+            const type = message.type;
+
+            // if less than a week, display day name
+            const msgDate = new Date(message.createdAt);
+            const today = new Date();
+
+            // This is not correct
+            // should look at before midnight..
+            const beforeToday = (msgDate.getDate() < today.getDate() || msgDate.getMonth() < today.getMonth());
+
+            // Day, Month, Date, Year
+            const timeElements = msgDate.toDateString().split(' ')
+
+            // Default time display
+            // this messes up the order....
+            const time = beforeToday ?
+              timeElements[0] :
+              timely(message.createdAt);
 
             // this.props.userTable takes a while to load
-            const roomName = this.props.userTable[propsRef.roomId];
-
-            console.log("PREV: ", propsRef)
+            const roomName = this.props.userTable[message.roomId];
 
             // in case text is too long..
-            const trimmedText = (propsRef.text.length + author.length) > 50 ?
-            `${propsRef.text.substring(0, 50)}...` : propsRef.text;
+            const trimmedText = (message.text.length + author.length) > 50 ?
+            `${message.text.substring(0, 50)}...` : message.text;
 
             return (
-              <Link key={i} to={`/${roomName}`} className="LinkStyle">
+              <Link key={message.createdAt} to={`/${roomName}`} className="LinkStyle">
                 <div className="conversationsPreview">
                   <img
-                    src={roomName == 'admin-bot' ?
+                    src={roomName === 'admin-bot' ?
                          require('../../utils/img/admin-bot.svg') :
                          `https://api.adorable.io/avatars/60/${roomName}@adorable.io.png`}
                     alt={roomName}
@@ -55,7 +74,6 @@ class ConversationsPreview extends Component {
               </Link>
             )
           })}
-          <div className="previewSpacer"></div>
         </div>
       );
     } else {
@@ -65,8 +83,7 @@ class ConversationsPreview extends Component {
     }
   }
 }
-//
-// export default ConversationsPreview;
+
 const mapStateToProps = (state) => ({
   conversations: state.conversations,
   currentUser: state.currentUser,

@@ -27,6 +27,8 @@ class Home extends Component {
     });
   };
 
+  // if you want to replace material tabs, do it here.
+  // Could use dragendjs?
   render() {
     return (
       <MuiThemeProvider>

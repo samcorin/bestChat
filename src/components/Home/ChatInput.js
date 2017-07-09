@@ -3,7 +3,7 @@ import {connect} from 'react-redux'
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
 import './ChatInput.css';
-import EmojiDependency from './../../utils/EmojiDependency';
+// import EmojiDependency from './../../utils/EmojiDependency';
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -14,29 +14,56 @@ class ChatInput extends React.Component {
     this.submitHandler = this.submitHandler.bind(this);
     this.textChangeHandler = this.textChangeHandler.bind(this);
     this.likeHandler = this.likeHandler.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.pushInputUp = this.pushInputUp.bind(this);
+    this.focusUpdate = this.focusUpdate.bind(this);
   }
 
   // componentWillUnmount() {
     // remove unecessary listeners, et...
   // }
 
-  componentDidMount() {
+  scrollToBottom() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
+  }
 
-    EmojiDependency().then((library) => {
-      console.log("Emojione loaded?: ", !!library)
-      // this.marked = deps.marked.setOptions({
-      //   highlight: (code) => deps.hljs.highlightAuto(code).value
-      // });
+  pushInputUp() {
+    const inputDiv = document.getElementById('chat-input');
+    // set bottom 0
+    inputDiv.scrollTop = inputDiv.scrollHeight;
+  }
 
-      this.forceUpdate();
-    });
+  focusUpdate(fn) {
+    const input = document.getElementById("chat-input");
+    input.addEventListener('focus', fn);
+  }
+
+  componentDidMount() {
+    const input = document.getElementById('chat-input');
+    input.blur();
+
+    // Shows the last message
+    this.scrollToBottom();
+
+    // Add listener for when chat input is focused, keyboard pops up, you want last message to be visible.
+    this.focusUpdate(this.scrollToBottom)
+
+    // do the same for the keybaord
+    // on update and on focus, push keyboard up
+
+    // EmojiDependency().then((library) => {
+    //   console.log("Emojione loaded?: ", !!library)
+    //   // this.marked = deps.marked.setOptions({
+    //   //   highlight: (code) => deps.hljs.highlightAuto(code).value
+    //   // });
+
+    //   this.forceUpdate();
+    // });
   }
 
   componentDidUpdate() {
-    const messageDiv = document.getElementById('messageList');
-    messageDiv.scrollTop = messageDiv.scrollHeight;
+    this.scrollToBottom();
   }
 
   // Fade animations for Send and Like icons
@@ -77,6 +104,7 @@ class ChatInput extends React.Component {
           value={this.state.chatInput}
           placeholder="Type a message"
           required
+          autoFocus
           className="chatInput" />
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>

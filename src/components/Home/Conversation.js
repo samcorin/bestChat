@@ -21,26 +21,21 @@ class Conversation extends React.Component{
   }
 
   sendHandler(message, room) {
-    // sending the message out, it gets relayed to others, receiver gets it.. (then add to store, db for them too)
     const messageObject = {
       sender: this.props.currentUser,
       text: '',
       createdAt: Date.now(),
     }
 
+    // add appropriate message type. Later add to this.
     if(message === 'like') {
-      console.log("LIKE clicked")
-      // make sure that on render, in Message.js
       messageObject['type'] = 'like';
       this.addMessage(messageObject);
     } else {
       messageObject['text'] = message;
       messageObject['type'] = 'default';
-      console.log("It's just a message")
       this.addMessage(messageObject);
     }
-
-    // Can't send this until I get the conversation.key
   }
 
   addMessage(message) {
@@ -52,14 +47,14 @@ class Conversation extends React.Component{
       // If a reference exists in currentUser/conversations/:id, send the message there.
       if(roomName) {
         message.roomId = swapped[roomName];
-        // console.log("message.roomId ", message.roomId, roomName)
-        // message.roomId  -KoC_pzpR0uFHnvvPqbb, sticky-literature
 
         // add username..
         message.roomName = roomName;
         this.props.dispatch(addMessageToStore(message));
         conversationsRef.child(message.roomId).push(message);
+
       } else {
+
         // No reference exists, so one needs to be created.
         const cRef = usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).push().key;
         message.roomId = cRef;

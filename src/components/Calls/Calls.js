@@ -5,10 +5,6 @@ import './../App.css';
 import './Calls.css';
 import CallsNavBar from './CallsNavBar';
 import trace from './../../utils/trace';
-// import {Tabs, Tab} from 'material-ui/Tabs';
-// import SwipeableViews from 'react-swipeable-views';
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 // temporarily remove swipeable views.
 
 class Calls extends Component {

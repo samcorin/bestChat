@@ -153,6 +153,7 @@ class Description extends Component {
 
           <h3>Changelog</h3>
           <ul className="toc">
+            <li>v0.4 - Likes!</li>
             <li>v0.3 - Link parsing. New look. </li>
             <li>v0.2 - Firebase now handles communication. Performance tweaks </li>
             <li>v0.1 - Basic chat. Basic styling.</li>

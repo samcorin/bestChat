@@ -4,11 +4,6 @@ import Message from './Message';
 import './MessagesView.css'
 
 class MessagesView extends React.Component {
-  constructor(props) {
-    super(props);
-
-  }
-
   componentDidMount() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;

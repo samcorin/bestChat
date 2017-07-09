@@ -8,8 +8,15 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  flex: auto;
 }
 
+@media (max-width: 600px) {
+  .messageList {
+    height: calc(100vh - 122px);
+  }
+}
+/* Where's this? */
 .messageContainer {
   overflow-y: auto;
   padding: 5px;

@@ -58,7 +58,7 @@ ul {
 
 .strikethrough {
   position: relative;
-  color: #929292;
+  color: #929292 !important;
   text-decoration: none;
 }
 .strikethrough:before {
@@ -68,7 +68,7 @@ ul {
   top: 55%;
   right: 0;
   border-top: 2px solid;
-  border-color: inherit;
+  border-color: #929292 !important;
 
   -webkit-transform:rotate(-5deg);
   -moz-transform:rotate(-5deg);
