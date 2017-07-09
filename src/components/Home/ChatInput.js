@@ -30,6 +30,7 @@ class ChatInput extends React.Component {
 
   pushInputUp() {
     const inputDiv = document.getElementById('chat-input');
+    // set bottom 0
     inputDiv.scrollTop = inputDiv.scrollHeight;
   }
 
@@ -39,6 +40,7 @@ class ChatInput extends React.Component {
   }
 
   componentDidMount() {
+    document.activeElement.blur();
 
     // Shows the last message
     this.scrollToBottom();
