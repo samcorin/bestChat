@@ -8,6 +8,7 @@ import ConversationsPreview from './ConversationsPreview';
 import BottomNav from './../BottomNav';
 import Tabsly from './../../utils/Tabsly';
 import './../App.css';
+import './Home.css';
 
 class Home extends Component {
   constructor(props) {
@@ -17,7 +18,7 @@ class Home extends Component {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     Tabsly();
   }
 
@@ -31,34 +32,37 @@ class Home extends Component {
   // Could use dragendjs?
   render() {
     return (
-      <MuiThemeProvider>
         <div className="homeView">
-          <Tabs
-            onChange={this.handleChange}
-            value={this.state.slideIndex}
-            className="Tabs"
-            style={{bottom:'0'}}>
-            <Tab
-              style={{backgroundColor: '#2196F3'}}
-              label="Messages" disableTouchRipple={true} value={0}>
+          <ul id="nav-tab" className="nav">
+
+            <li id="tab-content1" className="active">
+              <p className="aLink active">Messages</p>
+            </li>
+
+            <li id="tab-content2">
+              <p className="aLink">Users</p>
+            </li>
+
+            <li id="tab-content3">
+              <p className="aLink">Groups</p>
+            </li>
+
+          </ul>
+
+          <div className="tab-content">
+            <div className="tab-pane active" id="content1">
               <ConversationsPreview slideIndex={this.state.slideIndex} />
-            </Tab>
-            <Tab
-              style={{backgroundColor: '#2196F3'}}
-              label={this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
-              disableTouchRipple={true} value={1}>
+            </div>
+            <div className="tab-pane" id="content2">
               <ActiveUsers slideIndex={this.state.slideIndex} />
-            </Tab>
-            <Tab
-              style={{backgroundColor: '#2196F3'}}
-              label="Groups" disableTouchRipple={true} value={2}>
+            </div>
+            <div className="tab-pane" id="content3">
               <Groups />
-            </Tab>
-          </Tabs>
+            </div>
+          </div>
           <BottomNav />
         </div>
 
-      </MuiThemeProvider>
     );
   }
 }
@@ -103,3 +107,54 @@ export default connect(mapStateToProps)(Home);
 //     </div>
 //   </MuiThemeProvider>
 // </div>
+
+
+// <ul id="nav-tab" class="nav">
+//   <li class="active"><a href="#tab1">Tab um</a></li>
+//   <li><a href="#tab2">Tab dois</a></li>
+
+// </ul>
+
+// <!-- Tab panes -->
+// <div class="tab-content">
+//   <div class="tab-pane active" id="tab1">
+//     Conteúdo Primário</div>
+//   <div class="tab-pane" id="tab2">
+//     Conteúdo Secundário</div>
+
+// </div>
+
+
+
+
+
+// BACKUP
+
+// <MuiThemeProvider>
+//         <div className="homeView">
+//           <Tabs
+//             onChange={this.handleChange}
+//             value={this.state.slideIndex}
+//             className="Tabs"
+//             style={{bottom:'0'}}>
+//             <Tab
+//               style={{backgroundColor: '#2196F3'}}
+//               label="Messages" disableTouchRipple={true} value={0}>
+//               <ConversationsPreview slideIndex={this.state.slideIndex} />
+//             </Tab>
+//             <Tab
+//               style={{backgroundColor: '#2196F3'}}
+//               label={this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
+//               disableTouchRipple={true} value={1}>
+//               <ActiveUsers slideIndex={this.state.slideIndex} />
+//             </Tab>
+//             <Tab
+//               style={{backgroundColor: '#2196F3'}}
+//               label="Groups" disableTouchRipple={true} value={2}>
+//               <Groups />
+//             </Tab>
+//           </Tabs>
+//           <BottomNav />
+//         </div>
+
+//       </MuiThemeProvider>
