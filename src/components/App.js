@@ -1,10 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-// Temp - for Material-ui - keep it lean
-// import {Tabs, Tab} from 'material-ui/Tabs';
-// import SwipeableViews from 'react-swipeable-views';
-// import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-
 import Home from './Home/Home';
 import Conversation from './Home/Conversation';
 import Calls from './Calls/Calls';
