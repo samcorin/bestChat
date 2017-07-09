@@ -1,0 +1,39 @@
+
+.nav .active .aLink {
+  color: #fff;
+  opacity: 1;
+}
+.tab-pane {
+  display: none;
+}
+.tab-pane.active {
+  display: block;
+}
+
+#nav-tab {
+  background-color: #2196f3;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  height: 50px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+}
+
+#nav-tab li {
+  height: inherit;
+  flex: auto;
+}
+
+.aLink {
+  margin: 0;
+  color: #e3e3e3;
+  opacity: 0.5;
+  height: 100%;
+  text-align: center;
+  line-height: 50px;
+}
+
