@@ -6,12 +6,8 @@ import ActiveUsers from './ActiveUsers';
 import Groups from './Groups';
 import ConversationsPreview from './ConversationsPreview';
 import BottomNav from './../BottomNav';
+import Tabsly from './../../utils/Tabsly';
 import './../App.css';
-
-// Icons
-import MessagesPin from 'material-ui/svg-icons/communication/chat';
-import Active from 'material-ui/svg-icons/notification/sync';
-import Group from 'material-ui/svg-icons/social/group';
 
 class Home extends Component {
   constructor(props) {
@@ -19,6 +15,10 @@ class Home extends Component {
     this.state = {
       slideIndex: 0
     }
+  }
+
+  componentWillMount() {
+    Tabsly();
   }
 
   handleChange = (value) => {
@@ -40,18 +40,18 @@ class Home extends Component {
             style={{bottom:'0'}}>
             <Tab
               style={{backgroundColor: '#2196F3'}}
-              label="Messages" disableTouchRipple={true} value={0} icon={<MessagesPin />} >
+              label="Messages" disableTouchRipple={true} value={0}>
               <ConversationsPreview slideIndex={this.state.slideIndex} />
             </Tab>
             <Tab
               style={{backgroundColor: '#2196F3'}}
               label={this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
-              disableTouchRipple={true} value={1} icon={<Active />}>
+              disableTouchRipple={true} value={1}>
               <ActiveUsers slideIndex={this.state.slideIndex} />
             </Tab>
             <Tab
               style={{backgroundColor: '#2196F3'}}
-              label="Groups" disableTouchRipple={true} value={2}icon={<Group />} >
+              label="Groups" disableTouchRipple={true} value={2}>
               <Groups />
             </Tab>
           </Tabs>
