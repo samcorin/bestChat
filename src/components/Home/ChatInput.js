@@ -14,15 +14,30 @@ class ChatInput extends React.Component {
     this.submitHandler = this.submitHandler.bind(this);
     this.textChangeHandler = this.textChangeHandler.bind(this);
     this.likeHandler = this.likeHandler.bind(this);
+    this.scrollToBottom = this.scrollToBottom.bind(this);
+    this.focusUpdate = this.focusUpdate.bind(this);
   }
 
   // componentWillUnmount() {
     // remove unecessary listeners, et...
   // }
 
-  componentDidMount() {
+  scrollToBottom() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
+  }
+
+  focusUpdate(fn) {
+    const input = document.getElementById("chat-input");
+    input.addEventListener('focus', fn);
+  }
+
+  componentDidMount() {
+    // Shows the last message
+    this.scrollToBottom();
+
+    // Add listener for when chat input is focused, keyboard pops up, you want last message to be visible.
+    this.focusUpdate(this.scrollToBottom)
 
     // EmojiDependency().then((library) => {
     //   console.log("Emojione loaded?: ", !!library)
@@ -35,8 +50,7 @@ class ChatInput extends React.Component {
   }
 
   componentDidUpdate() {
-    const messageDiv = document.getElementById('messageList');
-    messageDiv.scrollTop = messageDiv.scrollHeight;
+    this.scrollToBottom();
   }
 
   // Fade animations for Send and Like icons
