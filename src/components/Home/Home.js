@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
-import {Tabs, Tab} from 'material-ui/Tabs';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import ActiveUsers from './ActiveUsers';
 import Groups from './Groups';
 import ConversationsPreview from './ConversationsPreview';
