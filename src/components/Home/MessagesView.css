@@ -13,7 +13,7 @@
 
 @media (max-width: 600px) {
   .messageList {
-    height: calc(100vh - 50px);
+    height: calc(100vh - 122px);
   }
 }
 /* Where's this? */
