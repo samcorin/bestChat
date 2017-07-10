@@ -14,7 +14,6 @@ const onTabClick = (event) => {
     actives[i].classList.remove('active');
   }
 
-  console.log("taget: ", event.target);
   var ref = event.target.parentElement.id;
 
   // Make new tab active

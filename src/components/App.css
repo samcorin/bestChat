@@ -147,7 +147,7 @@ button, button:focus {
     top: 25vh;
   }
   body, html {
-    overflow: hidden;
+    /*overflow: hidden;*/
   }
 }
 

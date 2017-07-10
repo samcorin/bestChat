@@ -4,66 +4,135 @@ import React, { Component } from 'react';
 import BottomNav from './../BottomNav';
 import './Miit.css';
 import './../App.css';
-import Map from './Map';
+// import Map from './Map';
+import {getScript, initMap, getPos} from './../../utils/mapFunctions';
 
 class Miit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: null,
-      longitude: null,
+      coords: {
+        latitude: null,
+        longitude: null
+      },
       showMap: true
     }
-    this.getScript = this.getScript.bind(this);
-    this.initMap = this.initMap.bind(this);
+    this.setCoords = this.setCoords.bind(this);
+    this.setMarker = this.setMarker.bind(this);
+    this.success = this.success.bind(this);
+    this.error = this.error.bind(this);
   }
 
-  initMap() {
-    console.log('Geolocation: ', !!window.google)
-    var koenji = {lat: 35.7059, lng: 139.6486};
-    var map = new window.google.maps.Map(document.getElementById('map'), {
-      zoom: 16,
-      center: koenji,
-      streetViewControl: false,
-      zoomControl: false,
-      mapTypeControl: false
+  setCoords(coords) {
+    this.setState({
+      coords: {
+        latitude: coords.lat,
+        longitude: coords.lng
+      }
+    })
+  }
+
+  setMarker(coords) {
+    window.map.setCenter(coords);
+    var marker = new window.google.maps.Marker({
+      position: coords,
+      map: window.map
     });
   }
 
-  getScript(source, callback) {
-    // Check to see if google maps dependency already exists. There's got to be a better way.s
-    var newScript = document.getElementById('googleMap');
-    if(newScript === null) {
-      var script = document.createElement('script');
-      script.id = "googleMap";
-      var prior = document.getElementsByTagName('script')[0];
-      script.async = 1;
+  success(position) {
+    console.log("POS: ", position)
+    // Optional Console views
+    // var crd = pos.coords;
+    // console.log('Your current position is:');
+    // console.log(`Latitude : ${crd.latitude}`);
+    // console.log(`Longitude: ${crd.longitude}`);
+    // console.log(`More or less ${crd.accuracy} meters.`);
 
-      script.onload = script.onreadystatechange = function( _, isAbort ) {
-          if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-              script.onload = script.onreadystatechange = null;
-              script = undefined;
-
-              if(!isAbort) { if(callback) callback(); }
-          }
-      };
-      script.src = source;
-      prior.parentNode.insertBefore(script, prior);
-    } else {
-      this.initMap();
+    // add to db? do somehti.g
+    this.setState({
+      coords: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }
+    })
+    // Marker coords
+    const coords = {
+      lat: position.coords.latitude,
+      lng: position.coords.longitude
     }
 
-  }
+    this.setMarker(coords)
+  };
+
+  error(err) {
+    console.warn(`ERROR(${err.code}): ${err.message}`);
+  };
 
   componentDidMount() {
-    this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", this.initMap);
+    // Initial map setup
+    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
+
+    // Check if location is supported
+    if (navigator.geolocation) {
+      let options = {
+        enableHighAccuracy: false,
+        timeout: 7000,
+        maximumAge: 0
+      };
+      navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+  }
+
+  render() {
+    console.log(this.state)
+    if(this.state.showMap) {
+      return (
+        <div id="MiitWrapper">
+          <div id="map"></div>
+          <BottomNav />
+        </div>
+      );
+    } else {
+      return (
+        <div id="MiitWrapper">
+          <div className="waiting">
+            Coming soon...
+          </div>
+          <BottomNav />
+        </div>
+      )
+    }
+  }
+}
+
+export default Miit;
+
+
+
+
+
+// ============ CENTER =================
+
+
+// var bound = new google.maps.LatLngBounds();
+
+// for (i = 0; i < locations.length; i++) {
+//   bound.extend( new google.maps.LatLng(locations[i][2], locations[i][3]) );
+
+//   // OTHER CODE
+// }
+
+// console.log( bound.getCenter() );
+
+
+
+
+// ==============  BOUNDS ===============================
 
   // functionA() {
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(success, error, options)
-    // } else {
-    //     console.log("Geolocation is not supported by this browser.");
-    // }
 
     // var bounds = new window.google.maps.LatLngBounds();
     // console.log('Geolocation: ', !!window.google)
@@ -152,46 +221,4 @@ class Miit extends Component {
     // } else {
     //     console.log("Geolocation is not supported by this browser.");
     // }
-  }
-
-  render() {
-    if(this.state.showMap) {
-      return (
-        <div id="MiitWrapper">
-          <div id="map"></div>
-          <BottomNav />
-        </div>
-      );
-    } else {
-      return (
-        <div id="MiitWrapper">
-          <div className="waiting">
-            Coming soon...
-          </div>
-          <BottomNav />
-        </div>
-      )
-    }
-  }
-}
-          // <div style={bgImg}></div>
-          // <img className="bgImg" src={require('../../utils/img/miit_alley_bg.jpg')} />
-
-export default Miit;
-
-
-
-
-
-// ============ CENTER =================
-
-
-// var bound = new google.maps.LatLngBounds();
-
-// for (i = 0; i < locations.length; i++) {
-//   bound.extend( new google.maps.LatLng(locations[i][2], locations[i][3]) );
-
-//   // OTHER CODE
-// }
-
-// console.log( bound.getCenter() );
+  // }
