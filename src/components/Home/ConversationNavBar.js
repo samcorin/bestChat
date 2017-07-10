@@ -9,13 +9,13 @@ class ConversationNavBar extends React.Component {
   // Replace dropdown menu with plain js
   render() {
     return (
-        <div style={{backgroundColor: '#2196F3'}} id="ConversationNavBar">
-          <NavLink id="backButton" className="LinkStyle" to="/"><FaArrowLeft /></NavLink>
-          <div id="room">
-            <h4 className="roomName">{this.props.room}</h4>
-            <p className="roomStatus">is {this.props.online ? 'online' : 'offline'}</p>
-          </div>
+      <div style={{backgroundColor: '#2196F3'}} id="ConversationNavBar">
+        <NavLink id="backButton" className="LinkStyle" to="/"><FaArrowLeft /></NavLink>
+        <div id="room">
+          <h4 className="roomName">{this.props.room}</h4>
+          <p className="roomStatus">is {this.props.online ? 'online' : 'offline'}</p>
         </div>
+      </div>
     );
   }
 }

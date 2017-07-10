@@ -7,13 +7,11 @@
   display: flex;
   align-items: center;
   flex-direction: row;
-  /*font-size: 30px;*/
   font-size: 22px;
-  /* Transparent */
-  /*background: rgba(255,255,255,0.95);*/
   background-color: #F1F3F4;
   opacity: 0.95;
-  border-top: 1px solid #d0d0d0;
+  /*border-top: 1px solid #d0d0d0;*/
+  flex: auto;
 }
 
 /*Mobile View*/
@@ -22,7 +20,7 @@
     position: fixed;
     height: 50px;
     /*background-color: #F1F3F4;*/
-    border-top: 1px solid #d0d0d0;
+    /*border-top: 1px solid #d0d0d0;*/
     font-size: 27px;
   }
   .bottomNavButton a {

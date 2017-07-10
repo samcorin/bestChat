@@ -47,11 +47,6 @@ class MessagesView extends React.Component {
     }
   }
 }
-
-// MessagesView.defaultProps = {
-//   messages: []
-// };
-
 // export default MessagesView;
 const mapStateToProps = (state) => ({
   conversations: state.conversations,

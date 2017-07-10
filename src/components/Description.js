@@ -39,7 +39,7 @@ class Description extends Component {
       return (
         <div className="dText">
           <div className="dHeader">
-            <h1>bestChat</h1><p>v0.4</p>
+            <h1>bestChat</h1><p>v0.5</p>
           </div>
           <p>A <em>mobile-first</em>, <em>evergreen</em>, <em>superfast </em> webapp.</p>
 
@@ -101,7 +101,7 @@ class Description extends Component {
           <ul>
             <li> - Lightweight.</li>
             <li> - Evergreen, self-updating.</li>
-            <li> - Emojis! Thanks to <a href="https://www.emojione.com/" target="_blank">emojione</a></li>
+            <li> - Emojis! Thanks to <a href="https://www.emojione.com/" rel="noopener noreferrer" target="_blank">emojione</a></li>
             <li> - Video and audio calls.</li>
             <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts.</li>
             <li> - Compatible across all browsers (90%).</li>
@@ -153,9 +153,10 @@ class Description extends Component {
 
           <h3>Changelog</h3>
           <ul className="toc">
+            <li>v0.5 - Performance improvements. Squished some bugs.</li>
             <li>v0.4 - Likes!</li>
             <li>v0.3 - Link parsing. New look. </li>
-            <li>v0.2 - Firebase now handles communication. Performance tweaks </li>
+            <li>v0.2 - Firebase now handles communication. many performance improvements. </li>
             <li>v0.1 - Basic chat. Basic styling.</li>
           </ul>
 
