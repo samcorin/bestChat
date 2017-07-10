@@ -36,7 +36,8 @@ class Miit extends Component {
     window.map.setCenter(coords);
     var marker = new window.google.maps.Marker({
       position: coords,
-      map: window.map
+      map: window.map,
+      animation: window.google.maps.Animation.DROP
     });
   }
 
@@ -62,7 +63,16 @@ class Miit extends Component {
       lng: position.coords.longitude
     }
 
+    // Center map on your position
+    window.map.setCenter(coords);
+
+    // is it necessary to do this? Couldn't I this save to localStorage
     this.setMarker(coords)
+
+    this.setMarker({
+      lat: 35.7049719,
+      lng: 139.6491155
+    })
   };
 
   error(err) {
@@ -75,12 +85,20 @@ class Miit extends Component {
 
     // Check if location is supported
     if (navigator.geolocation) {
+
       let options = {
         enableHighAccuracy: false,
         timeout: 7000,
         maximumAge: 0
       };
+
       navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+
+      // Watch user position
+      var watchID = navigator.geolocation.watchPosition((position) => {
+        console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
+      });
+
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
