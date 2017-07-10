@@ -11,10 +11,10 @@ app.use(compression())
 app.use(helmet())
 
 // Is this necessary?
-// app.use(helmet.hsts({
-//   maxAge: 31536000,
-//   includeSubDomains: true
-// }));
+app.use(helmet.hsts({
+  maxAge: 31536000,
+  includeSubDomains: true
+}));
 
 app.use(express.static(__dirname + '/build'));
 
