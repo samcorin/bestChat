@@ -46,7 +46,6 @@ class ActiveUsers extends Component {
           <div className="userListDivider"><strong>Offline</strong></div>
           <ul>
             {offlineUsers}
-            <li className="listSpacer"></li>
           </ul>
         </div>
       );

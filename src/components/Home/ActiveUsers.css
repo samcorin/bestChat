@@ -89,7 +89,7 @@
   }
   .userList {
     /* - HEIGHT OF NAVBAR */
-    height: calc(100vh - 72px);
+    height: calc(100vh - 100px);
     position: relative;
     text-align: initial;
     overflow-y: scroll;

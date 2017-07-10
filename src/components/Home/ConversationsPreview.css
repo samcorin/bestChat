@@ -61,9 +61,8 @@
 
 @media (min-width: 600px) {
   .conversationPreviewWrapper {
-    height: 390px;
-    padding-bottom: 60px;
     box-sizing: border-box;
+    height: 370px;
   }
 }
 
@@ -73,10 +72,10 @@
     margin-top: 12px;
   }
   .conversationPreviewWrapper {
-    height: calc(100vh - 123px);
     position: relative;
     text-align: initial;
     overflow-y: scroll;
+    height: calc(100vh - 100px);
   }
   .previewBody {
     padding-left: 14px;
