@@ -1,6 +1,7 @@
 // WHEN YOU ADD PPL TO GROUP, GRAB THEIR COORDS, ADD THEM TO GROUP USERS COORDS STATE, STORE
 
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
 import './Miit.css';
 import './../App.css';
@@ -17,46 +18,49 @@ class Miit extends Component {
       },
       showMap: true
     }
-    this.setCoords = this.setCoords.bind(this);
+    // this.setCoords = this.setCoords.bind(this);
     this.setMarker = this.setMarker.bind(this);
     this.success = this.success.bind(this);
     this.error = this.error.bind(this);
   }
 
-  setCoords(coords) {
-    this.setState({
-      coords: {
-        latitude: coords.lat,
-        longitude: coords.lng
-      }
-    })
-  }
+  // setCoords(coords) {
+  //   this.setState({
+  //     coords: {
+  //       latitude: coords.lat,
+  //       longitude: coords.lng
+  //     }
+  //   })
+  // }
 
-  setMarker(coords) {
+  setMarker(coords, id) {
+
     window.map.setCenter(coords);
     var marker = new window.google.maps.Marker({
       position: coords,
       map: window.map,
       animation: window.google.maps.Animation.DROP
     });
+
+    var position = new window.google.maps.LatLng(coords.lat, coords.lng);
+    window.bounds.extend(position);
+    window.map.fitBounds(window.bounds);
+
+    marker.id = id || this.props.currentUser;
   }
 
   success(position) {
     console.log("POS: ", position)
-    // Optional Console views
-    // var crd = pos.coords;
-    // console.log('Your current position is:');
-    // console.log(`Latitude : ${crd.latitude}`);
-    // console.log(`Longitude: ${crd.longitude}`);
-    // console.log(`More or less ${crd.accuracy} meters.`);
 
     // add to db? do somehti.g
-    this.setState({
-      coords: {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude
-      }
-    })
+
+    // this.setState({
+    //   coords: {
+    //     latitude: position.coords.latitude,
+    //     longitude: position.coords.longitude
+    //   }
+    // })
+
     // Marker coords
     const coords = {
       lat: position.coords.latitude,
@@ -69,11 +73,31 @@ class Miit extends Component {
     // is it necessary to do this? Couldn't I this save to localStorage
     this.setMarker(coords)
 
+    // Shinjuku
+    // 35.6938° N, 139.7035
     this.setMarker({
-      lat: 35.7049719,
-      lng: 139.6491155
-    })
+      lat: 35.6938,
+      lng: 139.7035
+    }, "juku")
+
+    // BOUNDS
+    // var window.bounds = new window.google.maps.LatLngBounds();
+    // let markers = [{lat: 35.7080, lng: 139.6486}, {lat: 35.7025, lng: 139.6485}];
+    // var i, marker;
+
+    // for(i = 0; i < markers.length; i++ ) {
+    //   var position = new window.google.maps.LatLng(markers[i].lat, markers[i].lng);
+    //   bounds.extend(position);
+    //   marker = new window.google.maps.Marker({
+    //     position: position,
+    //     map: window.map,
+    //     animation: window.google.maps.Animation.DROP
+    //   })
+    // };
+
   };
+
+  // ================================================================================================================
 
   error(err) {
     console.warn(`ERROR(${err.code}): ${err.message}`);
@@ -126,14 +150,14 @@ class Miit extends Component {
   }
 }
 
-export default Miit;
+const mapStateToProps = (state) => ({
+  currentUser: state.currentUser
+});
 
-
-
+export default connect(mapStateToProps)(Miit);
 
 
 // ============ CENTER =================
-
 
 // var bound = new google.maps.LatLngBounds();
 

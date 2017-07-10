@@ -47,10 +47,5 @@ class BottomNav extends React.Component {
     )
   }
 }
-          // <div className="bottomNavButton">
-          //   <NavLink activeStyle={{color: '#2894ff'}} to="/settings"><div className="bottomNavButtonItem">
-          //   <img className="linkIcon" height="22" width="24" src={require('../utils/icons/home.svg')} /><p>Settings</p></div></NavLink>
-          // </div>
-            // <img height="22" width="24" src={require('../utils/icons/homeIcon.png')} /><p>Settings</p></div></NavLink>
 
 export default BottomNav;

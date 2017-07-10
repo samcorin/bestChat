@@ -38,7 +38,11 @@ export const initMap = () => {
     zoomControl: false,
     mapTypeControl: false
   });
+
+  window.bounds = new window.google.maps.LatLngBounds();
 }
+
+// Init bounds
 
 // =================================================
 // Get User Position, acc: true or false
