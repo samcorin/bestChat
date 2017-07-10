@@ -5,16 +5,18 @@ var server = require('http').Server(app);
 var cors = require('cors');
 var helmet = require('helmet');
 var compression = require('compression');
+var enforce = require('express-sslify');
 
 app.use(cors());
 app.use(compression())
 app.use(helmet())
+app.use(enforce.HTTPS({ trustProtoHeader: true }))
 
 // Is this necessary?
-app.use(helmet.hsts({
-  maxAge: 31536000,
-  includeSubDomains: true
-}));
+// app.use(helmet.hsts({
+//   maxAge: 31536000,
+//   includeSubDomains: true
+// }));
 
 app.use(express.static(__dirname + '/build'));
 
