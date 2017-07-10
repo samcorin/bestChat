@@ -1,19 +1,21 @@
 #MiitWrapper {
   height: 100%;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  /*align-items: center;*/
+  /*justify-content: center;*/
   flex-direction: column;
 }
 
 #mapWrapper {
-  pointer-events: none;
+  /*remove touch */
+  /*pointer-events: none;*/
   width: 100%;
-  height: 380px;
+  /*height: 380px;*/
   bottom: 50px;
   /*touch-action: pan-y pan-x;*/
 }
 
+/*DONT KNOW WHY STILL HAVE THIS*/
 @media (max-width: 600px) {
   #mapWrapper {
     height: 100%;
@@ -22,11 +24,14 @@
   }
 }
 
+
 #map {
   width: 100%;
-  height: 300px;
+  height: 100%;
 }
 
-.bgImg {
-  filter: blur(5px);
+@media (min-width: 600px) {
+  #map {
+    height: 420px;
+  }
 }

@@ -70,7 +70,7 @@ class App extends Component {
     // getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", function() {
     //   console.log("LOADING MAPS API")
     // });
-    this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A")
+    // this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A")
   }
 
   handleWindowSizeChange() {

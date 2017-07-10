@@ -2,17 +2,9 @@
 
 import React, { Component } from 'react';
 import BottomNav from './../BottomNav';
-// import Map from './Map';
-import MiitNavBar from './MiitNavBar';
 import './Miit.css';
 import './../App.css';
-
-var bgImg = {
-  backgroundImage: `url(${require('../../utils/img/miit_alley_bg.jpg')})`,
-  backgroundRepeat: 'none',
-  height: '400px',
-  width: '300px'
-};
+import Map from './Map';
 
 class Miit extends Component {
   constructor(props) {
@@ -20,20 +12,14 @@ class Miit extends Component {
     this.state = {
       latitude: null,
       longitude: null,
-      showMap: false
+      showMap: true
     }
+    this.getScript = this.getScript.bind(this);
+    this.initMap = this.initMap.bind(this);
   }
 
-  // componentDidMount() {
-  functionA() {
+  initMap() {
     console.log('Geolocation: ', !!window.google)
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(success, error, options)
-    // } else {
-    //     console.log("Geolocation is not supported by this browser.");
-    // }
-
-    // var bounds = new window.google.maps.LatLngBounds();
     var koenji = {lat: 35.7059, lng: 139.6486};
     var map = new window.google.maps.Map(document.getElementById('map'), {
       zoom: 16,
@@ -42,62 +28,109 @@ class Miit extends Component {
       zoomControl: false,
       mapTypeControl: false
     });
+  }
+
+  getScript(source, callback) {
+    // Check to see if google maps dependency already exists. There's got to be a better way.s
+    var newScript = document.getElementById('googleMap');
+    if(newScript === null) {
+      var script = document.createElement('script');
+      script.id = "googleMap";
+      var prior = document.getElementsByTagName('script')[0];
+      script.async = 1;
+
+      script.onload = script.onreadystatechange = function( _, isAbort ) {
+          if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+              script.onload = script.onreadystatechange = null;
+              script = undefined;
+
+              if(!isAbort) { if(callback) callback(); }
+          }
+      };
+      script.src = source;
+      prior.parentNode.insertBefore(script, prior);
+    } else {
+      this.initMap();
+    }
+
+  }
+
+  componentDidMount() {
+    this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", this.initMap);
+
+  // functionA() {
+    // if (navigator.geolocation) {
+    //     navigator.geolocation.getCurrentPosition(success, error, options)
+    // } else {
+    //     console.log("Geolocation is not supported by this browser.");
+    // }
+
+    // var bounds = new window.google.maps.LatLngBounds();
+    // console.log('Geolocation: ', !!window.google)
+    // var koenji = {lat: 35.7059, lng: 139.6486};
+    // var map = new window.google.maps.Map(document.getElementById('map'), {
+    //   zoom: 16,
+    //   center: koenji,
+    //   streetViewControl: false,
+    //   zoomControl: false,
+    //   mapTypeControl: false
+    // });
 
     // Grab groups coords
     // p1
     // p2 ...
-    var markers = [
-      ['London Eye, London', 51.503454,-0.119562],
-      ['Palace of Westminster, London', 51.499633,-0.124755]
-    ];
+    // var markers = [
+    //   ['London Eye, London', 51.503454,-0.119562],
+    //   ['Palace of Westminster, London', 51.499633,-0.124755]
+    // ];
 
     // enableHighAccuracy: true,
-    var options = {
-      timeout: 5000,
-      maximumAge: 0,
-      mapTypeId: 'roadmap'
-    };
+    // var options = {
+    //   timeout: 5000,
+    //   maximumAge: 0,
+    //   mapTypeId: 'roadmap'
+    // };
 
 
-    var infoWindowContent = [
-        ['<div class="info_content">' +
-        '<h3>London Eye</h3>' +
-        '<p>The London Eye is a giant Ferris wheel situated on the banks of the River Thames. The entire structure is 135 metres (443 ft) tall and the wheel has a diameter of 120 metres (394 ft).</p>' +        '</div>'],
-        ['<div class="info_content">' +
-        '<h3>Palace of Westminster</h3>' +
-        '<p>The Palace of Westminster is the meeting place of the House of Commons and the House of Lords, the two houses of the Parliament of the United Kingdom. Commonly known as the Houses of Parliament after its tenants.</p>' +
-        '</div>']
-    ];
+    // var infoWindowContent = [
+    //     ['<div class="info_content">' +
+    //     '<h3>London Eye</h3>' +
+    //     '<p>The London Eye is a giant Ferris wheel situated on the banks of the River Thames. The entire structure is 135 metres (443 ft) tall and the wheel has a diameter of 120 metres (394 ft).</p>' +        '</div>'],
+    //     ['<div class="info_content">' +
+    //     '<h3>Palace of Westminster</h3>' +
+    //     '<p>The Palace of Westminster is the meeting place of the House of Commons and the House of Lords, the two houses of the Parliament of the United Kingdom. Commonly known as the Houses of Parliament after its tenants.</p>' +
+    //     '</div>']
+    // ];
 
-    var infoWindow = new window.google.maps.InfoWindow(), marker, i;
+    // var infoWindow = new window.google.maps.InfoWindow(), marker, i;
 
-    for( i = 0; i < markers.length; i++ ) {
-      var position = new window.google.maps.LatLng(markers[i][1], markers[i][2]);
-      // bounds.extend(position);
-      marker = new window.google.maps.Marker({
-          position: position,
-          map: map,
-          title: markers[i][0],
-          animation: window.google.maps.Animation.DROP
-      });
-          // icon: require('../../utils/map-marker-icon-1.png'),
+    // for( i = 0; i < markers.length; i++ ) {
+    //   var position = new window.google.maps.LatLng(markers[i][1], markers[i][2]);
+    //   // bounds.extend(position);
+    //   marker = new window.google.maps.Marker({
+    //       position: position,
+    //       map: map,
+    //       title: markers[i][0],
+    //       animation: window.google.maps.Animation.DROP
+    //   });
+    //       // icon: require('../../utils/map-marker-icon-1.png'),
 
-      // Allow each marker to have an info window
-      window.google.maps.event.addListener(marker, 'click', (function(marker, i) {
-          return function() {
-              infoWindow.setContent(infoWindowContent[i][0]);
-              infoWindow.open(map, marker);
-          }
-      })(marker, i));
+    //   // Allow each marker to have an info window
+    //   window.google.maps.event.addListener(marker, 'click', (function(marker, i) {
+    //       return function() {
+    //           infoWindow.setContent(infoWindowContent[i][0]);
+    //           infoWindow.open(map, marker);
+    //       }
+    //   })(marker, i));
 
-      // Automatically center the map fitting all markers on the screen
-      // map.fitBounds(bounds);
-    }
+    //   // Automatically center the map fitting all markers on the screen
+    //   // map.fitBounds(bounds);
+    // }
 
-    var boundsListener = window.google.maps.event.addListener((map), 'bounds_changed', function(event) {
-        this.setZoom(14);
-        window.google.maps.event.removeListener(boundsListener);
-    });
+    // var boundsListener = window.google.maps.event.addListener((map), 'bounds_changed', function(event) {
+    //     this.setZoom(14);
+    //     window.google.maps.event.removeListener(boundsListener);
+    // });
 
     // function success(position) {
     //   var pos = {
@@ -125,17 +158,13 @@ class Miit extends Component {
     if(this.state.showMap) {
       return (
         <div id="MiitWrapper">
-            <MiitNavBar />
-            <div id="mapWrapper">
-              <div id="map"></div>
-            </div>
+          <div id="map"></div>
           <BottomNav />
         </div>
       );
     } else {
       return (
         <div id="MiitWrapper">
-          <MiitNavBar />
           <div className="waiting">
             Coming soon...
           </div>
