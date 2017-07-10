@@ -26,6 +26,7 @@
 #nav-tab li {
   height: inherit;
   flex: auto;
+  cursor: pointer;
 }
 
 .aLink {

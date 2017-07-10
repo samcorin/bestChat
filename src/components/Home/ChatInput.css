@@ -35,6 +35,7 @@
 #inputButton {
   font-size: 25px;
   color: #1289fe;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
