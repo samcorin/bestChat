@@ -102,3 +102,22 @@
   margin-left: 5px;
 }
 
+#activeNow {
+  display: flex;
+  flex-direction: row;
+  height: 70px;
+  margin: 20px auto;
+  overflow-x: scroll;
+  align-items: center;
+  margin: 0;
+}
+
+#activeNow li {
+  /*min-width: 200px;*/
+}
+
+.activeNowHeader {
+  margin: 0;
+  padding: 0 10px;
+  margin: 5px auto;
+}

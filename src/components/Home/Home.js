@@ -38,7 +38,9 @@ class Home extends Component {
             </li>
 
             <li id="tab-content2">
-              <p className="aLink">Users</p>
+              <p className="aLink">
+                {this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
+              </p>
             </li>
 
             <li id="tab-content3">
@@ -60,7 +62,6 @@ class Home extends Component {
           </div>
           <BottomNav />
         </div>
-
     );
   }
 }

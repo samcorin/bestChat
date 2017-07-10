@@ -26,6 +26,7 @@
 #nav-tab li {
   height: inherit;
   flex: auto;
+  cursor: pointer;
 }
 
 .aLink {
@@ -36,4 +37,3 @@
   text-align: center;
   line-height: 50px;
 }
-

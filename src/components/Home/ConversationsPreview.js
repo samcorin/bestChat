@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import './ConversationsPreview.css';
-import './../App.css';
 import { Link } from 'react-router-dom';
 import timely from './../../utils/timely';
 import {sortMessages, latestMessages} from './../../utils/objFunctions';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
+import {AvatarOnlinePreview} from './Modules/Avatars.js'
+import './ConversationsPreview.css';
+import './../App.css';
+
 
 class ConversationsPreview extends Component {
-  // INEFFICIENT!!
-  // Abstract this out, and figure out how to make it faster
   render() {
     let convLen = Object.keys(this.props.conversations).length;
     let tableLen = Object.keys(this.props.userTable).length;
 
     // if(previewMessages.length > 0 && Object.keys(this.props.userTable).length) {
+    // THIS BREAKS IF YOU MESSAGE SOMEONE NEW< table !== conv
     if(convLen > 0 && tableLen === convLen) {
       let previewMessages = latestMessages(this.props.conversations)
 
@@ -74,6 +75,18 @@ class ConversationsPreview extends Component {
               </Link>
             )
           })}
+          {this.props.activeUsers.length > 0 &&
+            <div>
+              <p className="activeNowHeader"><strong>Active now</strong></p>
+              <ul id="activeNow">
+                {this.props.activeUsers.map((user, i) => {
+                  return (
+                    <AvatarOnlinePreview key={user} user={user} />
+                  )
+                })}
+              </ul>
+            </div>
+          }
         </div>
       );
     } else {
@@ -84,10 +97,24 @@ class ConversationsPreview extends Component {
   }
 }
 
+// // More Conversations
+// {this.props.conversations.length > 5 &&
+//   <div>
+//     <p className="activeNowHeader"><strong>More conversations</strong></p>
+//     <ul>
+//       <li>one</li>
+//       <li>two</li>
+//       <li>three</li>
+//     </ul>
+//   </div>
+// }
+
+
 const mapStateToProps = (state) => ({
   conversations: state.conversations,
   currentUser: state.currentUser,
-  userTable: state.userTable
+  userTable: state.userTable,
+  activeUsers: state.activeUsers
 });
 
 export default connect(mapStateToProps)(ConversationsPreview);
