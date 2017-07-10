@@ -25,9 +25,10 @@
 }
 
 
+/* On mobile, bottom nav is 50px. There's got to be a better way*/
 #map {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 50px);
 }
 
 @media (min-width: 600px) {
