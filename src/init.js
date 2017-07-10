@@ -4,6 +4,7 @@ import nameGen from './utils/nameGen'
 import {objKeysToArray, objToArray} from './utils/objFunctions';
 import userStatus from './utils/connectState';
 import {objSwap} from './utils/objFunctions';
+import injectTapEventPlugin  from 'react-tap-event-plugin';
 
 // login & username selection
 
@@ -114,6 +115,7 @@ const init = (store) => {
   // database.ref('users/' + userId).set({
   //   username: username
   // });
+  injectTapEventPlugin();
 }
 
 export default init;

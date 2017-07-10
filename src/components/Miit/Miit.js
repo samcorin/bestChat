@@ -73,6 +73,10 @@ class Miit extends Component {
   //   })
   // }
 
+
+  // travelMode: google.maps.TravelMode[selectedMode]
+
+
   // getDirections(origin, destination) {
   //   // console.log("THEN: ", coords)
   //   window.directionsService.route({
@@ -206,9 +210,25 @@ class Miit extends Component {
 
   componentDidMount() {
     // Initial map setup
-    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
 
-    // promise.then(data => doWork('text', data));
+    // Make this synchronous
+      getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
+      // /
+    // const promise = new Promise((resolve, reject) => {
+    //   console.log(position)
+    //   if(position) {
+    //     resolve('Success!');
+    //   }
+    //   else {
+    //     reject('Failure!');
+    // })
+      }
+
+    // promise.then(data => {
+    //   console.log('data: ', data)
+    // }, (error) => {
+    //   console.log("THERE WAS ERROR: ", error)
+    // })
 
     // Get center of map / the middle between markers:
     // window.map.getCenter().lat()
@@ -233,7 +253,7 @@ class Miit extends Component {
     // } else {
     //   console.log("Geolocation is not supported by this browser.");
     // }
-  }
+  // }
 
   render() {
     return (

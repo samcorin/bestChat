@@ -10,7 +10,7 @@ class Settings extends React.Component {
       <div className="waiting">
         <div>
           <h3>Settings</h3>
-          <p>{`Hello, ${this.props.currentUser}! (Edit)`}</p>
+          <p>{`Hello, ${this.props.currentUser}!`}</p>
         </div>
         <BottomNav />
       </div>

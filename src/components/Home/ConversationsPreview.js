@@ -100,19 +100,6 @@ class ConversationsPreview extends Component {
   }
 }
 
-// // More Conversations
-// {this.props.conversations.length > 5 &&
-//   <div>
-//     <p className="activeNowHeader"><strong>More conversations</strong></p>
-//     <ul>
-//       <li>one</li>
-//       <li>two</li>
-//       <li>three</li>
-//     </ul>
-//   </div>
-// }
-
-
 const mapStateToProps = (state) => ({
   conversations: state.conversations,
   currentUser: state.currentUser,

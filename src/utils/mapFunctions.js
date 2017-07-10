@@ -1,27 +1,34 @@
 // ==================================================
 // Load Google Maps dependency on Miit Component Load
 export const getScript = (source, callback) => {
-  // Check to see if google maps dependency already exists. There's got to be a better way.s
-  var newScript = document.getElementById('googleMap');
-  if(newScript === null) {
-    var script = document.createElement('script');
-    script.id = "googleMap";
-    var prior = document.getElementsByTagName('script')[0];
-    script.async = 1;
 
-    script.onload = script.onreadystatechange = function( _, isAbort ) {
-      if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-        script.onload = script.onreadystatechange = null;
-        script = undefined;
+  // return new Promise((resolve, reject) => {
+    // Check to see if google maps dependency already exists. There's got to be a better way.s
+    var newScript = document.getElementById('googleMap');
+    if(newScript === null) {
+      var script = document.createElement('script');
+      script.id = "googleMap";
+      var prior = document.getElementsByTagName('script')[0];
+      script.async = 1;
 
-        if(!isAbort) { if(callback) callback(); }
-      }
-    };
-    script.src = source;
-    prior.parentNode.insertBefore(script, prior);
-  } else {
-    callback();
-  }
+      script.onload = script.onreadystatechange = function( _, isAbort ) {
+        if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+          script.onload = script.onreadystatechange = null;
+          script = undefined;
+
+          if(!isAbort && callback) {
+            callback();
+            // resolve("Script loaded")
+          }
+        }
+      };
+      script.src = source;
+      prior.parentNode.insertBefore(script, prior);
+    } else {
+      callback();
+      // resolve("Script loaded")
+    }
+  // })
 }
 
 // =============================================================
@@ -31,7 +38,7 @@ export const initMap = () => {
   var koenji = {lat: 35.7059, lng: 139.6486};
   // Show map
   window.map = new window.google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
+    zoom: 14,
     center: koenji,
     streetViewControl: false,
     zoomControl: false,
@@ -85,7 +92,6 @@ export const initMap = () => {
   } else {
     console.log("Geolocation is not supported by this browser.");
   }
-  console.log("finish init maps")
 }
 
 
@@ -128,6 +134,7 @@ const success = (position) => {
     lng: 139.7003
   }, "juku")
 
+  return position;
 }
 
 
@@ -141,11 +148,43 @@ const error = (err) => {
 // =============================================================
 // ========================= error ===========================
 export const setMarker = (coords, id) =>{
+  const name = id || 'random';
   window.map.setCenter(coords);
+  // var icon = {
+  //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
+  //   scaledSize: new window.google.maps.Size(50, 50),
+  //   origin: new window.google.maps.Point(0,0),
+  //   anchor: new window.google.maps.Point(0, 0),
+  //   shape: {coords:[17,17,18],type:'circle'}
+  // };
+
+  var icon = {
+    path: window.google.maps.SymbolPath.CIRCLE,
+    fillOpacity: 0.5,
+    fillColor: '#209af7',
+    strokeOpacity: 1.0,
+    strokeColor: '#fff',
+    strokeWeight: 3.0,
+    scale: 16 //pixels
+  }
+
   var marker = new window.google.maps.Marker({
     position: coords,
     map: window.map,
-    animation: window.google.maps.Animation.DROP
+    animation: window.google.maps.Animation.DROP,
+    icon: icon
+  });
+
+  var infowindow = new window.google.maps.InfoWindow({
+    content: 'Hi'
+  });
+
+  marker.addListener('mouseover', function() {
+    infowindow.open(marker.get('map'), marker);
+  });
+
+  marker.addListener('mouseleave', function() {
+    infowindow.close();
   });
 
   // this.state.markers.push(marker)

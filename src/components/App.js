@@ -55,24 +55,6 @@ class App extends Component {
     prior.parentNode.insertBefore(script, prior);
   }
 
-  componentDidMount() {
-    // Conversation().then(loadedModule => {
-       // console.log(loadedModule);
-       // import Conversation from loadedModule;
-    // })
-    // const getScript = (source, callback) => {
-    //   var el = document.createElement('script');
-    //   el.onload = callback;
-    //   el.src = source;
-    //   document.body.appendChild(el);
-    // }
-
-    // getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", function() {
-    //   console.log("LOADING MAPS API")
-    // });
-    // this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A")
-  }
-
   handleWindowSizeChange() {
     this.setState({
       width: window.innerWidth
