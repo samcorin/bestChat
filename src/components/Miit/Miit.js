@@ -16,36 +16,131 @@ class Miit extends Component {
         latitude: null,
         longitude: null
       },
-      markers: [],
-      showMap: true
+      markers: []
     }
     // this.setCoords = this.setCoords.bind(this);
-    this.setMarker = this.setMarker.bind(this);
-    this.success = this.success.bind(this);
-    this.error = this.error.bind(this);
     this.deleteMarker = this.deleteMarker.bind(this);
     this.updateMarker = this.updateMarker.bind(this);
-    this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
+    // this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
+    // this.autoCenter = this.autoCenter.bind(this);
+    // this.getDirections = this.getDirections.bind(this);
+    // this.convertCoords = this.convertCoords.bind(this);
+    this.watchPosition = this.watchPosition.bind(this);
   }
 
-  calculateAndDisplayRoute() {
+  // handle center changd
+  // map.panTo(latLng);
 
-    var latlng1 = new window.google.maps.LatLng(this.state.markers[0].position.lat(), this.state.markers[0].position.lng());
-    var latlng2 = new window.google.maps.LatLng(this.state.markers[1].position.lat(), this.state.markers[1].position.lng());
+  // autoCenter(coords, time) {
+  //   window.map.addListener('center_changed', () => {
+  //     // 3 seconds after the center of the map has changed
+  //     var center = new window.google.maps.LatLng(this.state.markers[0].position.lat(), this.state.markers[0].position.lng());
+  //     window.setTimeout(() => {
+  //       window.map.setCenter()
+  //     }, time * 1000);
+  //   })
+  // }
 
-    window.directionsService.route({
+  watchPosition() {
+    return navigator.geolocation.watchPosition((position) => {
+      console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
+      // update your marker position.
+      this.state.markers.map((marker, i) => {
+        if(marker.id === this.props.currentUser) {
+          console.log("Your new location: ")
 
-      origin: latlng1,
-      destination: latlng2,
-      travelMode: 'TRANSIT'
-    }, function(response, status) {
-      if (status === 'OK') {
-        window.directionsDisplay.setDirections(response);
-      } else {
-        window.alert('Directions request failed due to ' + status);
-      }
+          var latlng = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
+          this.state.markers[i].setPosition(latlng);
+        }
+      })
     });
   }
+
+  // convertCoords() {
+  //   return new Promise((resolve, reject) => {
+  //     var resultArr = [];
+  //     for(var i = 0; i < this.state.markers.length; i++) {
+  //       var location = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
+  //       window.geocoder.geocode({'latLng': location}, (results, status) => {
+  //         if(status === window.google.maps.GeocoderStatus.OK) {
+  //           resultArr.push(results[0].formatted_address)
+  //         } else {
+  //           reject("LOCATION 1 NONO");
+  //         }
+  //       })
+  //     }
+  //     resolve(resultArr)
+  //   })
+  // }
+
+  // getDirections(origin, destination) {
+  //   // console.log("THEN: ", coords)
+  //   window.directionsService.route({
+  //     origin: origin,
+  //     destination: destination,
+  //     travelMode: 'DRIVING'
+  //   }, (response, status) => {
+  //     if (status === 'OK') {
+  //       window.directionsDisplay.setDirections(response);
+  //     } else {
+  //       window.alert('Directions request failed due to ' + status);
+  //     }
+  //   });
+  // }
+
+  // calculateAndDisplayRoute() {
+
+  //   window.geocoder = new window.google.maps.Geocoder();
+
+  //   this.convertCoords().then((coords) => {
+  //     console.log("CCOOODS: ", coords)
+  //     this.getDirections(coords)
+  //   }).catch((error) => {
+  //     console.log("OH OH< :", error)
+  //   })
+
+    // Departure
+    // var location1 = new window.google.maps.LatLng(this.state.markers[0].position.lat(), this.state.markers[0].position.lng());
+    // window.geocoder.geocode({'latLng': location1}, (results, status) => {
+    //   if(status === window.google.maps.GeocoderStatus.OK) {
+    //     origin = results[0].formatted_address;
+    //   } else {
+    //     console.log("LOCATION 1 fucked up")
+    //   }
+    // })
+
+    // Destination
+    // var location2 = new window.google.maps.LatLng(this.state.markers[1].position.lat(), this.state.markers[1].position.lng());
+    // window.geocoder.geocode({'latLng': location2}, (results, status) => {
+    //   if(status === window.google.maps.GeocoderStatus.OK) {
+    //     destination = results[0].formatted_address;
+    //   } else {
+    //     console.log("LOCATION 2 fucked up")
+    //   }
+    // })
+  // }
+
+    // var latlng2 = new window.google.maps.LatLng(this.state.markers[1].position.lat(), this.state.markers[1].position.lng());
+
+    // Do I need to convert these to addresses?
+  //   getDirections
+
+  //   window.directionsService.route({
+  //     origin: origin,
+  //     destination: destination,
+  //     travelMode: 'TRANSIT',
+  //     transitOptions: {
+  //       departureTime: new Date()
+  //     }
+  //   }, function(response, status) {
+  //     if (status === 'OK') {
+  //       window.directionsDisplay.setDirections(response);
+  //     } else {
+  //       window.alert('Directions request failed due to ' + status);
+  //     }
+  //   });
+  // }
+
 
   // Remove marker from array
   deleteMarker(id) {
@@ -79,61 +174,6 @@ class Miit extends Component {
     }
   }
 
-  setMarker(coords, id) {
-
-    window.map.setCenter(coords);
-    var marker = new window.google.maps.Marker({
-      position: coords,
-      map: window.map,
-      animation: window.google.maps.Animation.DROP
-    });
-
-    this.state.markers.push(marker)
-
-
-    var position = new window.google.maps.LatLng(coords.lat, coords.lng);
-    window.bounds.extend(position);
-    window.map.fitBounds(window.bounds);
-
-    // Directions!
-    window.directionsDisplay.setMap(window.map);
-
-    marker.id = id || this.props.currentUser;
-
-
-    console.log("MARKER: ", marker)
-    // OK
-    // this.state.markers.map((m, i) => {
-    //   console.log("MAKER ID: ", m.id)
-    // })
-  }
-
-  // ================================================ SUCCESS ====================================================
-
-  success(position) {
-
-    // Marker coords
-    const coords = {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude
-    }
-
-    // Center map on your position
-    window.map.setCenter(coords);
-
-    // is it necessary to do this? Couldn't I this save to localStorage
-    this.setMarker(coords)
-
-    // Shinjuku
-    // 35.6938° N, 139.7035
-    // var num = Math.floor(Math.random() * 10000);
-
-    var randLng;
-    this.setMarker({
-      lat: 35.6938,
-      lng: 139.7035
-    }, "juku")
-
 
     // Try deleting marker: OK! OK! OK!
     // this.deleteMarker('juku');
@@ -155,22 +195,20 @@ class Miit extends Component {
     // }, 100)
 
     // Directions:
-    if(this.state.markers.length == 2) {
-      this.calculateAndDisplayRoute();
-    }
+  //   if(this.state.markers.length == 2) {
+  //     this.calculateAndDisplayRoute();
+  //   }
 
 
-  };
+  // };
 
   // ================================================================================================================
-
-  error(err) {
-    console.warn(`ERROR(${err.code}): ${err.message}`);
-  };
 
   componentDidMount() {
     // Initial map setup
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
+
+    // promise.then(data => doWork('text', data));
 
     // Get center of map / the middle between markers:
     // window.map.getCenter().lat()
@@ -178,25 +216,23 @@ class Miit extends Component {
     // focus on this are?
 
     // Check if location is supported
-    if (navigator.geolocation) {
+    // if (navigator.geolocation) {
 
-      let options = {
-        enableHighAccuracy: false,
-        timeout: 7000,
-        maximumAge: 0
-      };
+    //   let options = {
+    //     enableHighAccuracy: false,
+    //     timeout: 7000,
+    //     maximumAge: 0
+    //   };
 
-      // Keep trying untill success?
-      navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+    //   // Keep trying untill success?
+    //   navigator.geolocation.getCurrentPosition(this.success, this.error, options);
 
-      // Watch user position
-      var watchID = navigator.geolocation.watchPosition((position) => {
-        console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
-      });
+    //   // Watch user position
+    //   this.watchPosition();
 
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
+    // } else {
+    //   console.log("Geolocation is not supported by this browser.");
+    // }
   }
 
   render() {

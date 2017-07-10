@@ -10,12 +10,12 @@ export const getScript = (source, callback) => {
     script.async = 1;
 
     script.onload = script.onreadystatechange = function( _, isAbort ) {
-        if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-            script.onload = script.onreadystatechange = null;
-            script = undefined;
+      if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+        script.onload = script.onreadystatechange = null;
+        script = undefined;
 
-            if(!isAbort) { if(callback) callback(); }
-        }
+        if(!isAbort) { if(callback) callback(); }
+      }
     };
     script.src = source;
     prior.parentNode.insertBefore(script, prior);
@@ -45,6 +45,7 @@ export const initMap = () => {
   window.directionsService = new window.google.maps.DirectionsService;
   window.directionsDisplay = new window.google.maps.DirectionsRenderer;
 
+
   // Calculate new directions on change, or initial
   // function calculateAndDisplayRoute(directionsService, directionsDisplay) {
   //   directionsService.route({
@@ -60,11 +61,109 @@ export const initMap = () => {
   //   });
   // }
 
-  var onChangeHandler = function() {
-    window.calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
-  };
+  // var onChangeHandler = function() {
+  //   window.calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
+  // };
 
   // should be markers;
   // document.getElementById('start').addEventListener('change', onChangeHandler);
   // document.getElementById('end').addEventListener('change', onChangeHandler);
+
+  if (navigator.geolocation) {
+  // let options = {
+  //   enableHighAccuracy: false,
+  //   timeout: 5000,
+  //   maximumAge: 0
+  // };
+
+  // Keep trying untill success?
+    navigator.geolocation.getCurrentPosition(success, error);
+
+  // Watch user position
+  // watchPosition();
+
+  } else {
+    console.log("Geolocation is not supported by this browser.");
+  }
+  console.log("finish init maps")
+}
+
+
+// ==================================================================
+// ========================= updateMarker ===========================
+export const updateMarker = (id, coords) => {
+  for (var i = 0; i < this.state.markers.length; i++) {
+    if (this.state.markers[i].id == id) {
+      var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
+      this.state.markers[i].setPosition(latlng);
+      // return;
+    }
+  }
+}
+
+
+// =============================================================
+// ========================= success ===========================
+const success = (position) => {
+
+  // Marker coords
+  const coords = {
+    lat: position.coords.latitude,
+    lng: position.coords.longitude
+  }
+
+  // Center map on your position
+  window.map.setCenter(coords);
+
+  // is it necessary to do this? Couldn't I this save to localStorage
+  setMarker(coords)
+
+  // Shinjuku
+  // 35.6938° N, 139.7035
+  // var num = Math.floor(Math.random() * 10000);
+
+  // var randLng;
+  setMarker({
+    lat: 35.6894,
+    lng: 139.7003
+  }, "juku")
+
+}
+
+
+// =============================================================
+// ========================= error ===========================
+const error = (err) => {
+  console.warn(`ERROR(${err.code}): ${err.message}`);
+};
+
+
+// =============================================================
+// ========================= error ===========================
+export const setMarker = (coords, id) =>{
+  window.map.setCenter(coords);
+  var marker = new window.google.maps.Marker({
+    position: coords,
+    map: window.map,
+    animation: window.google.maps.Animation.DROP
+  });
+
+  // this.state.markers.push(marker)
+
+
+  var position = new window.google.maps.LatLng(coords.lat, coords.lng);
+  window.bounds.extend(position);
+  window.map.fitBounds(window.bounds);
+
+  // Directions!
+  window.directionsDisplay.setMap(window.map);
+
+  // marker.id = id || this.props.currentUser;
+
+
+  console.log("MARKER: ", marker)
+  // OK
+  // this.state.markers.map((m, i) => {
+  //   console.log("MAKER ID: ", m.id)
+  // })
 }
