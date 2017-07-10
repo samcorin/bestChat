@@ -63,13 +63,16 @@ class Conversation extends React.Component{
         message.roomName = this.props.match.params.room;
         this.props.dispatch(addMessageToStore(message));
 
+        // Update userTable with -> { ID: NAME }
+        var userTableObj = {
+          id: cRef,
+          name: this.props.match.params.room
+        };
+
+        this.props.dispatch(updateUserTable(userTableObj));
+
         // Push message to db
         conversationsRef.child(cRef).push(message)
-
-        // Update userTable with -> { ID: NAME }
-        var userTableObj = {};
-        userTableObj[swapped[this.props.match.params.room]] = this.props.match.params.room
-        this.props.dispatch(updateUserTable(userTableObj));
 
         // Add a reference to this conversation for both users
         usersRef.child(this.props.currentUser + '/conversations/' + cRef).set(this.props.match.params.room);
