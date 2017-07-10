@@ -44,7 +44,6 @@ export var currentUserReducer = (state = {}, action) => {
 export var userTableReducer = (state = {}, action) => {
   switch(action.type) {
     case 'UPDATE_USER_TABLE':
-      console.log("REDUCER: ", state, action)
       return {
         ...state,
         [action.payload.id]: action.payload.name

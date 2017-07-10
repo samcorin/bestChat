@@ -46,7 +46,6 @@ export const addMessageToStore = (message) => {
 }
 
 export const updateUserTable = (data) => {
-  console.log("ACTION UPDATE UER TABLE", data)
   return {
     type: 'UPDATE_USER_TABLE',
     payload: data
