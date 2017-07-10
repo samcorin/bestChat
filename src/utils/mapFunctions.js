@@ -24,7 +24,7 @@ export const getScript = (source, callback) => {
   }
 }
 
-// =========================================================
+// ========================= initMap ===========================
 // Show map on screen
 export const initMap = () => {
   console.log('Geolocation: ', !!window.google)
@@ -40,6 +40,32 @@ export const initMap = () => {
   });
 
   window.bounds = new window.google.maps.LatLngBounds();
+
+  window.directionsService = new window.google.maps.DirectionsService;
+  window.directionsDisplay = new window.google.maps.DirectionsRenderer;
+
+  // Calculate new directions on change, or initial
+  function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    directionsService.route({
+      origin: document.getElementById('start').value,
+      destination: document.getElementById('end').value,
+      travelMode: 'DRIVING'
+    }, function(response, status) {
+      if (status === 'OK') {
+        directionsDisplay.setDirections(response);
+      } else {
+        window.alert('Directions request failed due to ' + status);
+      }
+    });
+  }
+
+  var onChangeHandler = function() {
+    window.calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
+  };
+
+  // should be markers;
+  // document.getElementById('start').addEventListener('change', onChangeHandler);
+  // document.getElementById('end').addEventListener('change', onChangeHandler);
 }
 
 // Init bounds

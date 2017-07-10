@@ -16,12 +16,15 @@ class Miit extends Component {
         latitude: null,
         longitude: null
       },
+      markers: [],
       showMap: true
     }
     // this.setCoords = this.setCoords.bind(this);
     this.setMarker = this.setMarker.bind(this);
     this.success = this.success.bind(this);
     this.error = this.error.bind(this);
+    this.deleteMarker = this.deleteMarker.bind(this);
+    this.updateMarker = this.updateMarker.bind(this);
   }
 
   // setCoords(coords) {
@@ -33,6 +36,38 @@ class Miit extends Component {
   //   })
   // }
 
+  // Remove marker from array
+  deleteMarker(id) {
+    //Find and remove the marker from the Array
+    for (var i = 0; i < this.state.markers.length; i++) {
+      if (this.state.markers[i].id == id) {
+        //Remove the marker from Map
+        this.state.markers[i].setMap(null);
+
+        //Remove the marker from array.
+        this.state.markers.splice(i, 1);
+        return;
+      }
+    }
+  };
+
+  // updateMarkers() {
+  updateMarker(id, coords) {
+    // coords: lat: ..., lng: ...
+
+    for (var i = 0; i < this.state.markers.length; i++) {
+      if (this.state.markers[i].id == id) {
+
+        var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
+        this.state.markers[i].setPosition(latlng);
+        // update maker on map
+
+
+        return;
+      }
+    }
+  }
+
   setMarker(coords, id) {
 
     window.map.setCenter(coords);
@@ -42,24 +77,29 @@ class Miit extends Component {
       animation: window.google.maps.Animation.DROP
     });
 
+    this.state.markers.push(marker)
+
+
     var position = new window.google.maps.LatLng(coords.lat, coords.lng);
     window.bounds.extend(position);
     window.map.fitBounds(window.bounds);
 
+    // Directions!
+    window.directionsDisplay.setMap(window.map);
+
     marker.id = id || this.props.currentUser;
+
+
+    console.log(marker.position)
+    // OK
+    // this.state.markers.map((m, i) => {
+    //   console.log("MAKER ID: ", m.id)
+    // })
   }
 
+  // ================================================ SUCCESS ====================================================
+
   success(position) {
-    console.log("POS: ", position)
-
-    // add to db? do somehti.g
-
-    // this.setState({
-    //   coords: {
-    //     latitude: position.coords.latitude,
-    //     longitude: position.coords.longitude
-    //   }
-    // })
 
     // Marker coords
     const coords = {
@@ -80,21 +120,18 @@ class Miit extends Component {
       lng: 139.7035
     }, "juku")
 
-    // BOUNDS
-    // var window.bounds = new window.google.maps.LatLngBounds();
-    // let markers = [{lat: 35.7080, lng: 139.6486}, {lat: 35.7025, lng: 139.6485}];
-    // var i, marker;
 
-    // for(i = 0; i < markers.length; i++ ) {
-    //   var position = new window.google.maps.LatLng(markers[i].lat, markers[i].lng);
-    //   bounds.extend(position);
-    //   marker = new window.google.maps.Marker({
-    //     position: position,
-    //     map: window.map,
-    //     animation: window.google.maps.Animation.DROP
-    //   })
-    // };
+    // Try deleting marker: OK! OK! OK!
+    // this.deleteMarker('juku');
 
+    // Update works too!
+    // var l = 35.6438;
+    // setInterval(() => {
+    //   this.updateMarker('juku', {
+    //     lat: l += 0.02,
+    //     lng: 139.7135}
+    //   );
+    // }, 500)
   };
 
   // ================================================================================================================
@@ -116,6 +153,7 @@ class Miit extends Component {
         maximumAge: 0
       };
 
+      // Keep trying untill success?
       navigator.geolocation.getCurrentPosition(this.success, this.error, options);
 
       // Watch user position
