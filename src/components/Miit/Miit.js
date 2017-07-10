@@ -87,7 +87,7 @@ class Miit extends Component {
     if (navigator.geolocation) {
 
       let options = {
-        enableHighAccuracy: false,
+        enableHighAccuracy: true,
         timeout: 7000,
         maximumAge: 0
       };
