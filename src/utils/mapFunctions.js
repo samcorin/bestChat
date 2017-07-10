@@ -45,19 +45,19 @@ export const initMap = () => {
   window.directionsDisplay = new window.google.maps.DirectionsRenderer;
 
   // Calculate new directions on change, or initial
-  function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-    directionsService.route({
-      origin: document.getElementById('start').value,
-      destination: document.getElementById('end').value,
-      travelMode: 'DRIVING'
-    }, function(response, status) {
-      if (status === 'OK') {
-        directionsDisplay.setDirections(response);
-      } else {
-        window.alert('Directions request failed due to ' + status);
-      }
-    });
-  }
+  // function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+  //   directionsService.route({
+  //     origin: document.getElementById('start').value,
+  //     destination: document.getElementById('end').value,
+  //     travelMode: 'DRIVING'
+  //   }, function(response, status) {
+  //     if (status === 'OK') {
+  //       directionsDisplay.setDirections(response);
+  //     } else {
+  //       window.alert('Directions request failed due to ' + status);
+  //     }
+  //   });
+  // }
 
   var onChangeHandler = function() {
     window.calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
