@@ -94,8 +94,7 @@ class Conversation extends React.Component{
         <MessagesView room={room} />
         <ChatInput onSend={this.sendHandler} room={room} />
       </div>
-    )
-  }
+    )  }
 }
 
 // export default Conversation;
