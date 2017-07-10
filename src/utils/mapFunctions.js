@@ -24,23 +24,24 @@ export const getScript = (source, callback) => {
   }
 }
 
+// =============================================================
 // ========================= initMap ===========================
-// Show map on screen
 export const initMap = () => {
-  console.log('Geolocation: ', !!window.google)
-
   // Just set this for now
   var koenji = {lat: 35.7059, lng: 139.6486};
+  // Show map
   window.map = new window.google.maps.Map(document.getElementById('map'), {
-    zoom: 16,
+    zoom: 12,
     center: koenji,
     streetViewControl: false,
     zoomControl: false,
     mapTypeControl: false
   });
 
+  // Initiate bounds object
   window.bounds = new window.google.maps.LatLngBounds();
 
+  // Used to show directions
   window.directionsService = new window.google.maps.DirectionsService;
   window.directionsDisplay = new window.google.maps.DirectionsRenderer;
 
@@ -67,67 +68,3 @@ export const initMap = () => {
   // document.getElementById('start').addEventListener('change', onChangeHandler);
   // document.getElementById('end').addEventListener('change', onChangeHandler);
 }
-
-// Init bounds
-
-// =================================================
-// Get User Position, acc: true or false
-// export const getPos = (scope, acc) => {
-//   var options = {
-//     enableHighAccuracy: acc || false,
-//     timeout: 5000,
-//     maximumAge: 0
-//   };
-
-//   const success = (pos) => {
-
-//     // Optional Console views
-//     // var crd = pos.coords;
-//     // console.log('Your current position is:');
-//     // console.log(`Latitude : ${crd.latitude}`);
-//     // console.log(`Longitude: ${crd.longitude}`);
-//     // console.log(`More or less ${crd.accuracy} meters.`);
-//     scope.setState({
-//       coords: {
-//         latitude: coords.lat,
-//         longitude: coords.lng
-//       }
-//     })
-
-//     // Returns users coords
-//     return pos.coords;
-//     // callback(pos.coords);
-//   };
-
-//   const error = (err) => {
-//     console.warn(`ERROR(${err.code}): ${err.message}`);
-//   };
-
-//   // Check if location is supported
-//   if (navigator.geolocation) {
-//     navigator.geolocation.getCurrentPosition(success, error, options);
-//   } else {
-//     console.log("Geolocation is not supported by this browser.");
-//   }
-// }
-
-
-// OLD - multiple markers + bounds
-
-// export const initMap = () => {
-
-//   var bounds = new window.google.maps.LatLngBounds();
-//   let markers = [{lat: 35.7080, lng: 139.6486}, {lat: 35.7025, lng: 139.6485}];
-//   var i, marker;
-
-//   for(i = 0; i < markers.length; i++ ) {
-//     var position = new window.google.maps.LatLng(markers[i].lat, markers[i].lng);
-//     bounds.extend(position);
-//     marker = new window.google.maps.Marker({
-//       position: position,
-//       map: window.map,
-//       animation: window.google.maps.Animation.DROP
-//     })
-//   };
-// }
-//  

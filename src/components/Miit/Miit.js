@@ -28,15 +28,6 @@ class Miit extends Component {
     this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
   }
 
-  // setCoords(coords) {
-  //   this.setState({
-  //     coords: {
-  //       latitude: coords.lat,
-  //       longitude: coords.lng
-  //     }
-  //   })
-  // }
-
   calculateAndDisplayRoute() {
 
     var latlng1 = new window.google.maps.LatLng(this.state.markers[0].position.lat(), this.state.markers[0].position.lng());
@@ -46,7 +37,7 @@ class Miit extends Component {
 
       origin: latlng1,
       destination: latlng2,
-      travelMode: 'DRIVING'
+      travelMode: 'TRANSIT'
     }, function(response, status) {
       if (status === 'OK') {
         window.directionsDisplay.setDirections(response);
@@ -135,9 +126,8 @@ class Miit extends Component {
 
     // Shinjuku
     // 35.6938° N, 139.7035
-    // var num = Math.floor(Math.random() * 90000) + 10000;
+    // var num = Math.floor(Math.random() * 10000);
 
-    var randLat;
     var randLng;
     this.setMarker({
       lat: 35.6938,
@@ -182,11 +172,16 @@ class Miit extends Component {
     // Initial map setup
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
 
+    // Get center of map / the middle between markers:
+    // window.map.getCenter().lat()
+    // window.map.getCenter().lng()
+    // focus on this are?
+
     // Check if location is supported
     if (navigator.geolocation) {
 
       let options = {
-        enableHighAccuracy: true,
+        enableHighAccuracy: false,
         timeout: 7000,
         maximumAge: 0
       };
@@ -205,24 +200,12 @@ class Miit extends Component {
   }
 
   render() {
-    console.log(this.state)
-    if(this.state.showMap) {
-      return (
-        <div id="MiitWrapper">
-          <div id="map"></div>
-          <BottomNav />
-        </div>
-      );
-    } else {
-      return (
-        <div id="MiitWrapper">
-          <div className="waiting">
-            Coming soon...
-          </div>
-          <BottomNav />
-        </div>
-      )
-    }
+    return (
+      <div id="MiitWrapper">
+        <div id="map"></div>
+        <BottomNav />
+      </div>
+    );
   }
 }
 

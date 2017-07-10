@@ -21,9 +21,9 @@ app.use(express.static(__dirname + '/build'));
 app.all('*', function(req, res) {
   if (req.headers['x-forwarded-proto'] === 'https' || req.headers.host === 'localhost:3000') {
     res.set('Cache-Control', 'public, max-age=31536000');
-    res.sendFile(__dirname + '/build/index.html');
+    return res.sendFile(__dirname + '/build/index.html');
   } else {
-    res.redirect(301, 'https://chat.samcor.in');
+    return res.redirect(301, 'https://chat.samcor.in');
   }
 });
 
