@@ -72,6 +72,7 @@
   z-index: 20;
   position: absolute;
   right: 0;
+  width: 200px;
   color: #000;
   background-color: #fff;
   visibility: hidden;
@@ -83,10 +84,11 @@
 }
 
 .dropdownMenu li {
-  width: 100px;
+  /*width: 100px;*/
   /*border-top: 1px solid rgba(0,0,0,0.2);
   border-top-width: 80%;*/
-  margin: 5px auto;
+  /*margin: 10px auto;*/
+  line-height: 35px;
 }
 
 .show {

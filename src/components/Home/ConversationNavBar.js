@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import './ConversationNavBar.css'
 import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
 import dropdown from './../../utils/dropdown';
@@ -9,7 +9,20 @@ class ConversationNavBar extends Component {
 
   componentDidMount() {
     dropdown();
+    const call = document.getElementById('initCall');
+
+    const startCall = () => {
+      console.log("statr call to: ", this.props.room)
+      // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
+    }
+
+    call.addEventListener('click', startCall, false);
+    call.addEventListener('touchstart', startCall, false);
+
   }
+
+
+
   render() {
     return (
       <div style={{backgroundColor: '#2196F3'}} id="ConversationNavBar">
@@ -23,8 +36,8 @@ class ConversationNavBar extends Component {
           <p>menu</p>
           <div className="dropdownMenu">
             <ul>
-              <li>Call</li>
-              <li>Miit</li>
+              <li id="initCall">Call {this.props.room}</li>
+              <li>Miit {this.props.room}</li>
             </ul>
           </div>
         </div>

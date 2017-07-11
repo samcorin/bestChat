@@ -5,23 +5,29 @@ export const dropdown = () => {
 
 const onMenuClick = (event) => {
   event.stopPropagation();
-  var el = document.querySelector('.dropdownMenu');
-  console.log("EL: ", el)
-  el.classList.toggle('show');
+  var menu = document.querySelector('.dropdownMenu');
+  var messageList = document.getElementById('messageList');
+  var conversationNavbar = document.getElementById('ConversationNavBar');
 
-  // // deactivate existing active tab and panel
-  // for (var i=0; i < actives.length; i++){
-  //   actives[i].classList.remove('active');
-  // }
+  menu.classList.toggle('show');
 
-  // var ref = event.target.parentElement.id;
+  messageList.addEventListener('click', () => {
+    menu.classList.remove('show');
+  }, false)
 
-  // // Make new tab active
-  // event.target.parentElement.classList.add('active');
+  messageList.addEventListener('touchstart', () => {
+    menu.classList.remove('show');
+  }, false)
 
-  // // Make content active
-  // var activeContent = document.getElementById(ref.split('tab-')[1]);
-  // activeContent.classList.add('active');
+  conversationNavbar.addEventListener('click', () => {
+    menu.classList.remove('show');
+  }, false)
+
+  conversationNavbar.addEventListener('touchstart', () => {
+    menu.classList.remove('show');
+  }, false)
+
+
 }
 
 export default dropdown;
