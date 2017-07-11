@@ -17,6 +17,7 @@ class ChatInput extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this);
     this.pushInputUp = this.pushInputUp.bind(this);
     this.focusUpdate = this.focusUpdate.bind(this);
+    this.blurInput = this.blurInput.bind(this);
   }
 
   // componentWillUnmount() {
@@ -39,16 +40,16 @@ class ChatInput extends React.Component {
     input.addEventListener('focus', fn);
   }
 
-  componentDidMount() {
+  blurInput() {
     const input = document.getElementById('chat-input');
-    // input.blur();
-    input.addEventListener("focus", function( event ) {
-      event.target.style.background = "pink";
-    }, true);
-    input.addEventListener("blur", function( event ) {
-      event.target.style.background = "";
-    }, true);
+    input.blur();
+  }
+  componentDidMount() {
+    const messageList = document.getElementById('messageList');
 
+    // On touch outside
+    messageList.addEventListener("touchstart", this.blurInput, true);
+    messageList.addEventListener("click", this.blurInput, true);
 
     // Shows the last message
     this.scrollToBottom();
