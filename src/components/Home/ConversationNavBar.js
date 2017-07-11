@@ -10,14 +10,31 @@ class ConversationNavBar extends Component {
   componentDidMount() {
     dropdown();
     const call = document.getElementById('initCall');
+    const miit = document.getElementById('initCall');
 
     const startCall = () => {
-      console.log("statr call to: ", this.props.room)
+      console.log("start call to: ", this.props.room)
       // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
+      // webrtc stuff.
     }
 
-    call.addEventListener('click', startCall, false);
+    const startMiit = () => {
+      console.log("start MIIT to: ", this.props.room)
+      // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
+
+      // show a new screen? or go straight to miit?
+      // 1. get currentUser coords?
+      // 2. get other users coords?
+    }
+
+
+    // Event listeners for Calls
     call.addEventListener('touchstart', startCall, false);
+    call.addEventListener('click', startCall, false);
+
+    // Event listeners for Miit
+    call.addEventListener('touchstart', startMiit, false);
+    call.addEventListener('click', startMiit, false);
 
   }
 
@@ -37,7 +54,7 @@ class ConversationNavBar extends Component {
           <div className="dropdownMenu">
             <ul>
               <li id="initCall">Call {this.props.room}</li>
-              <li>Miit {this.props.room}</li>
+              <li id="initMiit">Miit {this.props.room}</li>
             </ul>
           </div>
         </div>
