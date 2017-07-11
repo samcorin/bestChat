@@ -179,13 +179,15 @@ export const setMarker = (coords, id) =>{
     content: 'Hi'
   });
 
-  marker.addListener('mouseover', function() {
-    infowindow.open(marker.get('map'), marker);
-  });
+  // HOVER?
+  // marker.addListener('mouseover', function() {
+  //   infowindow.open(marker.get('map'), marker);
 
-  marker.addListener('mouseleave', function() {
-    infowindow.close();
-  });
+  //   marker.addListener('mouseleave', function() {
+  //     infowindow.close();
+  //   });
+  // });
+
 
   // this.state.markers.push(marker)
 
@@ -200,7 +202,7 @@ export const setMarker = (coords, id) =>{
   // marker.id = id || this.props.currentUser;
 
 
-  console.log("MARKER: ", marker)
+  // console.log("MARKER: ", marker)
   // OK
   // this.state.markers.map((m, i) => {
   //   console.log("MAKER ID: ", m.id)

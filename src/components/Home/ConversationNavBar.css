@@ -6,6 +6,7 @@
   justify-content: center;
   position: relative;
   top: 0;
+  z-index: 20;
 }
 
 @media (max-width: 600px) {
