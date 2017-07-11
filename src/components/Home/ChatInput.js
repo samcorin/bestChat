@@ -41,7 +41,14 @@ class ChatInput extends React.Component {
 
   componentDidMount() {
     const input = document.getElementById('chat-input');
-    input.blur();
+    // input.blur();
+    input.addEventListener("focus", function( event ) {
+      event.target.style.background = "pink";
+    }, true);
+    input.addEventListener("blur", function( event ) {
+      event.target.style.background = "";
+    }, true);
+
 
     // Shows the last message
     this.scrollToBottom();
