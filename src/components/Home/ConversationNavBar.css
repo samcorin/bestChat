@@ -8,6 +8,15 @@
   top: 0;
 }
 
+@media (max-width: 600px) {
+  #ConversationNavBar {
+    height: 52px;
+    position: sticky;
+    display: flex;
+    top: 0;
+  }
+}
+
 .LinkStyle {
   text-decoration: none;
   font-size: 14px;

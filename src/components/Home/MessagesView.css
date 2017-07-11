@@ -4,7 +4,7 @@
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   margin: 0;
-  height: 100%;
+  /*height: 100%;*/
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@
 
 @media (max-width: 600px) {
   .messageList {
-    height: calc(100vh - 122px);
+    /*height: calc(100vh - 122px);*/
   }
 }
 /* Where's this? */

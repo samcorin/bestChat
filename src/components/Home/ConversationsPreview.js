@@ -22,9 +22,6 @@ class ConversationsPreview extends Component {
       // Clean up this code
       return (
         <div className="conversationPreviewWrapper">
-
-          <div>HEIGHT: {window.innerHeight}</div>
-
           {previewMessages.map((message) => {
 
             const author = message.sender === this.props.currentUser ? 'You' : message.sender;
