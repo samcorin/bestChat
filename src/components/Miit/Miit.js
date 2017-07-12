@@ -1,197 +1,278 @@
 // WHEN YOU ADD PPL TO GROUP, GRAB THEIR COORDS, ADD THEM TO GROUP USERS COORDS STATE, STORE
 
 import React, { Component } from 'react';
+import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
 import './Miit.css';
 import './../App.css';
-import Map from './Map';
+// import Map from './Map';
+import {getScript, initMap, getPos} from './../../utils/mapFunctions';
 
 class Miit extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      latitude: null,
-      longitude: null,
-      showMap: true
+      coords: {
+        latitude: null,
+        longitude: null
+      },
+      markers: []
     }
-    this.getScript = this.getScript.bind(this);
-    this.initMap = this.initMap.bind(this);
+    // this.setCoords = this.setCoords.bind(this);
+    this.deleteMarker = this.deleteMarker.bind(this);
+    this.updateMarker = this.updateMarker.bind(this);
+    // this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
+    // this.autoCenter = this.autoCenter.bind(this);
+    // this.getDirections = this.getDirections.bind(this);
+    // this.convertCoords = this.convertCoords.bind(this);
+    this.watchPosition = this.watchPosition.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
 
-  initMap() {
-    console.log('Geolocation: ', !!window.google)
-    var koenji = {lat: 35.7059, lng: 139.6486};
-    var map = new window.google.maps.Map(document.getElementById('map'), {
-      zoom: 16,
-      center: koenji,
-      streetViewControl: false,
-      zoomControl: false,
-      mapTypeControl: false
+  // handle center changd
+  // map.panTo(latLng);
+
+  // autoCenter(coords, time) {
+  //   window.map.addListener('center_changed', () => {
+  //     // 3 seconds after the center of the map has changed
+  //     var center = new window.google.maps.LatLng(this.state.markers[0].position.lat(), this.state.markers[0].position.lng());
+  //     window.setTimeout(() => {
+  //       window.map.setCenter()
+  //     }, time * 1000);
+  //   })
+  // }
+
+  watchPosition() {
+    return navigator.geolocation.watchPosition((position) => {
+      console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
+      // update your marker position.
+      this.state.markers.map((marker, i) => {
+        if(marker.id === this.props.currentUser) {
+          console.log("Your new location: ")
+
+          var latlng = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
+          this.state.markers[i].setPosition(latlng);
+        }
+      })
     });
   }
 
-  getScript(source, callback) {
-    // Check to see if google maps dependency already exists. There's got to be a better way.s
-    var newScript = document.getElementById('googleMap');
-    if(newScript === null) {
-      var script = document.createElement('script');
-      script.id = "googleMap";
-      var prior = document.getElementsByTagName('script')[0];
-      script.async = 1;
+  // convertCoords() {
+  //   return new Promise((resolve, reject) => {
+  //     var resultArr = [];
+  //     for(var i = 0; i < this.state.markers.length; i++) {
+  //       var location = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
+  //       window.geocoder.geocode({'latLng': location}, (results, status) => {
+  //         if(status === window.google.maps.GeocoderStatus.OK) {
+  //           resultArr.push(results[0].formatted_address)
+  //         } else {
+  //           reject("LOCATION 1 NONO");
+  //         }
+  //       })
+  //     }
+  //     resolve(resultArr)
+  //   })
+  // }
 
-      script.onload = script.onreadystatechange = function( _, isAbort ) {
-          if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-              script.onload = script.onreadystatechange = null;
-              script = undefined;
 
-              if(!isAbort) { if(callback) callback(); }
-          }
-      };
-      script.src = source;
-      prior.parentNode.insertBefore(script, prior);
-    } else {
-      this.initMap();
+  // travelMode: google.maps.TravelMode[selectedMode]
+
+
+  // getDirections(origin, destination) {
+  //   // console.log("THEN: ", coords)
+  //   window.directionsService.route({
+  //     origin: origin,
+  //     destination: destination,
+  //     travelMode: 'DRIVING'
+  //   }, (response, status) => {
+  //     if (status === 'OK') {
+  //       window.directionsDisplay.setDirections(response);
+  //     } else {
+  //       window.alert('Directions request failed due to ' + status);
+  //     }
+  //   });
+  // }
+
+  // calculateAndDisplayRoute() {
+
+  //   window.geocoder = new window.google.maps.Geocoder();
+
+  //   this.convertCoords().then((coords) => {
+  //     console.log("CCOOODS: ", coords)
+  //     this.getDirections(coords)
+  //   }).catch((error) => {
+  //     console.log("OH OH< :", error)
+  //   })
+
+    // Departure
+    // var location1 = new window.google.maps.LatLng(this.state.markers[0].position.lat(), this.state.markers[0].position.lng());
+    // window.geocoder.geocode({'latLng': location1}, (results, status) => {
+    //   if(status === window.google.maps.GeocoderStatus.OK) {
+    //     origin = results[0].formatted_address;
+    //   } else {
+    //     console.log("LOCATION 1 fucked up")
+    //   }
+    // })
+
+    // Destination
+    // var location2 = new window.google.maps.LatLng(this.state.markers[1].position.lat(), this.state.markers[1].position.lng());
+    // window.geocoder.geocode({'latLng': location2}, (results, status) => {
+    //   if(status === window.google.maps.GeocoderStatus.OK) {
+    //     destination = results[0].formatted_address;
+    //   } else {
+    //     console.log("LOCATION 2 fucked up")
+    //   }
+    // })
+  // }
+
+    // var latlng2 = new window.google.maps.LatLng(this.state.markers[1].position.lat(), this.state.markers[1].position.lng());
+
+    // Do I need to convert these to addresses?
+  //   getDirections
+
+  //   window.directionsService.route({
+  //     origin: origin,
+  //     destination: destination,
+  //     travelMode: 'TRANSIT',
+  //     transitOptions: {
+  //       departureTime: new Date()
+  //     }
+  //   }, function(response, status) {
+  //     if (status === 'OK') {
+  //       window.directionsDisplay.setDirections(response);
+  //     } else {
+  //       window.alert('Directions request failed due to ' + status);
+  //     }
+  //   });
+  // }
+
+
+  // Remove marker from array
+  deleteMarker(id) {
+    //Find and remove the marker from the Array
+    for (var i = 0; i < this.state.markers.length; i++) {
+      if (this.state.markers[i].id == id) {
+        //Remove the marker from Map
+        this.state.markers[i].setMap(null);
+
+        //Remove the marker from array.
+        this.state.markers.splice(i, 1);
+        return;
+      }
     }
+  };
 
+  // updateMarkers() {
+  updateMarker(id, coords) {
+    // coords: lat: ..., lng: ...
+
+    for (var i = 0; i < this.state.markers.length; i++) {
+      if (this.state.markers[i].id == id) {
+
+        var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
+        this.state.markers[i].setPosition(latlng);
+        // update maker on map
+
+
+        return;
+      }
+    }
   }
 
+
+    // Try deleting marker: OK! OK! OK!
+    // this.deleteMarker('juku');
+
+
+    // ============= marker animation ================
+    // Update works too!
+    // var l = 35.6438;
+    // var n = 139.7135;
+    // setInterval(() => {
+    //   this.updateMarker('juku', {
+    //     lat: l += 0.001,
+    //     lng: n}
+    //   );
+    //   var position = new window.google.maps.LatLng(l, n);
+    //   window.bounds.extend(position);
+    //   window.map.fitBounds(window.bounds);
+
+    // }, 100)
+
+    // Directions:
+  //   if(this.state.markers.length == 2) {
+  //     this.calculateAndDisplayRoute();
+  //   }
+
+
+  // };
+
+  // ================================================================================================================
+
   componentDidMount() {
-    this.getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", this.initMap);
+    // Initial map setup
 
-  // functionA() {
-    // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(success, error, options)
-    // } else {
-    //     console.log("Geolocation is not supported by this browser.");
-    // }
-
-    // var bounds = new window.google.maps.LatLngBounds();
-    // console.log('Geolocation: ', !!window.google)
-    // var koenji = {lat: 35.7059, lng: 139.6486};
-    // var map = new window.google.maps.Map(document.getElementById('map'), {
-    //   zoom: 16,
-    //   center: koenji,
-    //   streetViewControl: false,
-    //   zoomControl: false,
-    //   mapTypeControl: false
-    // });
-
-    // Grab groups coords
-    // p1
-    // p2 ...
-    // var markers = [
-    //   ['London Eye, London', 51.503454,-0.119562],
-    //   ['Palace of Westminster, London', 51.499633,-0.124755]
-    // ];
-
-    // enableHighAccuracy: true,
-    // var options = {
-    //   timeout: 5000,
-    //   maximumAge: 0,
-    //   mapTypeId: 'roadmap'
-    // };
-
-
-    // var infoWindowContent = [
-    //     ['<div class="info_content">' +
-    //     '<h3>London Eye</h3>' +
-    //     '<p>The London Eye is a giant Ferris wheel situated on the banks of the River Thames. The entire structure is 135 metres (443 ft) tall and the wheel has a diameter of 120 metres (394 ft).</p>' +        '</div>'],
-    //     ['<div class="info_content">' +
-    //     '<h3>Palace of Westminster</h3>' +
-    //     '<p>The Palace of Westminster is the meeting place of the House of Commons and the House of Lords, the two houses of the Parliament of the United Kingdom. Commonly known as the Houses of Parliament after its tenants.</p>' +
-    //     '</div>']
-    // ];
-
-    // var infoWindow = new window.google.maps.InfoWindow(), marker, i;
-
-    // for( i = 0; i < markers.length; i++ ) {
-    //   var position = new window.google.maps.LatLng(markers[i][1], markers[i][2]);
-    //   // bounds.extend(position);
-    //   marker = new window.google.maps.Marker({
-    //       position: position,
-    //       map: map,
-    //       title: markers[i][0],
-    //       animation: window.google.maps.Animation.DROP
-    //   });
-    //       // icon: require('../../utils/map-marker-icon-1.png'),
-
-    //   // Allow each marker to have an info window
-    //   window.google.maps.event.addListener(marker, 'click', (function(marker, i) {
-    //       return function() {
-    //           infoWindow.setContent(infoWindowContent[i][0]);
-    //           infoWindow.open(map, marker);
-    //       }
-    //   })(marker, i));
-
-    //   // Automatically center the map fitting all markers on the screen
-    //   // map.fitBounds(bounds);
-    // }
-
-    // var boundsListener = window.google.maps.event.addListener((map), 'bounds_changed', function(event) {
-    //     this.setZoom(14);
-    //     window.google.maps.event.removeListener(boundsListener);
-    // });
-
-    // function success(position) {
-    //   var pos = {
-    //     lat: position.coords.latitude,
-    //     lng: position.coords.longitude
+    // Make this synchronous
+    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
+    // const promise = new Promise((resolve, reject) => {
+    //   console.log(position)
+    //   if(position) {
+    //     resolve('Success!');
     //   }
-    //   map.setCenter(pos);
-    //   var marker = new window.google.maps.Marker({
-    //     position: pos,
-    //     map: map
-    //   });
-    // };
-    // function error(err) {
-    //   console.warn(`ERROR(${err.code}): ${err.message}`);
-    // };
+    //   else {
+    //     reject('Failure!');
+    // })
+      }
 
+    // promise.then(data => {
+    //   console.log('data: ', data)
+    // }, (error) => {
+    //   console.log("THERE WAS ERROR: ", error)
+    // })
+
+    // Get center of map / the middle between markers:
+    // window.map.getCenter().lat()
+    // window.map.getCenter().lng()
+    // focus on this are?
+
+    // Check if location is supported
     // if (navigator.geolocation) {
-    //     navigator.geolocation.getCurrentPosition(success, error, options)
+
+    //   let options = {
+    //     enableHighAccuracy: false,
+    //     timeout: 7000,
+    //     maximumAge: 0
+    //   };
+
+    //   // Keep trying untill success?
+    //   navigator.geolocation.getCurrentPosition(this.success, this.error, options);
+
+    //   // Watch user position
+    //   this.watchPosition();
+
     // } else {
-    //     console.log("Geolocation is not supported by this browser.");
+    //   console.log("Geolocation is not supported by this browser.");
     // }
+  // }
+
+  goBack() {
+    window.showMapBack = false;
+    window.history.back();
   }
 
   render() {
-    if(this.state.showMap) {
-      return (
-        <div id="MiitWrapper">
-          <div id="map"></div>
-          <BottomNav />
-        </div>
-      );
-    } else {
-      return (
-        <div id="MiitWrapper">
-          <div className="waiting">
-            Coming soon...
-          </div>
-          <BottomNav />
-        </div>
-      )
-    }
+    return (
+      <div id="MiitWrapper">
+        {window.showMapBack && <button onClick={this.goBack} id="mapBackBtn"> {`<`} </button>}
+        <div id="map"></div>
+        <BottomNav />
+      </div>
+    );
   }
 }
-          // <div style={bgImg}></div>
-          // <img className="bgImg" src={require('../../utils/img/miit_alley_bg.jpg')} />
 
-export default Miit;
+const mapStateToProps = (state) => ({
+  currentUser: state.currentUser
+});
 
-
-
-
-
-// ============ CENTER =================
-
-
-// var bound = new google.maps.LatLngBounds();
-
-// for (i = 0; i < locations.length; i++) {
-//   bound.extend( new google.maps.LatLng(locations[i][2], locations[i][3]) );
-
-//   // OTHER CODE
-// }
-
-// console.log( bound.getCenter() );
+export default connect(mapStateToProps)(Miit);

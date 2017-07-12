@@ -36,3 +36,18 @@
     height: 420px;
   }
 }
+
+#mapBackBtn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(50,50,93,.1);
+  border: none;
+  z-index: 40;
+  height: 26px;
+  width: 26px;
+  font-size: 15px;
+  border-radius: 2px;
+  color: #6b7c93;
+}

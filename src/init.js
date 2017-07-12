@@ -2,9 +2,9 @@ import {usersRef, conversationsRef, database} from './firebase/index';
 import {startFetchMessages, addCurrentUser, updateUserList, updateUserTable, addMessageToStore} from './actions/index';
 import nameGen from './utils/nameGen'
 import {objKeysToArray, objToArray} from './utils/objFunctions';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import userStatus from './utils/connectState';
 import {objSwap} from './utils/objFunctions';
+import injectTapEventPlugin  from 'react-tap-event-plugin';
 
 // login & username selection
 
@@ -24,7 +24,13 @@ const getConversations = (user, store) => {
       Object.keys(conversationsObj).map(function(roomId, i) {
 
         return database.child('conversations/' + roomId).once('value', snapshot => {
-          const messageArray = objToArray(snapshot.val());
+          let obj = snapshot.val();
+
+          if(obj.meta) {
+            delete obj.meta;
+          }
+          // remove obj.key == x
+          const messageArray = objToArray(obj);
           store.dispatch(startFetchMessages({ id: conversationsObj[roomId], data: messageArray }));
         })
       })
@@ -38,7 +44,6 @@ const getConversations = (user, store) => {
   store.dispatch(addCurrentUser(currentUser));
 }
 
-// TODO: Refactor
 // NEW USERS
 const setUsername = (store) => {
   currentUser = nameGen();
@@ -49,8 +54,6 @@ const setUsername = (store) => {
     text: `Welcome to bestChat, ${currentUser}!`,
     createdAt: Date.now()
   };
-
-  // ?>Need to separate this. initDatabase or something..
 
   // Conversation 1
   const newPostKey = database.child('conversations').push().key;
@@ -70,20 +73,13 @@ const setUsername = (store) => {
 }
 
 const init = (store) => {
-  // Check if username(uuid?) is saved in localStorage ( && database !== null)
   if(lsUsername) {
     currentUser = lsUsername;
-    // SET LISTENERS + fetch etc...
     getConversations(lsUsername, store);
   } else {
     // New User
     setUsername(store)
-    // SET LISTENERS + fetch etc...
-    // getConversations(currentUser, store);
   }
-
-
-  // LISTENERS ===================================================
 
   // ======================= activeUsers =========================
   userStatus(currentUser, store);
@@ -108,7 +104,6 @@ const init = (store) => {
         const newMessage = snapshot.val();
 
         // currentUser stores the message in Conversation.js
-        // this just listens for incoming messages
         if(newMessage.roomName === currentUser) {
           newMessage.roomName = tempUserObj.name;
           store.dispatch(addMessageToStore(newMessage));
@@ -126,7 +121,6 @@ const init = (store) => {
   // database.ref('users/' + userId).set({
   //   username: username
   // });
-
   injectTapEventPlugin();
 }
 

@@ -3,7 +3,6 @@
 export const humanReadable = (unix) => {
   const newDate = new Date(unix);
   const el = newDate.toDateString().split(' ');
-  console.log("humanReadable: ", )
 
   return `${el[0]}, ${el[2].replace(/^0+/, '')} ${el[1]}`;
 }

@@ -17,6 +17,7 @@ class ChatInput extends React.Component {
     this.scrollToBottom = this.scrollToBottom.bind(this);
     this.pushInputUp = this.pushInputUp.bind(this);
     this.focusUpdate = this.focusUpdate.bind(this);
+    this.blurInput = this.blurInput.bind(this);
   }
 
   // componentWillUnmount() {
@@ -39,9 +40,16 @@ class ChatInput extends React.Component {
     input.addEventListener('focus', fn);
   }
 
-  componentDidMount() {
+  blurInput() {
     const input = document.getElementById('chat-input');
     input.blur();
+  }
+  componentDidMount() {
+    const messageList = document.getElementById('messageList');
+
+    // On touch outside
+    messageList.addEventListener("touchstart", this.blurInput, true);
+    messageList.addEventListener("click", this.blurInput, true);
 
     // Shows the last message
     this.scrollToBottom();
@@ -104,7 +112,6 @@ class ChatInput extends React.Component {
           value={this.state.chatInput}
           placeholder="Type a message"
           required
-          autoFocus
           className="chatInput" />
           {this.state.chatInput.length ?
             <div id="inputButton" onClick={this.submitHandler}>
