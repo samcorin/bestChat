@@ -1,3 +1,8 @@
+import {database, conversationsRef} from './../firebase/index';
+
+let coordsListener;
+let coordsStore = {};
+
 // ==================================================
 // Load Google Maps dependency on Miit Component Load
 export const getScript = (source, callback) => {
@@ -76,6 +81,7 @@ export const initMap = () => {
   // document.getElementById('start').addEventListener('change', onChangeHandler);
   // document.getElementById('end').addEventListener('change', onChangeHandler);
 
+  // getPos();
   if (navigator.geolocation) {
   // let options = {
   //   enableHighAccuracy: false,
@@ -119,22 +125,22 @@ const success = (position) => {
   }
 
   // Center map on your position
-  window.map.setCenter(coords);
+  // window.map.setCenter(coords);
 
   // is it necessary to do this? Couldn't I this save to localStorage
-  setMarker(coords)
+  // setMarker(coords)
 
   // Shinjuku
   // 35.6938° N, 139.7035
   // var num = Math.floor(Math.random() * 10000);
 
   // var randLng;
-  setMarker({
-    lat: 35.6894,
-    lng: 139.7003
-  }, "juku")
+  // setMarker({
+  //   lat: 35.6662,
+  //   lng: 139.7583
+  // }, "shim")
 
-  return position;
+  return coords;
 }
 
 
@@ -146,7 +152,7 @@ const error = (err) => {
 
 
 // =============================================================
-// ========================= error ===========================
+// ========================= setMarker ===========================
 export const setMarker = (coords, id) =>{
   const name = id || 'random';
   window.map.setCenter(coords);
@@ -207,4 +213,214 @@ export const setMarker = (coords, id) =>{
   // this.state.markers.map((m, i) => {
   //   console.log("MAKER ID: ", m.id)
   // })
+}
+
+
+// ================================= coords Listener ==================================
+export const getCoords = {
+  started: false,
+  coordsListener: null,
+  coordsStore: {},
+  currentUser: null,
+  roomId: null,
+  start: function(roomId, user) {
+    var metaRef = conversationsRef.child(`${roomId}`);
+
+    // metaRef.child('meta').once('value', snapshot => {
+    //   console.log("START CHECK", snapshot.val())
+    // })
+
+    //   // check for something here
+
+    //   // set it up
+      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false})
+    // })
+
+    // this.getPos();
+    // if (navigator.geolocation) {
+    //   console.log("HELLO. Getting position. Wait a moment...")
+    //   navigator.geolocation.getCurrentPosition((pos) => {
+    //     console.log("HURRAY, ", user)
+    //     metaRef.set(pos.coords);
+    //   }, error);
+    // } else {
+    //   console.log("Geolocation is not supported by this browser.");
+    // }
+
+  },
+  listen: function(roomId, user, redirect) {
+    var metaRef = conversationsRef.child(`${roomId}/meta`);
+    // Set username
+    if(this.currentUser === null) {
+      this.currentUser = user;
+    }
+
+    if(this.roomId === null) {
+      this.roomId = roomId;
+    }
+
+    // What am i listening for? changes to meta. new coords, new ppl, etc..
+
+    metaRef.on('value', snapshot => {
+      let obj = snapshot.val();
+      console.log("NEW VALUE: ", obj)
+
+        if (navigator.geolocation) {
+          console.log("Getting your position. Wait a moment...")
+          navigator.geolocation.getCurrentPosition((pos) => {
+            console.log("Your coords: ", this.currentUser, pos.coords)
+            let coords = {};
+            coords['accuracy'] = pos.coords.accuracy;
+            coords['latitude'] = pos.coords.latitude;
+            coords['longitude'] = pos.coords.longitude;
+
+            // metaRef.child(`${this.currentUser}/coords`).set(pos.coords);
+            metaRef.once('value', snapshot => {
+              console.log("META VAL: ", snapshot.val())
+              metaRef.child(this.currentUser).set(coords)
+            })
+          }, error);
+        } else {
+          console.log("Geolocation is not supported by this browser.");
+        }
+
+    })
+
+      // const metaRef = conversationsRef.child(this.roomId + '/meta/coords');
+      // if meta exists last data, prev session?
+
+      // Someting changed, need to find out what?
+      // works here
+      // database.child('conversations/' + roomId + '/meta').set({initiator: user, time: Date.now(), redirect: true})
+
+
+      // ================================================================
+      // I'm not the initiator, so I do this
+      // if(obj !== null && obj.initiator !== user && !obj[user]) {
+      //   console.log("INVITATION")
+      //   // this.getPos();
+      // if (navigator.geolocation) {
+      //   console.log("navigator.geolocation OK")
+      //   console.log("Getting position. Wait a moment...")
+      //   navigator.geolocation.getCurrentPosition((pos) => {
+      //     console.log("Your coords: ", pos.coords)
+      //     // let coords = {};
+      //     // coords[this.currentUser] = pos.coords;
+      //     // metaRef.child(this.currentUser).set(pos.coords);
+      //     // updateValues(coords)
+      //   }, error);
+      // } else {
+      //   console.log("Geolocation is not supported by this browser.");
+      // }
+
+      // }
+
+      // All set, redirect to Miit page
+      // if(obj && obj.redirect) {
+      //   // show back button to conversation
+      //   window.showMapBack = true;
+      //   console.log("Time to bounce") // for all
+      //   redirect();
+      // }
+
+
+
+
+
+      // getGeoLoc : function (id) {
+
+      //         var self = this;
+
+      //         navigator.geolocation.getCurrentPosition(function(position) {
+
+      //             var myVar1, myVar2, myVar3; // Define has many variables as you want here
+
+      //             // From here you can pass the position, as well as any other arguments
+      //             // you might need.
+      //             self.foundLoc(position, self, myVar1, myVar2, myVar3)
+
+      //         }, this.noloc, { timeout : 3});
+      //     },
+
+      //     foundLoc : function(position, self, myVar1, myVar2, myVar3) {},
+        // if (navigator.geolocation) {
+        //   navigator.geolocation.getCurrentPosition(this.myCoords, error);
+        // } else {
+        //   console.log("Geolocation is not supported by this browser.");
+        // }
+
+
+
+        // if (window.confirm('If you click "ok" you would be redirected')) {
+        //  // redirect();
+        //  // database.child('conversations/' + roomId + '/meta').update({redirect: true})
+        // };
+
+        // if current user coords don't exist, add them
+        // if(Object.keys(obj).indexOf(user) === -1) {
+        //   console.log("You don't exist yet, ", user)
+        //   let myCoords = {};
+
+          // do_a( function(){
+            // do_b();
+            // database.child('conversations/' + roomId + '/meta').update(myCoords)
+          // });
+
+          // myCoords[user] = coords
+        // }
+
+        // switch it in there
+
+  },
+  updateCoords: function(pos, room) {
+    let update = {};
+    // update[this.currentUser] = pos.coords;
+    update[this.currentUser] = "pos.coords";
+
+    // database.child('conversations/' + room + '/meta').set({time: "test"})
+    // var updates = {};
+    // updates['/posts/' + newPostKey] = postData;
+    // updates['/user-posts/' + uid + '/' + newPostKey] = postData;
+    // database.update(update);
+  },
+  getPos: function() {
+    // IS THE PROBLEM THAT IM GETTING STUCK IN A FEEDBAK LOOP? if this changes, then it sets off another change, and this again.
+    var self = this;
+    const currentUser = this.currentUser;
+    const roomId = this.roomId;
+
+
+    var updateValues = function(pos) {
+      console.log("POSITION OK: ", pos)
+
+      database.child('conversations/' + roomId + '/meta/coords/' + currentUser).set(pos).then(() => {
+        console.log("OK! all went well. ")
+      }).catch((err) => {
+        console.log("There was an error updating the DB. ", err)
+      });
+      // database.child('conversations/' + roomId + '/meta').set({initiator: user, time: Date.now(), redirect: false, ready: false})
+
+    }
+
+    if (navigator.geolocation) {
+      console.log("navigator.geolocation OK")
+      console.log("Getting position. Wait a moment...")
+      navigator.geolocation.getCurrentPosition((pos) => {
+
+        let coords = {};
+        coords[currentUser] = pos.coords;
+
+        updateValues(pos.coords)
+      }, error);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
+
+  }
+}
+
+export const updateCoords = (coords) => {
+  let obj = {};
+  console.log("SOMETHING CHANGED: ", coords)
+  // database.child('conversations/' + roomId + '/coords').updatet(obj);
 }

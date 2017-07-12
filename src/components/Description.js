@@ -43,17 +43,7 @@ class Description extends Component {
           </div>
           <p>A <em>mobile-first</em>, <em>evergreen</em>, <em>superfast </em> webapp.</p>
 
-          <p>bestChat started as a playground. A few hours for me to learn how to use socket.io to make a simple communication client,
-          but it grew into much more than that.</p>
-
-          <div className="dSubHeader">
-            <h3>Stats</h3>
-          </div>
-          <ul>
-            <li className="metrics">domComplete: <span className="stats"> {this.state.domLoadTime}ms</span></li>
-            <li className="metrics">navigationStart: <span className="stats"> {this.state.navigationStart}ms</span></li>
-            <li className="metrics">bundle.js: <span className="stats">200kb~</span></li>
-          </ul>
+          <p>bestChat started as a playground, a technical demo to play around with different technologies.</p>
 
           <h3>The Stack</h3>
           <div className="tech">
@@ -99,15 +89,15 @@ class Description extends Component {
 
           <h4>Features</h4>
           <ul>
-            <li> - Lightweight.</li>
-            <li> - Evergreen, self-updating.</li>
-            <li> - Emojis! Thanks to <a href="https://www.emojione.com/" rel="noopener noreferrer" target="_blank">emojione</a></li>
-            <li> - Video and audio calls.</li>
-            <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts.</li>
-            <li> - Compatible across all browsers (90%).</li>
-            <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
+            <li> - Lightweight. ~140kb</li>
+            <li> - Self-updating. </li>
             <li> - It's fast.</li>
-            <li> - 100% JavaScript (back and front end).</li>
+            <li> - Video and audio calls. (Coming soon... iOS11...)</li>
+            <li> - <em>Miit</em>. Convenient venue recommendations for you and your friends.</li>
+            <li> - Fully compatible across all (95%) desktop and mobile browsers.</li>
+            <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
+            <li> - 100% JavaScript. </li>
+            <li> - Emojis! Thanks to <a href="https://www.emojione.com/" rel="noopener noreferrer" target="_blank">emojione</a> (Coming soon)</li>
           </ul>
 
           <div className="dSubHeader">
@@ -158,6 +148,15 @@ class Description extends Component {
             <li>v0.3 - Link parsing. New look. </li>
             <li>v0.2 - Firebase now handles communication. many performance improvements. </li>
             <li>v0.1 - Basic chat. Basic styling.</li>
+          </ul>
+
+          <div className="dSubHeader">
+            <h3>Stats</h3>
+          </div>
+          <ul>
+            <li className="metrics">domComplete: <span className="stats"> {this.state.domLoadTime}ms</span></li>
+            <li className="metrics">navigationStart: <span className="stats"> {this.state.navigationStart}ms</span></li>
+            <li className="metrics">bundle.js: <span className="stats">200kb~</span></li>
           </ul>
 
         </div>

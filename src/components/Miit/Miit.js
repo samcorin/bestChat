@@ -26,6 +26,7 @@ class Miit extends Component {
     // this.getDirections = this.getDirections.bind(this);
     // this.convertCoords = this.convertCoords.bind(this);
     this.watchPosition = this.watchPosition.bind(this);
+    this.goBack = this.goBack.bind(this);
   }
 
   // handle center changd
@@ -212,8 +213,7 @@ class Miit extends Component {
     // Initial map setup
 
     // Make this synchronous
-      getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
-      // /
+    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
     // const promise = new Promise((resolve, reject) => {
     //   console.log(position)
     //   if(position) {
@@ -255,9 +255,15 @@ class Miit extends Component {
     // }
   // }
 
+  goBack() {
+    window.showMapBack = false;
+    window.history.back();
+  }
+
   render() {
     return (
       <div id="MiitWrapper">
+        {window.showMapBack && <button onClick={this.goBack} id="mapBackBtn"> {`<`} </button>}
         <div id="map"></div>
         <BottomNav />
       </div>
