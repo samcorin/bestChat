@@ -48,13 +48,18 @@ export const initMap = () => {
   
   // 2, you invited someone or you are an invitee, you have coords already and a partner, 
   
-  // Just set this for now
-  // should be your own coords, 
-  var koenji = {lat: 35.7059, lng: 139.6486};
+  // Try localStorage
+  // const myLat = window.localStorage.getItem('myLat') || 35.6895;
+  // const myLng = window.localStorage.getItem('myLng') || 139.6917;
+  // let center = {lat: myLat, lng: myLng};
+  // console.log("YOUR ORIGINAL COORDS: ", myLat, myLng)
+  
+  let center = {lat: 35.6895, lng: 139.6917};
+    
   // Show map
   window.map = new window.google.maps.Map(document.getElementById('map'), {
-    zoom: 14,
-    center: koenji,
+    zoom: 12,
+    center: center,
     streetViewControl: false,
     zoomControl: false,
     mapTypeControl: false
@@ -164,8 +169,9 @@ const error = (err) => {
 
 // =============================================================
 // ========================= setMarker ===========================
-export const setMarker = (coords, id) =>{
+export const setMarker = (coords, id, group) =>{
   const name = id || 'random';
+  console.log("SET MARKER COORDS: ", coords)
   window.map.setCenter(coords);
   // var icon = {
   //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
@@ -208,13 +214,17 @@ export const setMarker = (coords, id) =>{
 
   // this.state.markers.push(marker)
 
-
+ if(group) {
   var position = new window.google.maps.LatLng(coords.lat, coords.lng);
   window.bounds.extend(position);
   window.map.fitBounds(window.bounds);
 
   // Directions!
   window.directionsDisplay.setMap(window.map);
+
+ } else {
+   window.map.setZoom(15);
+ }
 
   // marker.id = id || this.props.currentUser;
 
@@ -420,26 +430,25 @@ export const miit = {
     if (navigator.geolocation) {
       console.log("Getting your position. Wait a moment...")
       navigator.geolocation.getCurrentPosition((pos) => {
+
+        console.log("Your coords: ", user, pos.coords)
         
-        if(ref) {
-          console.log("Your coords: ", user, pos.coords)
-          
-          let coords = {};
-          coords[`/${user}/accuracy`] = pos.coords.accuracy;
-          coords[`/${user}/latitude`] = pos.coords.latitude;
-          coords[`/${user}/longitude`] = pos.coords.longitude;
+        let coords = {};
+        coords[`/${user}/accuracy`] = pos.coords.accuracy;
+        coords[`/${user}/latitude`] = pos.coords.latitude;
+        coords[`/${user}/longitude`] = pos.coords.longitude;
 
-          this.coordsStore[user] = {
-            accuracy: pos.coords.accuracy,
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude
-          };
+        this.coordsStore[user] = {
+          accuracy: pos.coords.accuracy,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude
+        };
+        
+        localStorage.setItem('myLat', pos.coords.latitude.toFixed(7));
+        localStorage.setItem('myLng', pos.coords.longitude.toFixed(7));
 
-          // Add to db
-          ref.child('coords').update(coords)
-        } else {
-          return pos;
-        }
+        // Add to db
+        ref.child('coords').update(coords)
         
       }, error);
     } else {
@@ -482,24 +491,21 @@ export const miit = {
   }
 }
 
-export const getPosition = (user, ref) => {
+// General purpose locator
+export const getPosition = (user, ref, callback) => {
   if (navigator.geolocation) {
     console.log("Getting your position. Wait a moment...")
     navigator.geolocation.getCurrentPosition((pos) => {
+      const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
 
-      // If it's for a Miit
-      if(!!user && !!ref) {
-        console.log("Your coords: ", user, pos.coords)
-        
-        let coords = {};
-        coords[`/${user}/accuracy`] = pos.coords.accuracy;
-        coords[`/${user}/latitude`] = pos.coords.latitude;
-        coords[`/${user}/longitude`] = pos.coords.longitude;
+      localStorage.setItem('myLat', pos.coords.latitude);
+      localStorage.setItem('myLng', pos.coords.longitude);
+      
+      // Single user
+      window.map.setZoom(12);
+      // group marker? false
+      callback(myLatLng, user, false);
 
-        ref.child('coords').update(coords)
-      } else {
-        return pos;
-      }
     }, error);
   } else {
     console.log("Geolocation is not supported by this browser.");

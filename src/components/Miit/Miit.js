@@ -17,7 +17,8 @@ class Miit extends Component {
         latitude: null,
         longitude: null
       },
-      markers: []
+      markers: [],
+      loading: false
     }
     // this.setCoords = this.setCoords.bind(this);
     this.deleteMarker = this.deleteMarker.bind(this);
@@ -215,25 +216,32 @@ class Miit extends Component {
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
 
     if(miit.roomId) {
-      database.child('conversations/' + miit.roomId + '/meta/coords').on('value', snapshot => {
+      database.child('conversations/' + miit.roomId + '/meta').on('value', snapshot => {
         // listen for coords?
         
         const data = snapshot.val();
-        
-
+      
         console.log("LOADING MEET< WAITING FOR COORDS from users.")
         console.log("DB DATA FOR MIIT: ", data)
         // keep listening
-        if(data) {
+        // check if it's old. 
+        if(data.time) {
           // ok render the dots
           // render the coords, 
           // export const setMarker = (coords, id) =>{
+      
+            //       navigator.geolocation.getCurrentPosition((pos) => {
+      // const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
           
         }
 
       })
     } else {
       console.log("You're on on own.")
+      // do some loading....
+
+      getPosition(this.props.currentUser, null, setMarker)
+      // export const setMarker = (coords, 'You') =>{
     }
     // db?
     // database.child('conversations/' + roomId + '/meta').update({redirect: true})
