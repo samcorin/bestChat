@@ -76,9 +76,9 @@ class ConversationsPreview extends Component {
             )
           })}
           {this.props.activeUsers.length > 0 &&
-            <div>
+            <div id="activeNow">
               <p className="activeNowHeader"><strong>Active now</strong></p>
-              <ul id="activeNow">
+              <ul id="activeNowUl">
                 {this.props.activeUsers.map((user, i) => {
                   return (
                     <AvatarOnlinePreview key={user} user={user} />

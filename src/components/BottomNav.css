@@ -9,7 +9,7 @@
   flex-direction: row;
   font-size: 22px;
   background-color: #F1F3F4;
-  opacity: 0.95;
+  /* opacity: 0.95; */
   /*border-top: 1px solid #d0d0d0;*/
   flex: auto;
 }
