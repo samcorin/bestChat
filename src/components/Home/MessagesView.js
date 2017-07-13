@@ -4,15 +4,33 @@ import Message from './Message';
 import './MessagesView.css'
 
 class MessagesView extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.handleWindowSizeChange = this.handleWindowSizeChange.bind(this);
+  }
+  
   componentDidMount() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
+
+    var el = document.getElementById('messageList');
+    el.addEventListener('resize', this.handleWindowSizeChange);
   }
 
   componentDidUpdate() {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
   }
+
+  componentWillUnmount() {
+    var el = document.getElementById('messageList');
+    el.removeEventListener('resize', this.handleWindowSizeChange);
+  }
+
+  handleWindowSizeChange() {
+    document.getElementById('messageList').style.height = document.getElementById('messageList').clientHeight;
+  };
 
   render() {
     if(this.props.conversations[this.props.room] === undefined) {
@@ -38,7 +56,7 @@ class MessagesView extends React.Component {
             prevMsg={prevMsg && prevMsg.createdAt} />
           );
         });
-
+      
       return (
         <ul id='messageList' className="messageList">
           { messages }
