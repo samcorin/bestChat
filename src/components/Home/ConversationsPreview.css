@@ -1,5 +1,6 @@
 .conversationPreviewWrapper {
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch
 }
 
 .conversationsPreview {
@@ -102,6 +103,12 @@
 }
 
 #activeNow {
+  margin-top: 16px;
+  padding: 0 13px;
+
+}
+
+#activeNowUl {
   display: flex;
   flex-direction: row;
   height: 70px;
@@ -109,9 +116,10 @@
   overflow-x: scroll;
   align-items: center;
   margin: 0;
+  padding: 0;
 }
 
-#activeNow li {
+#activeNowUl li {
   /*min-width: 200px;*/
 }
 

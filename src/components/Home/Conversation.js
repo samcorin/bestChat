@@ -37,6 +37,9 @@ class Conversation extends React.Component{
       this.addMessage(messageObject);
     }
   }
+  // componentWillMount() {
+    // var n = document.getElementsByClassName('chatScreenMob')[0];
+  // }
 
   addMessage(message) {
     const swapped = objSwap(this.props.userTable);

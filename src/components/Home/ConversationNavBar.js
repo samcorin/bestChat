@@ -29,7 +29,7 @@ class ConversationNavBar extends Component {
 // This user isthe initiator, that means that you need to push your coords to the db
   startMiit() {
     // roomId messes up sometimes?
-    console.log("Miit started by ", this.state.roomId, this.props.currentUser)
+    console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
     // const pos = getPos();
     getCoords.start(this.state.roomId, this.props.currentUser);
     // if other person accepts, ok
@@ -44,6 +44,7 @@ class ConversationNavBar extends Component {
 
   componentDidMount() {
     dropdown.init();
+    
     const call = document.getElementById('initCall');
     const miit = document.getElementById('initMiit');
 
@@ -60,10 +61,13 @@ class ConversationNavBar extends Component {
 
 
     // Listen for events
+    // ===================== PROBLEM ======================
+    // this stuff isnt loaded if you start at the screen, 
     const swapped = objSwap(this.props.userTable);
     // what if it's null?
     // It's a problem when users start in the conversatoin. no time to load? need to dissalow urls other than root
     const roomId = swapped[this.props.room];
+    console.log("SWAPPED ID ETC>>> ", swapped, roomId)
     this.setState({
       roomId: roomId
     })

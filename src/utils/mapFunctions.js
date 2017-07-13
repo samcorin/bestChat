@@ -233,7 +233,11 @@ export const getCoords = {
     //   // check for something here
 
     //   // set it up
-      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false})
+      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false}).then(() => {
+        console.log("init meta setup OK")
+      }).catch((err) => {
+        console.log("error setting up meta: ", err)
+      })
     // })
 
     // this.getPos();
@@ -249,6 +253,8 @@ export const getCoords = {
 
   },
   listen: function(roomId, user, redirect) {
+    // What do I want to happen here? What is this listening for?
+    console.log("Listening...")
     var metaRef = conversationsRef.child(`${roomId}/meta`);
     // Set username
     if(this.currentUser === null) {
@@ -260,31 +266,49 @@ export const getCoords = {
     }
 
     // What am i listening for? changes to meta. new coords, new ppl, etc..
-
+    // This only gets update when meta is updated, eg: coords, showMap, ready, etc..
+    // Listen for particular changes. 
     metaRef.on('value', snapshot => {
       let obj = snapshot.val();
-      console.log("NEW VALUE: ", obj)
+      console.log("Changes to /meta ", obj)
 
-        if (navigator.geolocation) {
-          console.log("Getting your position. Wait a moment...")
-          navigator.geolocation.getCurrentPosition((pos) => {
-            console.log("Your coords: ", this.currentUser, pos.coords)
-            let coords = {};
-            coords['accuracy'] = pos.coords.accuracy;
-            coords['latitude'] = pos.coords.latitude;
-            coords['longitude'] = pos.coords.longitude;
+        // if (navigator.geolocation) {
+          // console.log("Getting your position. Wait a moment...")
+    //       navigator.geolocation.getCurrentPosition((pos) => {
+    //         console.log("Your coords: ", this.currentUser, pos.coords)
+    //         let coords = {};
+    //         coords['accuracy'] = pos.coords.accuracy;
+    //         coords['latitude'] = pos.coords.latitude;
+    //         coords['longitude'] = pos.coords.longitude;
 
-            // metaRef.child(`${this.currentUser}/coords`).set(pos.coords);
-            metaRef.once('value', snapshot => {
-              console.log("META VAL: ", snapshot.val())
-              metaRef.child(this.currentUser).set(coords)
-            })
-          }, error);
-        } else {
-          console.log("Geolocation is not supported by this browser.");
-        }
+    //         // metaRef.child(`${this.currentUser}/coords`).set(pos.coords);
+    //         metaRef.once('value', snapshot => {
+    //           console.log("META VAL: ", snapshot.val())
+    //           console.log("vars: ", user, coords)
+    //           metaRef.child(this.currentUser).set(coords)
+    //         })
+    //       }, error);
+    //     } else {
+    //       console.log("Geolocation is not supported by this browser.");
+    //     }
 
+
+      // Finally, if redirect is set up, redirect.
+      if(obj && obj.redirect) {
+        // show back button to conversation
+        window.showMapBack = true;
+        console.log("Time to bounce") // for all
+        redirect();
+      }
     })
+
+
+
+
+
+
+
+
 
       // const metaRef = conversationsRef.child(this.roomId + '/meta/coords');
       // if meta exists last data, prev session?
