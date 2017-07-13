@@ -20,9 +20,14 @@ class Message extends React.Component {
         <div>
           {divider && <MessageDivider date={humanReadable(this.props.createdAt)}/> }
           <li>
-            <div className={myMessage ? 'myMessage' : 'theirMessage'}>
+            <div className='myMessage'>
               {type === 'like' ? (
                 <FaThumbsOUp className='likeIcon' />
+              ) : type === 'miit' ? (
+                <div>
+                  <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
+                  <span className='myMessageBody' id="MessageBody">{this.props.text}</span>
+                </div>
               ) : (
                 <div>
                   <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
@@ -38,9 +43,14 @@ class Message extends React.Component {
         <div>
           {divider && <MessageDivider date={humanReadable(this.props.createdAt)}/> }
           <li>
-            <div className={myMessage ? 'myMessage' : 'theirMessage'}>
+            <div className='theirMessage'>
               {type === 'like' ? (
                 <FaThumbsOUp className='likeIcon' />
+              ) : type === 'miit' ? (
+                <div>
+                  <span className='theirMessageBody' id="MessageBody">{this.props.text}</span>
+                  <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
+                </div>
               ) : (
                 <div>
                   <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>
