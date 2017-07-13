@@ -10,6 +10,7 @@ import './../App.css';
 
 
 class ConversationsPreview extends Component {
+  
   render() {
     let convLen = Object.keys(this.props.conversations).length;
     let tableLen = Object.keys(this.props.userTable).length;

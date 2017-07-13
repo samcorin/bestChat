@@ -1,4 +1,5 @@
-import {database, conversationsRef} from './../firebase/index';
+import {database, usersRef, conversationsRef} from './../firebase/index';
+import SendMessage from './../components/Home/Modules/SendMessage'
 
 let coordsListener;
 let coordsStore = {};
@@ -39,7 +40,13 @@ export const getScript = (source, callback) => {
 // =============================================================
 // ========================= initMap ===========================
 export const initMap = () => {
+  
+  // 1, you're just looking at meet, "Hey, why don't you invite someone for a drink?"
+  
+  // 2, you invited someone or you are an invitee, you have coords already and a partner, 
+  
   // Just set this for now
+  // should be your own coords, 
   var koenji = {lat: 35.7059, lng: 139.6486};
   // Show map
   window.map = new window.google.maps.Map(document.getElementById('map'), {
@@ -225,20 +232,46 @@ export const miit = {
   roomId: null,
   accepted: false,
   newSession: false,
-  start: function(roomId, user, roomName) {
+  start: function(roomId, user, roomName, thatProps, swapped) {
+    // Might move vars in here...
+    // started: false,
+    // coordsListener: null,
+    // coordsStore: {},
+    // currentUser: null,
+    // roomId: null,
+    // accepted: false,
+    // newSession: false,
     var metaRef = conversationsRef.child(`${roomId}`);
 
+    // Text based on what the initiator chooses, are there options? There might be later.
+      const message = {
+        sender: user,
+        text: 'Wanna grab a drink? 🍻',
+        createdAt: Date.now(),
+        type: 'miit'
+      }
+
+      SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
+
     // make sure roomId and user are not undefined, or why are they?
-    metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false}).then(() => {
-      // Send 'roomName' a message
-      
-      console.log("init meta setup OK")
-    }).catch((err) => {
-      console.log("error setting up meta: ", err)
-    })
+    setTimeout(() => {
+      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false}).then(() => {
+
+        console.log("init meta setup OK")
+      }).catch((err) => {
+        console.log("error setting up meta: ", err)
+      })
+    }, 1000);
 
   },
   listen: function(roomId, user, redirect) {
+    // started: false,
+    // coordsListener: null,
+    // coordsStore: {},
+    // currentUser: null,
+    // roomId: null,
+    // accepted: false,
+    // newSession: false,
     // redirect in the db acts as a global var. it should set the redirect for everyone.
 
 
@@ -305,31 +338,36 @@ export const miit = {
         console.log(' *** Invite *** from: ', obj.initiator)
         
         // Once you get the invite you need to do something about the init thing
-        if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
-        
-        // get coords
+        setTimeout(() => {
+          if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
+          // get coords
+          // Set this for everyone else? or just yourself? if just for self, then:
+          //  redirect();
+          // that way others can join in later. But need to change the fresh condition;
+            this.accepted = true;
+            metaRef.update({accepted: true})
+            
+            setTimeout(() => {
+              database.child('conversations/' + roomId + '/meta').update({redirect: true})
+            }, 1000)
 
-        // Set this for everyone else? or just yourself? if just for self, then:
-        //  redirect();
-        // that way others can join in later. But need to change the fresh condition;
-        //  database.child('conversations/' + roomId + '/meta').update({redirect: true})
-          this.accepted = true;
-          metaRef.update({accepted: true})
-        }
-      }
+          }
+        },1000)
+      } 
       
       // Initiator checks coords
       const newSession = (obj && (Date.now() - obj.time) < 30 * 1000);
       if(obj && obj.accepted && obj.initiator === user && newSession) {
         console.log("It's your turn")
-        this.getPosition(metaRef, user);
+        this.getPosition(user, metaRef);
+        this.accepted = true;
       }
       
       // #2
       // session is < 30s
       if(this.accepted && newSession) {
         // then get coords for everyone, then set redirect
-        this.getPosition(metaRef, user)
+        this.getPosition(user, metaRef);
         // if (navigator.geolocation) {
           
         //   console.log("Getting your position. Wait a moment...")
@@ -374,19 +412,23 @@ export const miit = {
     // updates['/user-posts/' + uid + '/' + newPostKey] = postData;
     // database.update(update);
   },
-  getPosition: function(ref, user) {
+  getPosition: function(user, ref) {
     if (navigator.geolocation) {
       console.log("Getting your position. Wait a moment...")
       navigator.geolocation.getCurrentPosition((pos) => {
         
-        console.log("Your coords: ", user, pos.coords)
-        
-        let coords = {};
-        coords[`/${user}/accuracy`] = pos.coords.accuracy;
-        coords[`/${user}/latitude`] = pos.coords.latitude;
-        coords[`/${user}/longitude`] = pos.coords.longitude;
+        if(ref) {
+          console.log("Your coords: ", user, pos.coords)
+          
+          let coords = {};
+          coords[`/${user}/accuracy`] = pos.coords.accuracy;
+          coords[`/${user}/latitude`] = pos.coords.latitude;
+          coords[`/${user}/longitude`] = pos.coords.longitude;
 
-        ref.child('coords').update(coords)
+          ref.child('coords').update(coords)
+        } else {
+          return pos;
+        }
         
       }, error);
     } else {
