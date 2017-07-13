@@ -13,7 +13,8 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Route,
-  Switch
+  Switch,
+  Link
 } from 'react-router-dom'
 
 // const Conversation = () => import('./Home/Conversation');
@@ -35,6 +36,22 @@ class App extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowSizeChange);
+  }
+
+  componentDidMount() {
+    const power = document.getElementById('offButton');
+    const overlay = document.getElementById('offOverlay');
+
+    power.addEventListener('click', (e) => {
+      console.log("Clicked power button")
+        overlay.style.display = 'block';
+      // pointer-events: none;
+      // power
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      },3000)
+      // pointer-events: none; remove
+    })
   }
 
   getScript(source, callback) {
@@ -74,6 +91,13 @@ class App extends Component {
                 <img src={require("../utils/img/ios_template_min_3.png")}
                      alt="iPhone6s"
                      className="iphoneImg" />}
+              {!isMobile &&
+                  <div>
+                    <div id="offButton"></div>
+                    <div id="offOverlay"></div>
+                    <Link to="/" id="homeButton"></Link>
+                  </div>
+                }
               <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/calls" component={Calls}/>

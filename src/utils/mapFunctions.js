@@ -258,24 +258,19 @@ export const miit = {
     var metaRef = conversationsRef.child(`${roomId}`);
 
     // Text based on what the initiator chooses, are there options? There might be later.
-      const message = {
-        sender: user,
-        text: 'Wanna grab a drink? 🍻',
-        createdAt: Date.now(),
-        type: 'miit'
-      }
+    const message = {
+      sender: user,
+      text: 'Wanna grab a drink? 🍻',
+      createdAt: Date.now(),
+      type: 'miit'
+    }
 
-      SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
+    SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
 
     // make sure roomId and user are not undefined, or why are they?
     setTimeout(() => {
-      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false}).then(() => {
-
-        console.log("init meta setup OK")
-      }).catch((err) => {
-        console.log("error setting up meta: ", err)
-      })
-    }, 1000);
+      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false});
+    }, 700);
 
   },
   listen: function(roomId, user, redirect) {
@@ -354,15 +349,15 @@ export const miit = {
         // Once you get the invite you need to do something about the init thing
         setTimeout(() => {
           if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
-          // get coords
-          // Set this for everyone else? or just yourself? if just for self, then:
-          //  redirect();
-          // that way others can join in later. But need to change the fresh condition;
+            // what if you had a button inside the message?
             this.accepted = true;
             metaRef.update({accepted: true})
             
             setTimeout(() => {
               database.child('conversations/' + roomId + '/meta').update({redirect: true})
+            
+              this.getPosition(user, metaRef);
+            
             }, 1000)
 
           }
@@ -377,11 +372,16 @@ export const miit = {
         this.accepted = true;
       }
       
+      if(obj && !!obj.coords && newSession) {
+        console.log("You're good to go.")
+        // redirect();
+      }
       // #2
       // session is < 30s
-      if(this.accepted && newSession) {
+      // if(this.accepted && newSession && !obj.redirect) {
         // then get coords for everyone, then set redirect
-        this.getPosition(user, metaRef);
+        
+        // this.getPosition(user, metaRef);
         // if (navigator.geolocation) {
           
         //   console.log("Getting your position. Wait a moment...")
@@ -401,7 +401,7 @@ export const miit = {
         //   console.log("Geolocation is not supported by this browser.");
         // }
       
-    }
+    // }
 
       // #3
       // Finally, if redirect is set up, redirect.
