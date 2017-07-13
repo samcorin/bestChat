@@ -223,7 +223,7 @@ export const setMarker = (coords, id, group) =>{
   window.directionsDisplay.setMap(window.map);
 
  } else {
-   window.map.setZoom(15);
+   window.map.setZoom(14);
  }
 
   // marker.id = id || this.props.currentUser;
