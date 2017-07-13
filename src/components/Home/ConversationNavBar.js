@@ -5,7 +5,7 @@ import './ConversationNavBar.css'
 import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
 import dropdown from './../../utils/dropdown';
 import {objSwap} from './../../utils/objFunctions';
-import {getCoords} from './../../utils/mapFunctions.js';
+import {miit} from './../../utils/mapFunctions.js';
 
 class ConversationNavBar extends Component {
   constructor(props) {
@@ -38,7 +38,7 @@ class ConversationNavBar extends Component {
 
       if(defined) {
         clearInterval(timer);
-        getCoords.start(roomId, this.props.currentUser);
+        miit.start(roomId, this.props.currentUser, this.props.room);
         console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
       }
       
@@ -55,7 +55,7 @@ class ConversationNavBar extends Component {
     dropdown.init();
     
     const call = document.getElementById('initCall');
-    const miit = document.getElementById('initMiit');
+    const miitDiv = document.getElementById('initMiit');
 
     const startCall = () => {
       console.log("start call to: ", this.props.room)
@@ -73,7 +73,7 @@ class ConversationNavBar extends Component {
       if(defined) {
         clearInterval(timer);
         defined = false;
-        getCoords.listen(roomId, this.props.currentUser, this.setRedirect);
+        miit.listen(roomId, this.props.currentUser, this.setRedirect);
       }
       
       // Increment counter. Limit to 3s
@@ -91,7 +91,7 @@ class ConversationNavBar extends Component {
 
     // Event listeners for Miit
     // miit.addEventListener('touchstart', this.startMiit, false);
-    miit.addEventListener('click', this.startMiit);
+    miitDiv.addEventListener('click', this.startMiit);
 
   }
 

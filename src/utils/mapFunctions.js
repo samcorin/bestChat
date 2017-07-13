@@ -217,36 +217,31 @@ export const setMarker = (coords, id) =>{
 
 
 // ================================= coords Listener ==================================
-export const getCoords = {
+export const miit = {
   started: false,
   coordsListener: null,
   coordsStore: {},
   currentUser: null,
   roomId: null,
-  start: function(roomId, user) {
+  accepted: false,
+  newSession: false,
+  start: function(roomId, user, roomName) {
     var metaRef = conversationsRef.child(`${roomId}`);
 
     // make sure roomId and user are not undefined, or why are they?
-    metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false}).then(() => {
+    metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false}).then(() => {
+      // Send 'roomName' a message
+      
       console.log("init meta setup OK")
     }).catch((err) => {
       console.log("error setting up meta: ", err)
     })
-    // })
-
-    // this.getPos();
-    // if (navigator.geolocation) {
-    //   console.log("HELLO. Getting position. Wait a moment...")
-    //   navigator.geolocation.getCurrentPosition((pos) => {
-    //     console.log("HURRAY, ", user)
-    //     metaRef.set(pos.coords);
-    //   }, error);
-    // } else {
-    //   console.log("Geolocation is not supported by this browser.");
-    // }
 
   },
   listen: function(roomId, user, redirect) {
+    // redirect in the db acts as a global var. it should set the redirect for everyone.
+
+
     // What do I want to happen here? What is this listening for?
     console.log("Listening...")
     var metaRef = conversationsRef.child(`${roomId}/meta`);
@@ -259,135 +254,113 @@ export const getCoords = {
       this.roomId = roomId;
     }
 
-    // What am i listening for? changes to meta. new coords, new ppl, etc..
-    // This only gets update when meta is updated, eg: coords, showMap, ready, etc..
-    // Listen for particular changes. 
+    // check here if session is old?
+    // metaRef.once('value', snapshot => {
+    //   let obj = snapshot.val();
+    //   console.log("TIME: ", obj)
+      // console.log('obj: ', (Date.now() - obj.time) > 10 * 1000)
+      
+      // // first person to join room checks if the last request is old. 1 minutes?
+      // if (!!obj && (Date.now() - obj.time) > 10 * 1000) {
+      //   console.log("Clearing session.")
+      //   // or delete it
+      //   // metaRef.update({redirect: false})
+      //   metaRef.set(null)
+      // }
+    // })
+
     metaRef.on('value', snapshot => {
-      let obj = snapshot.val();
-      console.log("Changes to /meta ", obj)
+      let obj = snapshot.val() || null;
+      console.log("... changes to /meta ", obj)
 
+
+      // console.log('obj: ', (Date.now() - obj.time) > 10 * 1000)
+      
+      // first person to join room checks if the last request is old. 30s?
+      // if (!!obj && ((Date.now() - obj.time) > 30000)) {
+      //   this.newSession = true;
+      //   console.log("Clearing session.")
+      //   metaRef.remove();
+      //   // or delete it
+      //   metaRef.update({time: Date.now()})
+      //   let hello = {};
+      //   hello[user] = "HELLO"
+      //   let t = {};
+      //   t['/newref/hello//test'] = "HELLO"
+
+      //   metaRef.set({accepted: false})
+      //   console.log("accepted...")
+      //   metaRef.update({another: true})
+      //   console.log("anotehr...")
+      //   metaRef.update(hello)
+      //   metaRef.update(t)
+
+      // }
+
+      // #1
+      // also check that the invitation is less than 15 seconds old
+      const fresh = (obj && ((Date.now()) - obj.time) < 15000);
+      // Accepted: only done once, this starts the coords process, etc..
+      if(!!obj && obj.initiator !== user && fresh && obj.redirect === false && !this.accepted) {
+        console.log(' *** Invite *** from: ', obj.initiator)
+        
+        // Once you get the invite you need to do something about the init thing
+        if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
+        
+        // get coords
+
+        // Set this for everyone else? or just yourself? if just for self, then:
+        //  redirect();
+        // that way others can join in later. But need to change the fresh condition;
+        //  database.child('conversations/' + roomId + '/meta').update({redirect: true})
+          this.accepted = true;
+          metaRef.update({accepted: true})
+        }
+      }
+      
+      // Initiator checks coords
+      const newSession = (obj && (Date.now() - obj.time) < 30 * 1000);
+      if(obj && obj.accepted && obj.initiator === user && newSession) {
+        console.log("It's your turn")
+        this.getPosition(metaRef, user);
+      }
+      
+      // #2
+      // session is < 30s
+      if(this.accepted && newSession) {
+        // then get coords for everyone, then set redirect
+        this.getPosition(metaRef, user)
         // if (navigator.geolocation) {
-          // console.log("Getting your position. Wait a moment...")
-    //       navigator.geolocation.getCurrentPosition((pos) => {
-    //         console.log("Your coords: ", this.currentUser, pos.coords)
-    //         let coords = {};
-    //         coords['accuracy'] = pos.coords.accuracy;
-    //         coords['latitude'] = pos.coords.latitude;
-    //         coords['longitude'] = pos.coords.longitude;
+          
+        //   console.log("Getting your position. Wait a moment...")
+        //   navigator.geolocation.getCurrentPosition((pos) => {
+            
+        //     console.log("Your coords: ", user, pos.coords)
+            
+        //     let coords = {};
+        //     coords[`/${user}/accuracy`] = pos.coords.accuracy;
+        //     coords[`/${user}/latitude`] = pos.coords.latitude;
+        //     coords[`/${user}/longitude`] = pos.coords.longitude;
 
-    //         // metaRef.child(`${this.currentUser}/coords`).set(pos.coords);
-    //         metaRef.once('value', snapshot => {
-    //           console.log("META VAL: ", snapshot.val())
-    //           console.log("vars: ", user, coords)
-    //           metaRef.child(this.currentUser).set(coords)
-    //         })
-    //       }, error);
-    //     } else {
-    //       console.log("Geolocation is not supported by this browser.");
-    //     }
+        //     metaRef.child('coords').update(coords)
+            
+        //   }, error);
+        // } else {
+        //   console.log("Geolocation is not supported by this browser.");
+        // }
+      
+    }
 
-
+      // #3
       // Finally, if redirect is set up, redirect.
       if(obj && obj.redirect) {
         // show back button to conversation
         window.showMapBack = true;
         console.log("Time to bounce") // for all
         redirect();
+        metaRef.update({redirect: false})
       }
     })
-
-
-
-
-
-
-
-
-
-      // const metaRef = conversationsRef.child(this.roomId + '/meta/coords');
-      // if meta exists last data, prev session?
-
-      // Someting changed, need to find out what?
-      // works here
-      // database.child('conversations/' + roomId + '/meta').set({initiator: user, time: Date.now(), redirect: true})
-
-
-      // ================================================================
-      // I'm not the initiator, so I do this
-      // if(obj !== null && obj.initiator !== user && !obj[user]) {
-      //   console.log("INVITATION")
-      //   // this.getPos();
-      // if (navigator.geolocation) {
-      //   console.log("navigator.geolocation OK")
-      //   console.log("Getting position. Wait a moment...")
-      //   navigator.geolocation.getCurrentPosition((pos) => {
-      //     console.log("Your coords: ", pos.coords)
-      //     // let coords = {};
-      //     // coords[this.currentUser] = pos.coords;
-      //     // metaRef.child(this.currentUser).set(pos.coords);
-      //     // updateValues(coords)
-      //   }, error);
-      // } else {
-      //   console.log("Geolocation is not supported by this browser.");
-      // }
-
-      // }
-
-      // All set, redirect to Miit page
-      // if(obj && obj.redirect) {
-      //   // show back button to conversation
-      //   window.showMapBack = true;
-      //   console.log("Time to bounce") // for all
-      //   redirect();
-      // }
-
-
-
-
-
-      // getGeoLoc : function (id) {
-
-      //         var self = this;
-
-      //         navigator.geolocation.getCurrentPosition(function(position) {
-
-      //             var myVar1, myVar2, myVar3; // Define has many variables as you want here
-
-      //             // From here you can pass the position, as well as any other arguments
-      //             // you might need.
-      //             self.foundLoc(position, self, myVar1, myVar2, myVar3)
-
-      //         }, this.noloc, { timeout : 3});
-      //     },
-
-      //     foundLoc : function(position, self, myVar1, myVar2, myVar3) {},
-        // if (navigator.geolocation) {
-        //   navigator.geolocation.getCurrentPosition(this.myCoords, error);
-        // } else {
-        //   console.log("Geolocation is not supported by this browser.");
-        // }
-
-
-
-        // if (window.confirm('If you click "ok" you would be redirected')) {
-        //  // redirect();
-        //  // database.child('conversations/' + roomId + '/meta').update({redirect: true})
-        // };
-
-        // if current user coords don't exist, add them
-        // if(Object.keys(obj).indexOf(user) === -1) {
-        //   console.log("You don't exist yet, ", user)
-        //   let myCoords = {};
-
-          // do_a( function(){
-            // do_b();
-            // database.child('conversations/' + roomId + '/meta').update(myCoords)
-          // });
-
-          // myCoords[user] = coords
-        // }
-
-        // switch it in there
 
   },
   updateCoords: function(pos, room) {
@@ -400,6 +373,25 @@ export const getCoords = {
     // updates['/posts/' + newPostKey] = postData;
     // updates['/user-posts/' + uid + '/' + newPostKey] = postData;
     // database.update(update);
+  },
+  getPosition: function(ref, user) {
+    if (navigator.geolocation) {
+      console.log("Getting your position. Wait a moment...")
+      navigator.geolocation.getCurrentPosition((pos) => {
+        
+        console.log("Your coords: ", user, pos.coords)
+        
+        let coords = {};
+        coords[`/${user}/accuracy`] = pos.coords.accuracy;
+        coords[`/${user}/latitude`] = pos.coords.latitude;
+        coords[`/${user}/longitude`] = pos.coords.longitude;
+
+        ref.child('coords').update(coords)
+        
+      }, error);
+    } else {
+      console.log("Geolocation is not supported by this browser.");
+    }
   },
   getPos: function() {
     // IS THE PROBLEM THAT IM GETTING STUCK IN A FEEDBAK LOOP? if this changes, then it sets off another change, and this again.
