@@ -2,9 +2,12 @@
   outline: none;
   display: flex;
   background-color: #fff;
-  opacity: 0.95;
-  min-height: 40px;
+  height: 40px;
   padding: 0 5px;
+  position: absolute;
+  width: 96%;
+  bottom: 0;
+  flex: 1 0 100%;
 }
 
 .chatForm .form {
@@ -41,7 +44,8 @@
   .chatForm {
     padding: 0 10px;
     min-height: 50px;
-    position: relative;
+    position: fixed;
+    width: 96%;
     bottom: 0;
   }
   #inputButton {

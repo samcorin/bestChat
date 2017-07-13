@@ -2,17 +2,21 @@
   padding: 8px 6px 0px;
   width: 100%;
   overflow-y: scroll;
+  overflow-scrolling: touch;
   -webkit-overflow-scrolling: touch;
   margin: 0;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  flex: 1;
+  max-height: calc(100vh - 90px);
+  flex: 1 0 100%;
 }
 
 @media (max-width: 600px) {
   .messageList {
-    height: calc(100vh - 92px);
+    /* height: calc(100vh - 92px); */
+    flex: 1 1 100%;
+    max-height: calc(100vh - 100px);
   }
 }
 /* Where's this? */
