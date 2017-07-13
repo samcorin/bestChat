@@ -3,10 +3,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
+import {database} from './../../firebase/index';
 import './Miit.css';
 import './../App.css';
 // import Map from './Map';
-import {getScript, initMap, getPos} from './../../utils/mapFunctions';
+import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
 
 class Miit extends Component {
   constructor(props) {
@@ -211,9 +212,34 @@ class Miit extends Component {
 
   componentDidMount() {
     // Initial map setup
+    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
 
-    // Make this synchronous
-    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
+    if(miit.roomId) {
+      database.child('conversations/' + miit.roomId + '/meta/coords').on('value', snapshot => {
+        // listen for coords?
+        
+        const data = snapshot.val();
+        
+
+        console.log("LOADING MEET< WAITING FOR COORDS from users.")
+        console.log("DB DATA FOR MIIT: ", data)
+        // keep listening
+        if(data) {
+          // ok render the dots
+          // render the coords, 
+          // export const setMarker = (coords, id) =>{
+          
+        }
+
+      })
+    } else {
+      console.log("You're on on own.")
+    }
+    // db?
+    // database.child('conversations/' + roomId + '/meta').update({redirect: true})
+  }
+    
+    // const pos = getPosition();
     // const promise = new Promise((resolve, reject) => {
     //   console.log(position)
     //   if(position) {
@@ -222,7 +248,6 @@ class Miit extends Component {
     //   else {
     //     reject('Failure!');
     // })
-      }
 
     // promise.then(data => {
     //   console.log('data: ', data)

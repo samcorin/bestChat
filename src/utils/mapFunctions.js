@@ -6,7 +6,7 @@ let coordsStore = {};
 
 // ==================================================
 // Load Google Maps dependency on Miit Component Load
-export const getScript = (source, callback) => {
+export const getScript = (source, callback, isMiit) => {
 
   // return new Promise((resolve, reject) => {
     // Check to see if google maps dependency already exists. There's got to be a better way.s
@@ -23,6 +23,9 @@ export const getScript = (source, callback) => {
           script = undefined;
 
           if(!isAbort && callback) {
+            // if(isMiit) {
+            //   // getPosition()
+            // }
             callback();
             // resolve("Script loaded")
           }
@@ -89,7 +92,7 @@ export const initMap = () => {
   // document.getElementById('end').addEventListener('change', onChangeHandler);
 
   // getPos();
-  if (navigator.geolocation) {
+  // if (navigator.geolocation) {
   // let options = {
   //   enableHighAccuracy: false,
   //   timeout: 5000,
@@ -97,14 +100,15 @@ export const initMap = () => {
   // };
 
   // Keep trying untill success?
-    navigator.geolocation.getCurrentPosition(success, error);
+    
+    // navigator.geolocation.getCurrentPosition(success, error);
 
   // Watch user position
   // watchPosition();
 
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
+  // } else {
+  //   console.log("Geolocation is not supported by this browser.");
+  // }
 }
 
 
@@ -425,6 +429,13 @@ export const miit = {
           coords[`/${user}/latitude`] = pos.coords.latitude;
           coords[`/${user}/longitude`] = pos.coords.longitude;
 
+          this.coordsStore[user] = {
+            accuracy: pos.coords.accuracy,
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude
+          };
+
+          // Add to db
           ref.child('coords').update(coords)
         } else {
           return pos;
@@ -468,6 +479,30 @@ export const miit = {
       console.log("Geolocation is not supported by this browser.");
     }
 
+  }
+}
+
+export const getPosition = (user, ref) => {
+  if (navigator.geolocation) {
+    console.log("Getting your position. Wait a moment...")
+    navigator.geolocation.getCurrentPosition((pos) => {
+
+      // If it's for a Miit
+      if(!!user && !!ref) {
+        console.log("Your coords: ", user, pos.coords)
+        
+        let coords = {};
+        coords[`/${user}/accuracy`] = pos.coords.accuracy;
+        coords[`/${user}/latitude`] = pos.coords.latitude;
+        coords[`/${user}/longitude`] = pos.coords.longitude;
+
+        ref.child('coords').update(coords)
+      } else {
+        return pos;
+      }
+    }, error);
+  } else {
+    console.log("Geolocation is not supported by this browser.");
   }
 }
 
