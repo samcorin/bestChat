@@ -226,18 +226,12 @@ export const getCoords = {
   start: function(roomId, user) {
     var metaRef = conversationsRef.child(`${roomId}`);
 
-    // metaRef.child('meta').once('value', snapshot => {
-    //   console.log("START CHECK", snapshot.val())
-    // })
-
-    //   // check for something here
-
-    //   // set it up
-      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false}).then(() => {
-        console.log("init meta setup OK")
-      }).catch((err) => {
-        console.log("error setting up meta: ", err)
-      })
+    // make sure roomId and user are not undefined, or why are they?
+    metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false}).then(() => {
+      console.log("init meta setup OK")
+    }).catch((err) => {
+      console.log("error setting up meta: ", err)
+    })
     // })
 
     // this.getPos();

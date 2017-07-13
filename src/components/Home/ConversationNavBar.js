@@ -28,18 +28,27 @@ class ConversationNavBar extends Component {
 
 // This user isthe initiator, that means that you need to push your coords to the db
   startMiit() {
-    // roomId messes up sometimes?
-    console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
-    // const pos = getPos();
-    getCoords.start(this.state.roomId, this.props.currentUser);
-    // if other person accepts, ok
-    // Chain
-    // .on('child_added', function(obj) {
-      // do stuff...
-    // }).off();
+    // Ensure values are defined
+    let counter = 0;
+    let timer = setInterval(() => {
+      const swapped = objSwap(this.props.userTable);
+      const roomId = swapped[this.props.room];
+      
+      let defined = (!!this.props.currentUser && !!roomId && !!swapped);    
 
-    // Detach listener
-    // coordsListener.off();
+      if(defined) {
+        clearInterval(timer);
+        getCoords.start(roomId, this.props.currentUser);
+        console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
+      }
+      
+      // Increment counter. Limit to 3s
+      counter++;
+      if(counter > 30) {
+        console.log("Miit timed out.")
+        clearInterval(timer);
+      }
+    },100)
   }
 
   componentDidMount() {
@@ -52,26 +61,28 @@ class ConversationNavBar extends Component {
       console.log("start call to: ", this.props.room)
       // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
       // webrtc stuff.
-
     }
-
-    // componentWillUnmount() {
-    //   coordsListener.off();
-    // }
-
-
-    // Listen for events
-    // ===================== PROBLEM ======================
-    // this stuff isnt loaded if you start at the screen, 
-    const swapped = objSwap(this.props.userTable);
-    // what if it's null?
-    // It's a problem when users start in the conversatoin. no time to load? need to dissalow urls other than root
-    const roomId = swapped[this.props.room];
-    console.log("SWAPPED ID ETC>>> ", swapped, roomId)
-    this.setState({
-      roomId: roomId
-    })
-    getCoords.listen(roomId, this.props.currentUser, this.setRedirect);
+    
+    // Setting up main listener, ensure all vars load beforehand
+    let counter = 0;
+    let timer = setInterval(() => {
+      const swapped = objSwap(this.props.userTable);
+      const roomId = swapped[this.props.room];
+      let defined = (!!swapped && !!roomId && !!this.props.currentUser);   
+      
+      if(defined) {
+        clearInterval(timer);
+        defined = false;
+        getCoords.listen(roomId, this.props.currentUser, this.setRedirect);
+      }
+      
+      // Increment counter. Limit to 3s
+      counter++;
+      if(counter > 30) {
+        console.log("Listener timed out.")
+        clearInterval(timer);
+      }
+    },100)
 
 
     // Event listeners for Calls
