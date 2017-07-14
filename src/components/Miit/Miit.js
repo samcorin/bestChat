@@ -3,10 +3,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
+import {database} from './../../firebase/index';
 import './Miit.css';
 import './../App.css';
 // import Map from './Map';
-import {getScript, initMap, getPos} from './../../utils/mapFunctions';
+import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
 
 class Miit extends Component {
   constructor(props) {
@@ -16,7 +17,8 @@ class Miit extends Component {
         latitude: null,
         longitude: null
       },
-      markers: []
+      markers: [],
+      loading: false
     }
     // this.setCoords = this.setCoords.bind(this);
     this.deleteMarker = this.deleteMarker.bind(this);
@@ -211,9 +213,41 @@ class Miit extends Component {
 
   componentDidMount() {
     // Initial map setup
+    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
 
-    // Make this synchronous
-    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap);
+    if(miit.roomId) {
+      database.child('conversations/' + miit.roomId + '/meta').on('value', snapshot => {
+        // listen for coords?
+        const data = snapshot.val();
+        // console.log("DATA: ", data)
+        
+        // keep listening
+        // check if it's old. 
+        let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
+        if(newSession && !!data.coords) {
+          console.log("DB DATA FOR MIIT: ", data)
+          // console.log("data.coords[this.props.currentUser]: ", data.coords[this.props.currentUser])
+          // ok render the dots
+          // render the coords, 
+          // export const setMarker = (coords, id) =>{
+      
+            //       navigator.geolocation.getCurrentPosition((pos) => {
+          // const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};  
+        }
+
+      })
+    } else {
+      console.log("You're on on own.")
+      // do some loading....
+
+      getPosition(this.props.currentUser, null, setMarker)
+      // export const setMarker = (coords, 'You') =>{
+    }
+    // db?
+    // database.child('conversations/' + roomId + '/meta').update({redirect: true})
+  }
+    
+    // const pos = getPosition();
     // const promise = new Promise((resolve, reject) => {
     //   console.log(position)
     //   if(position) {
@@ -222,7 +256,6 @@ class Miit extends Component {
     //   else {
     //     reject('Failure!');
     // })
-      }
 
     // promise.then(data => {
     //   console.log('data: ', data)

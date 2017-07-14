@@ -113,6 +113,13 @@ const init = (store) => {
     })
   });
 
+  // ======================= USER TABLE =========================
+  usersRef.child(currentUser + '/meta').on('value', snapshot => {
+    const meta = snapshot.val()
+    console.log("META: ", meta)
+  })
+
+
   // ===================== LAST CONNECT ======================
   // var userLastOnlineRef = firebase.database().ref("users/joe/lastOnline");
   // userLastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);

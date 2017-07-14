@@ -14,8 +14,16 @@ class MessagesView extends React.Component {
     const messageDiv = document.getElementById('messageList');
     messageDiv.scrollTop = messageDiv.scrollHeight;
 
-    var el = document.getElementById('messageList');
-    el.addEventListener('resize', this.handleWindowSizeChange);
+    // Do I need this????
+    // var el = document.getElementById('messageList');
+    // el.addEventListener('resize', this.handleWindowSizeChange);
+   
+    // const miitResponse = () => {
+    //   console.log("OK YOU RESPONESDD")
+    // }
+    
+    // const accept = document.getElementById('miitAccept');
+    // accept.addEventListener('click', miitResponse); // false / true????
   }
 
   componentDidUpdate() {

@@ -6,7 +6,7 @@ let coordsStore = {};
 
 // ==================================================
 // Load Google Maps dependency on Miit Component Load
-export const getScript = (source, callback) => {
+export const getScript = (source, callback, isMiit) => {
 
   // return new Promise((resolve, reject) => {
     // Check to see if google maps dependency already exists. There's got to be a better way.s
@@ -23,6 +23,9 @@ export const getScript = (source, callback) => {
           script = undefined;
 
           if(!isAbort && callback) {
+            // if(isMiit) {
+            //   // getPosition()
+            // }
             callback();
             // resolve("Script loaded")
           }
@@ -45,13 +48,18 @@ export const initMap = () => {
   
   // 2, you invited someone or you are an invitee, you have coords already and a partner, 
   
-  // Just set this for now
-  // should be your own coords, 
-  var koenji = {lat: 35.7059, lng: 139.6486};
+  // Try localStorage
+  // const myLat = window.localStorage.getItem('myLat') || 35.6895;
+  // const myLng = window.localStorage.getItem('myLng') || 139.6917;
+  // let center = {lat: myLat, lng: myLng};
+  // console.log("YOUR ORIGINAL COORDS: ", myLat, myLng)
+  
+  let center = {lat: 35.6895, lng: 139.6917};
+    
   // Show map
   window.map = new window.google.maps.Map(document.getElementById('map'), {
-    zoom: 14,
-    center: koenji,
+    zoom: 12,
+    center: center,
     streetViewControl: false,
     zoomControl: false,
     mapTypeControl: false
@@ -89,7 +97,7 @@ export const initMap = () => {
   // document.getElementById('end').addEventListener('change', onChangeHandler);
 
   // getPos();
-  if (navigator.geolocation) {
+  // if (navigator.geolocation) {
   // let options = {
   //   enableHighAccuracy: false,
   //   timeout: 5000,
@@ -97,14 +105,15 @@ export const initMap = () => {
   // };
 
   // Keep trying untill success?
-    navigator.geolocation.getCurrentPosition(success, error);
+    
+    // navigator.geolocation.getCurrentPosition(success, error);
 
   // Watch user position
   // watchPosition();
 
-  } else {
-    console.log("Geolocation is not supported by this browser.");
-  }
+  // } else {
+  //   console.log("Geolocation is not supported by this browser.");
+  // }
 }
 
 
@@ -160,8 +169,9 @@ const error = (err) => {
 
 // =============================================================
 // ========================= setMarker ===========================
-export const setMarker = (coords, id) =>{
+export const setMarker = (coords, id, group) =>{
   const name = id || 'random';
+  console.log("SET MARKER COORDS: ", coords)
   window.map.setCenter(coords);
   // var icon = {
   //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
@@ -204,13 +214,17 @@ export const setMarker = (coords, id) =>{
 
   // this.state.markers.push(marker)
 
-
+ if(group) {
   var position = new window.google.maps.LatLng(coords.lat, coords.lng);
   window.bounds.extend(position);
   window.map.fitBounds(window.bounds);
 
   // Directions!
   window.directionsDisplay.setMap(window.map);
+
+ } else {
+   window.map.setZoom(14);
+ }
 
   // marker.id = id || this.props.currentUser;
 
@@ -244,24 +258,19 @@ export const miit = {
     var metaRef = conversationsRef.child(`${roomId}`);
 
     // Text based on what the initiator chooses, are there options? There might be later.
-      const message = {
-        sender: user,
-        text: 'Wanna grab a drink? 🍻',
-        createdAt: Date.now(),
-        type: 'miit'
-      }
+    const message = {
+      sender: user,
+      text: 'Wanna grab a drink? 🍻',
+      createdAt: Date.now(),
+      type: 'miit'
+    }
 
-      SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
+    SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
 
     // make sure roomId and user are not undefined, or why are they?
     setTimeout(() => {
-      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false}).then(() => {
-
-        console.log("init meta setup OK")
-      }).catch((err) => {
-        console.log("error setting up meta: ", err)
-      })
-    }, 1000);
+      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false});
+    }, 700);
 
   },
   listen: function(roomId, user, redirect) {
@@ -340,15 +349,15 @@ export const miit = {
         // Once you get the invite you need to do something about the init thing
         setTimeout(() => {
           if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
-          // get coords
-          // Set this for everyone else? or just yourself? if just for self, then:
-          //  redirect();
-          // that way others can join in later. But need to change the fresh condition;
+            // what if you had a button inside the message?
             this.accepted = true;
             metaRef.update({accepted: true})
             
             setTimeout(() => {
               database.child('conversations/' + roomId + '/meta').update({redirect: true})
+            
+              this.getPosition(user, metaRef);
+            
             }, 1000)
 
           }
@@ -363,11 +372,16 @@ export const miit = {
         this.accepted = true;
       }
       
+      if(obj && !!obj.coords && newSession) {
+        console.log("You're good to go.")
+        // redirect();
+      }
       // #2
       // session is < 30s
-      if(this.accepted && newSession) {
+      // if(this.accepted && newSession && !obj.redirect) {
         // then get coords for everyone, then set redirect
-        this.getPosition(user, metaRef);
+        
+        // this.getPosition(user, metaRef);
         // if (navigator.geolocation) {
           
         //   console.log("Getting your position. Wait a moment...")
@@ -387,7 +401,7 @@ export const miit = {
         //   console.log("Geolocation is not supported by this browser.");
         // }
       
-    }
+    // }
 
       // #3
       // Finally, if redirect is set up, redirect.
@@ -400,6 +414,9 @@ export const miit = {
       }
     })
 
+  },
+  acceptInvite: function() {
+    console.log("MAP FUNCITONS: ACCEPTED")
   },
   updateCoords: function(pos, room) {
     let update = {};
@@ -416,58 +433,51 @@ export const miit = {
     if (navigator.geolocation) {
       console.log("Getting your position. Wait a moment...")
       navigator.geolocation.getCurrentPosition((pos) => {
+
+        console.log("Your coords: ", user, pos.coords)
         
-        if(ref) {
-          console.log("Your coords: ", user, pos.coords)
-          
-          let coords = {};
-          coords[`/${user}/accuracy`] = pos.coords.accuracy;
-          coords[`/${user}/latitude`] = pos.coords.latitude;
-          coords[`/${user}/longitude`] = pos.coords.longitude;
-
-          ref.child('coords').update(coords)
-        } else {
-          return pos;
-        }
-        
-      }, error);
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
-  },
-  getPos: function() {
-    // IS THE PROBLEM THAT IM GETTING STUCK IN A FEEDBAK LOOP? if this changes, then it sets off another change, and this again.
-    var self = this;
-    const currentUser = this.currentUser;
-    const roomId = this.roomId;
-
-
-    var updateValues = function(pos) {
-      console.log("POSITION OK: ", pos)
-
-      database.child('conversations/' + roomId + '/meta/coords/' + currentUser).set(pos).then(() => {
-        console.log("OK! all went well. ")
-      }).catch((err) => {
-        console.log("There was an error updating the DB. ", err)
-      });
-      // database.child('conversations/' + roomId + '/meta').set({initiator: user, time: Date.now(), redirect: false, ready: false})
-
-    }
-
-    if (navigator.geolocation) {
-      console.log("navigator.geolocation OK")
-      console.log("Getting position. Wait a moment...")
-      navigator.geolocation.getCurrentPosition((pos) => {
-
         let coords = {};
-        coords[currentUser] = pos.coords;
+        coords[`/${user}/accuracy`] = pos.coords.accuracy;
+        coords[`/${user}/latitude`] = pos.coords.latitude;
+        coords[`/${user}/longitude`] = pos.coords.longitude;
 
-        updateValues(pos.coords)
+        this.coordsStore[user] = {
+          accuracy: pos.coords.accuracy,
+          latitude: pos.coords.latitude,
+          longitude: pos.coords.longitude
+        };
+        
+        localStorage.setItem('myLat', pos.coords.latitude.toFixed(7));
+        localStorage.setItem('myLng', pos.coords.longitude.toFixed(7));
+
+        // Add to db
+        ref.child('coords').update(coords)
+        
       }, error);
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
+  }
+}
 
+// General purpose locator
+export const getPosition = (user, ref, callback) => {
+  if (navigator.geolocation) {
+    console.log("Getting your position. Wait a moment...")
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+
+      localStorage.setItem('myLat', pos.coords.latitude);
+      localStorage.setItem('myLng', pos.coords.longitude);
+      
+      // Single user
+      window.map.setZoom(12);
+      // group marker? false
+      callback(myLatLng, user, false);
+
+    }, error);
+  } else {
+    console.log("Geolocation is not supported by this browser.");
   }
 }
 

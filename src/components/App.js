@@ -9,6 +9,7 @@ import Description from './Description';
 import Games from './Games/Games';
 import UsernameEditor from './../utils/UsernameEditor';
 import './App.css';
+import HomeEasterEggs from './../utils/EasterEggs/HomeEasterEggs';
 
 import {
   BrowserRouter as Router,
@@ -26,7 +27,6 @@ class App extends Component {
       currentUser: ''
     }
     this.handleWindowSizeChange = this.handleWindowSizeChange.bind(this);
-    this.getScript = this.getScript.bind(this);
   }
 
   componentWillMount() {
@@ -35,24 +35,6 @@ class App extends Component {
 
   componentWillUnmount() {
     window.removeEventListener('resize', this.handleWindowSizeChange);
-  }
-
-  getScript(source, callback) {
-    var script = document.createElement('script');
-    var prior = document.getElementsByTagName('script')[0];
-    script.async = 1;
-
-    script.onload = script.onreadystatechange = function( _, isAbort ) {
-        if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-            script.onload = script.onreadystatechange = null;
-            script = undefined;
-
-            if(!isAbort) { if(callback) callback(); }
-        }
-    };
-
-    script.src = source;
-    prior.parentNode.insertBefore(script, prior);
   }
 
   handleWindowSizeChange() {
@@ -74,6 +56,7 @@ class App extends Component {
                 <img src={require("../utils/img/ios_template_min_3.png")}
                      alt="iPhone6s"
                      className="iphoneImg" />}
+              {!isMobile && <HomeEasterEggs />}
               <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/calls" component={Calls}/>
