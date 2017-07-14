@@ -9,17 +9,10 @@ import MeetPreview from './../Miit/MiitPreview';
 import './ConversationsPreview.css';
 import './../App.css';
 
-
 class ConversationsPreview extends Component {
   constructor(props) {
     super(props)
 
-    this.previewMiitAccept = this.previewMiitAccept.bind(this);
-  }
-  
-  previewMiitAccept(e) {
-    e.preventDefault();  
-    console.log("CLICKED OK IN PREVIEW SCREEN")
   }
 
   render() {
@@ -80,7 +73,7 @@ class ConversationsPreview extends Component {
                     {type === 'like' ? (
                       <p className="previewText">{author}: <FaThumbsOUp className="previewLike" /></p>
                     ) : type === 'miit' ? (
-                      <MeetPreview author={author} createdAt={message.createdAt} text={message.text} currentUser={this.props.currentUser} onClick={this.previewMiitAccept}/>
+                      <MeetPreview author={author} createdAt={message.createdAt} text={message.text} currentUser={this.props.currentUser}/>
                     ) : (
                       <p className="previewText">{author}: {trimmedText}</p>
                     )}

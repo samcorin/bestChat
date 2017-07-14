@@ -415,8 +415,26 @@ export const miit = {
     })
 
   },
-  acceptInvite: function() {
-    console.log("MAP FUNCITONS: ACCEPTED")
+  acceptInvite: function(user) {
+    console.log("MAP FUNCITONS: " + user + " ACCEPTED")
+    // person accepts, do stuff. coords etc...
+    
+    // setTimeout(() => {
+    //   if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
+    //     // what if you had a button inside the message?
+    //     this.accepted = true;
+    //     metaRef.update({accepted: true})
+        
+    //     setTimeout(() => {
+    //       database.child('conversations/' + roomId + '/meta').update({redirect: true})
+        
+    //       this.getPosition(user, metaRef);
+        
+    //     }, 1000)
+
+    //   }
+    // },1000)
+    
   },
   updateCoords: function(pos, room) {
     let update = {};

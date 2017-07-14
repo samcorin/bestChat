@@ -15,9 +15,7 @@ class Message extends React.Component {
   }
 
   handleMiitAccept(e) {
-    console.log("YOU CLICKED OK ", e)
-    miit.acceptInvite()
-    // do stuff
+    miit.acceptInvite(this.props.currentUser)
   }
 
   render() {
@@ -42,7 +40,7 @@ class Message extends React.Component {
               ) : type === 'miit' ? (
                 <div>
                   <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
-                  <span className='myMessageBody' id="MessageBody">{this.props.text}</span>
+                  <span className='myMessageBody' id="MessageBody">You sent an invite</span>
                 </div>
               ) : (
                 <div>
@@ -66,7 +64,7 @@ class Message extends React.Component {
                 <div>
                   <span className='theirMessageBody' id="MessageBody">{this.props.text}
                     {isNew && 
-                      <button id="miitAccept" onClick={() => this.handleMiitAccept(this.props.sender)}>OK</button>
+                      <button id="miitAccept" onClick={this.handleMiitAccept}>OK</button>
                     }
                   </span>
                   <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>

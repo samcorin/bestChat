@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
+import {miit} from './../../utils/mapFunctions';
 
 const styles = {
   previewMiit: {
-    margin: '0'
+    margin: '0',
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   miitButtonPreview: {
     width: '52px',
@@ -34,7 +37,7 @@ class MiitPreview extends Component {
 
   clickHandler(e) {
     e.preventDefault();
-    this.props.onClick(this.state.previewMiitAccept);
+    miit.acceptInvite(this.props.currentUser)
   }
 
   render() {
@@ -50,7 +53,7 @@ class MiitPreview extends Component {
     } else {
       return (
         <div style={styles.previewMiit}>
-          <p className="previewText">{this.props.author}: {this.props.text}</p>
+          <p className="previewText">{this.props.text} </p>
           <button id='MiitButtonPreview' style={isNew ? styles.miitButtonPreview : styles.miitButtonPreviewOld} onClick={this.clickHandler}>
             OK!
           </button>
