@@ -5,12 +5,23 @@ import timely from './../../utils/timely';
 import {sortMessages, latestMessages} from './../../utils/objFunctions';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import {AvatarOnlinePreview} from './Modules/Avatars.js'
+import MeetPreview from './../Miit/MiitPreview';
 import './ConversationsPreview.css';
 import './../App.css';
 
 
 class ConversationsPreview extends Component {
+  constructor(props) {
+    super(props)
+
+    this.previewMiitAccept = this.previewMiitAccept.bind(this);
+  }
   
+  previewMiitAccept(e) {
+    e.preventDefault();  
+    console.log("CLICKED OK IN PREVIEW SCREEN")
+  }
+
   render() {
     let convLen = Object.keys(this.props.conversations).length;
     let tableLen = Object.keys(this.props.userTable).length;
@@ -68,6 +79,8 @@ class ConversationsPreview extends Component {
                     </div>
                     {type === 'like' ? (
                       <p className="previewText">{author}: <FaThumbsOUp className="previewLike" /></p>
+                    ) : type === 'miit' ? (
+                      <MeetPreview author={author} currentUser={this.props.currentUser} onClick={this.previewMiitAccept}/>
                     ) : (
                       <p className="previewText">{author}: {trimmedText}</p>
                     )}

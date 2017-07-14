@@ -38,54 +38,12 @@ class Conversation extends React.Component{
       this.addMessage(messageObject);
     }
   }
-  // componentWillMount() {
-    // var n = document.getElementsByClassName('chatScreenMob')[0];
-  // }
 
   addMessage(message) {
     const swapped = objSwap(this.props.userTable);
 
     // Quarantine
     SendMessage(this.props.currentUser, message, swapped, this.props.match.params.room, usersRef, conversationsRef, this.props);
-    // usersRef.child(this.props.currentUser + '/conversations/' + swapped[this.props.match.params.room]).once('value', snapshot => {
-    //   const roomName = snapshot.val();
-
-    //   // If a reference exists in currentUser/conversations/:id, send the message there.
-    //   if(roomName) {
-    //     message.roomId = swapped[roomName];
-
-    //     // add username..
-    //     message.roomName = roomName;
-    //     this.props.dispatch(addMessageToStore(message));
-    //     conversationsRef.child(message.roomId).push(message);
-
-    //   } else {
-
-    //     // No reference exists, so one needs to be created.
-    //     const cRef = usersRef.child(this.props.currentUser + '/conversations/' + this.props.match.params.room).push().key;
-    //     message.roomId = cRef;
-
-    //     // Push message to store
-    //     message.roomName = this.props.match.params.room;
-    //     this.props.dispatch(addMessageToStore(message));
-
-    //     // Update userTable with -> { ID: NAME }
-    //     var userTableObj = {
-    //       id: cRef,
-    //       name: this.props.match.params.room
-    //     };
-
-    //     this.props.dispatch(updateUserTable(userTableObj));
-
-    //     // Push message to db
-    //     conversationsRef.child(cRef).push(message)
-
-    //     // Add a reference to this conversation for both users
-    //     usersRef.child(this.props.currentUser + '/conversations/' + cRef).set(this.props.match.params.room);
-    //     usersRef.child(this.props.match.params.room + '/conversations/' + cRef).set(this.props.currentUser);
-    //   }
-    // })
-
     this.setState({
       lastMessage: message
     })

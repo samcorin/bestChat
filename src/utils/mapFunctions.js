@@ -454,40 +454,6 @@ export const miit = {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
-  },
-  getPos: function() {
-    // IS THE PROBLEM THAT IM GETTING STUCK IN A FEEDBAK LOOP? if this changes, then it sets off another change, and this again.
-    var self = this;
-    const currentUser = this.currentUser;
-    const roomId = this.roomId;
-
-
-    var updateValues = function(pos) {
-      console.log("POSITION OK: ", pos)
-
-      database.child('conversations/' + roomId + '/meta/coords/' + currentUser).set(pos).then(() => {
-        console.log("OK! all went well. ")
-      }).catch((err) => {
-        console.log("There was an error updating the DB. ", err)
-      });
-      // database.child('conversations/' + roomId + '/meta').set({initiator: user, time: Date.now(), redirect: false, ready: false})
-
-    }
-
-    if (navigator.geolocation) {
-      console.log("navigator.geolocation OK")
-      console.log("Getting position. Wait a moment...")
-      navigator.geolocation.getCurrentPosition((pos) => {
-
-        let coords = {};
-        coords[currentUser] = pos.coords;
-
-        updateValues(pos.coords)
-      }, error);
-    } else {
-      console.log("Geolocation is not supported by this browser.");
-    }
-
   }
 }
 
