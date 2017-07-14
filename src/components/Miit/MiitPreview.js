@@ -11,6 +11,7 @@ const styles = {
     width: '52px',
     height: '24px',
     borderRadius: '5px',
+    color: '#90EE90',
     border: '1px solid #90EE90',
     backgroundColor: '#fff',
     fontSize: '16px',
@@ -37,7 +38,7 @@ class MiitPreview extends Component {
 
   componentDidMount() {
     //  listen: function(roomId, user, redirect) {
-    miit.listen()
+    miit.listen(this.props.roomId, this.props.currentUser, this.props.onClick)
   }
 
   clickHandler(e) {

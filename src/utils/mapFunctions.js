@@ -375,10 +375,12 @@ export const miit = {
       // #3
       // Finally, if redirect is set up, redirect.
       if(obj && obj.redirect) {
-      //   // show back button to conversation
+        //   // show back button to conversation
         window.showMapBack = true;
-      //   console.log("Time to bounce") // for all
+        
         redirect();
+        
+        // Set to false. What if this stops other people from being redirected? or does it happen automatcally?
         metaRef.update({redirect: false})
       }
     })
@@ -428,7 +430,8 @@ export const miit = {
     // updates['/user-posts/' + uid + '/' + newPostKey] = postData;
     // database.update(update);
   },
-  getPosition: function(user, ref) {
+  getPosition: function(user, ref, callback) {
+    
     if (navigator.geolocation) {
       console.log("Getting your position. Wait a moment...")
       navigator.geolocation.getCurrentPosition((pos) => {

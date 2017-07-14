@@ -19,6 +19,10 @@ class ConversationsPreview extends Component {
     this.previewMiitAccept = this.previewMiitAccept.bind(this);
   }
 
+  componentDidMount() {
+    
+  }
+
   previewMiitAccept() {
     this.setState({
       redirect: true

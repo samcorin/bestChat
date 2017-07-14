@@ -216,16 +216,44 @@ class Miit extends Component {
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
 
     if(miit.roomId) {
-      database.child('conversations/' + miit.roomId + '/meta').on('value', snapshot => {
+      const metaRef = database.child('conversations/' + miit.roomId + '/meta')
+      metaRef.on('value', snapshot => {
+        
         // listen for coords?
         const data = snapshot.val();
-        // console.log("DATA: ", data)
+        // console.log("Miit snapshot, ", data)
+
+
+        // accepted:false
+        // initiator:"eager-sample"
+        // redirect:false
+        // time:1500009220622
         
+        miit.getPosition(this.props.currentUser, metaRef, setMarker)
+        
+        const coordsNum = data.coords ? Object.keys(data.coords).length : null;
+        
+        // How to make this dynami? based on people in the group?
+        if(coordsNum === 2) {
+          console.log("YOU ARE NOW BOTH READY ")
+          // render markerS
+          console.log("data.coords: ", data.coords)
+          Object.keys(data.coords).map((user,i) => {
+            console.log("user: ", data.coords[user])
+            // format then setmarker?
+            const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
+            setMarker(coords, user, true);
+          
+          })
+        }
+
         // keep listening
-        // check if it's old. 
-        let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
-        if(newSession && !!data.coords) {
-          console.log("DB DATA FOR MIIT: ", data)
+        // let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
+        // if(newSession && !!data.coords) {
+        //   console.log("DB DATA FOR MIIT: ", data)
+          // figure out how to get everyones markers on the page, 
+          // getPosition(this.props.currentUser, null, setMarker)
+          
           // console.log("data.coords[this.props.currentUser]: ", data.coords[this.props.currentUser])
           // ok render the dots
           // render the coords, 
@@ -233,7 +261,7 @@ class Miit extends Component {
       
             //       navigator.geolocation.getCurrentPosition((pos) => {
           // const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};  
-        }
+        // }
 
       })
     } else {
