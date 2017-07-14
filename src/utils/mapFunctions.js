@@ -341,28 +341,28 @@ export const miit = {
 
       // #1
       // also check that the invitation is less than 15 seconds old
-      const fresh = (obj && ((Date.now()) - obj.time) < 15000);
+      // const fresh = (obj && ((Date.now()) - obj.time) < 15000);
       // Accepted: only done once, this starts the coords process, etc..
-      if(!!obj && obj.initiator !== user && fresh && obj.redirect === false && !this.accepted) {
-        console.log(' *** Invite *** from: ', obj.initiator)
+      // if(!!obj && obj.initiator !== user && fresh && obj.redirect === false && !this.accepted) {
+        // console.log(' *** Invite *** from: ', obj.initiator)
         
         // Once you get the invite you need to do something about the init thing
-        setTimeout(() => {
-          if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
-            // what if you had a button inside the message?
-            this.accepted = true;
-            metaRef.update({accepted: true})
+        // setTimeout(() => {
+        //   if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
+        //     // what if you had a button inside the message?
+        //     this.accepted = true;
+        //     metaRef.update({accepted: true})
             
-            setTimeout(() => {
-              database.child('conversations/' + roomId + '/meta').update({redirect: true})
+        //     setTimeout(() => {
+        //       database.child('conversations/' + roomId + '/meta').update({redirect: true})
             
-              this.getPosition(user, metaRef);
+        //       this.getPosition(user, metaRef);
             
-            }, 1000)
+        //     }, 1000)
 
-          }
-        },1000)
-      } 
+        //   }
+        // },1000)
+      // } 
       
       // Initiator checks coords
       const newSession = (obj && (Date.now() - obj.time) < 30 * 1000);
@@ -415,8 +415,9 @@ export const miit = {
     })
 
   },
-  acceptInvite: function(user) {
-    console.log("MAP FUNCITONS: " + user + " ACCEPTED")
+  acceptInvite: function(user, roomId) {
+    console.log("ACCEPTED by: ", user, roomId)
+    // database.child('conversations/' + roomId + '/meta').update({redirect: true})
     // person accepts, do stuff. coords etc...
     
     // setTimeout(() => {
@@ -434,7 +435,7 @@ export const miit = {
 
     //   }
     // },1000)
-    
+
   },
   updateCoords: function(pos, room) {
     let update = {};

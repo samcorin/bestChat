@@ -55,6 +55,8 @@ class Conversation extends React.Component{
 
   render() {
     const room = this.props.match.params.room;
+    const swapped = objSwap(this.props.userTable);
+    
     return (
       <div className="ConversationScreen">
         <ConversationNavBar online={this.roomOnline()} room={room} />

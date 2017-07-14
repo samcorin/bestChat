@@ -15,7 +15,8 @@ class Message extends React.Component {
   }
 
   handleMiitAccept(e) {
-    miit.acceptInvite(this.props.currentUser)
+    // function takes username and roomId
+    miit.acceptInvite(this.props.currentUser, this.props.roomId)
   }
 
   render() {

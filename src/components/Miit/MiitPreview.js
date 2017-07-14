@@ -37,7 +37,7 @@ class MiitPreview extends Component {
 
   clickHandler(e) {
     e.preventDefault();
-    miit.acceptInvite(this.props.currentUser)
+    miit.acceptInvite(this.props.currentUser, this.props.roomId)
   }
 
   render() {

@@ -39,7 +39,7 @@ class ConversationNavBar extends Component {
       if(defined) {
         clearInterval(timer);
         miit.start(roomId, this.props.currentUser, this.props.room, this.props, swapped);
-        console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
+        console.log("Miit started by " + this.props.currentUser + " in " + roomId)
       }
       
       // Increment counter. Limit to 3s

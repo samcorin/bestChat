@@ -73,7 +73,7 @@ class ConversationsPreview extends Component {
                     {type === 'like' ? (
                       <p className="previewText">{author}: <FaThumbsOUp className="previewLike" /></p>
                     ) : type === 'miit' ? (
-                      <MeetPreview author={author} createdAt={message.createdAt} text={message.text} currentUser={this.props.currentUser}/>
+                      <MeetPreview author={author} createdAt={message.createdAt} text={message.text} roomId={message.roomId} currentUser={this.props.currentUser}/>
                     ) : (
                       <p className="previewText">{author}: {trimmedText}</p>
                     )}

@@ -2,6 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux'
 import Message from './Message';
 import './MessagesView.css'
+import {objSwap} from './../../utils/objFunctions';
 
 class MessagesView extends React.Component {
   constructor(props) {
@@ -47,8 +48,11 @@ class MessagesView extends React.Component {
       )
     } else {
       const messages = Object.keys(this.props.conversations[this.props.room]).map((message, i) => {
-        var msg = this.props.conversations[this.props.room][message];
-        var prevMsg = null;
+        const msg = this.props.conversations[this.props.room][message];
+        const swapped = objSwap(this.props.userTable);
+        const roomId = swapped[this.props.room];
+        
+        let prevMsg = null;
         if(i > 0) {
           prevMsg = this.props.conversations[this.props.room][i-1];
         }
@@ -58,6 +62,7 @@ class MessagesView extends React.Component {
             key={i}
             currentUser={this.props.currentUser}
             sender={msg.sender}
+            roomId={roomId}
             text={msg.text}
             createdAt={msg.createdAt}
             type={msg.type}
@@ -76,7 +81,8 @@ class MessagesView extends React.Component {
 // export default MessagesView;
 const mapStateToProps = (state) => ({
   conversations: state.conversations,
-  currentUser: state.currentUser
+  currentUser: state.currentUser,
+  userTable: state.userTable
 });
 
 export default connect(mapStateToProps)(MessagesView);
