@@ -217,6 +217,9 @@ class Miit extends Component {
   componentDidMount() {
     // Initial map setup
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
+    
+
+    // a lot of this, if not all can go into getscript as callbaks.
     console.log("componentDidMount() {", miit)
     // need to block  this if session new, restart
     if(miit.roomId !== null) {
@@ -254,17 +257,40 @@ class Miit extends Component {
           
           console.log("YOU ARE NOW BOTH READY ")
           // render markerS
+          
+          var temp = [];
           Object.keys(data.coords).map((user,i) => {
             // format then setmarker?
             const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
             miit.setMarker(coords, user, true);
+            
+            temp.push(coords);
+          
           })
-          window.map.panBy(0, 120);
+          // window.map.panBy(0, 100);
 
           this.setState({
             suggestions: true
           })
-          // update your own coord?
+
+          function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            directionsService.route({
+              origin: temp[0],
+              destination: temp[1],
+              travelMode: 'TRANSIT'
+            }, function(response, status) {
+              if (status === 'OK') {
+                window.map.panBy(0, 120);
+                directionsDisplay.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+          }
+
+          calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
+          // // update your own coord?
+        
         }
 
         // keep listening
@@ -287,10 +313,13 @@ class Miit extends Component {
     } else {
       console.log("You're on on own, ", this.props.currentUser)
       // do some loading....
-
-      // setTimeout(() => {
+      // if(!!window.map) {
+      // } else {
+      //   getPosition(this.props.currentUser, null, setMarker)
+      // }
+        // setTimeout(() => {
         getPosition(this.props.currentUser, null, setMarker)
-      // }, 500);
+        // }, 1500);
       
       // export const setMarker = (coords, 'You') =>{
     }

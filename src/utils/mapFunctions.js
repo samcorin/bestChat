@@ -1,4 +1,5 @@
 import {database, usersRef, conversationsRef} from './../firebase/index';
+import {addMessageToStore, updateUserTable} from './../actions/index';
 import SendMessage from './../components/Home/Modules/SendMessage'
 
 // ==================================================
@@ -48,7 +49,7 @@ export const initMap = () => {
     
   // Show map
   window.map = new window.google.maps.Map(document.getElementById('map'), {
-    zoom: 12,
+    zoom: 6,
     center: center,
     streetViewControl: false,
     zoomControl: false,
@@ -60,7 +61,7 @@ export const initMap = () => {
 
   // Used to show directions
   window.directionsService = new window.google.maps.DirectionsService;
-  window.directionsDisplay = new window.google.maps.DirectionsRenderer;
+  window.directionsDisplay = new window.google.maps.DirectionsRenderer({suppressMarkers: true});
 
 
   // Calculate new directions on change, or initial
@@ -156,6 +157,37 @@ const error = (err) => {
   console.warn(`ERROR(${err.code}): ${err.message}`);
 };
 
+export const NewRoomMessage = (currentUser, room, thatProps) => {
+  let message = {
+    sender: currentUser,
+    text: 'Join me in Miit',
+    createdAt: Date.now(),
+    type: 'miit'
+  }
+
+  const cRef = usersRef.child(currentUser + '/conversations/' + room).push().key;
+  message.roomId = cRef;
+
+  // Push message to store
+  message.roomName = room;
+  thatProps.dispatch(addMessageToStore(message));
+
+  // Update userTable with -> { ID: NAME }
+  var userTableObj = {
+      id: cRef,
+      name: room
+  };
+
+  thatProps.dispatch(updateUserTable(userTableObj));
+
+  // Push message to db
+  conversationsRef.child(cRef).push(message)
+
+  // Add a reference to this conversation for both users
+  usersRef.child(currentUser + '/conversations/' + cRef).set(room);
+  usersRef.child(room + '/conversations/' + cRef).set(currentUser);
+}
+
 
 // ====================================================================================
 // ======================================= Miit =======================================
@@ -180,7 +212,9 @@ export const miit = {
       createdAt: Date.now(),
       type: 'miit'
     }
-
+    console.log("START: ", arguments)
+    // check if room is new here:
+    //   NewRoomMessage(this.props.currentUser, this.props.room, usersRef, conversationsRef, this.props);
     SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
 
     // Initiate the contract
@@ -342,6 +376,7 @@ export const miit = {
 
 
     if(group) {
+      // iterate here?
       var position = new window.google.maps.LatLng(coords.lat, coords.lng);
       window.bounds.extend(position);
       window.map.fitBounds(window.bounds);
