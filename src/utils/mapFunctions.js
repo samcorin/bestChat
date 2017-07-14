@@ -225,15 +225,6 @@ export const setMarker = (coords, id, group) =>{
  } else {
    window.map.setZoom(14);
  }
-
-  // marker.id = id || this.props.currentUser;
-
-
-  // console.log("MARKER: ", marker)
-  // OK
-  // this.state.markers.map((m, i) => {
-  //   console.log("MAKER ID: ", m.id)
-  // })
 }
 
 
@@ -246,15 +237,8 @@ export const miit = {
   roomId: null,
   accepted: false,
   newSession: false,
+  redirect: null,
   start: function(roomId, user, roomName, thatProps, swapped) {
-    // Might move vars in here...
-    // started: false,
-    // coordsListener: null,
-    // coordsStore: {},
-    // currentUser: null,
-    // roomId: null,
-    // accepted: false,
-    // newSession: false,
     var metaRef = conversationsRef.child(`${roomId}`);
 
     // Text based on what the initiator chooses, are there options? There might be later.
@@ -267,53 +251,37 @@ export const miit = {
 
     SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
 
-    // make sure roomId and user are not undefined, or why are they?
-    setTimeout(() => {
-      metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false});
-    }, 700);
+    // Initiate the contract
+    metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false});
 
   },
   listen: function(roomId, user, redirect) {
-    // started: false,
-    // coordsListener: null,
-    // coordsStore: {},
-    // currentUser: null,
-    // roomId: null,
-    // accepted: false,
-    // newSession: false,
-    // redirect in the db acts as a global var. it should set the redirect for everyone.
+    // Listening for what?
+    // - new coords
+    // - 
 
-
-    // What do I want to happen here? What is this listening for?
     console.log("Listening...")
     var metaRef = conversationsRef.child(`${roomId}/meta`);
+    
     // Set username
     if(this.currentUser === null) {
       this.currentUser = user;
     }
 
+    // Set roomId
     if(this.roomId === null) {
       this.roomId = roomId;
     }
 
-    // check here if session is old?
-    // metaRef.once('value', snapshot => {
-    //   let obj = snapshot.val();
-    //   console.log("TIME: ", obj)
-      // console.log('obj: ', (Date.now() - obj.time) > 10 * 1000)
-      
-      // // first person to join room checks if the last request is old. 1 minutes?
-      // if (!!obj && (Date.now() - obj.time) > 10 * 1000) {
-      //   console.log("Clearing session.")
-      //   // or delete it
-      //   // metaRef.update({redirect: false})
-      //   metaRef.set(null)
-      // }
-    // })
+    if(this.redirect === null) {
+      this.redirect = redirect;
+    }
 
     metaRef.on('value', snapshot => {
       let obj = snapshot.val() || null;
       console.log("... changes to /meta ", obj)
+      // is everyone ready , etc...
+
 
 
       // console.log('obj: ', (Date.now() - obj.time) > 10 * 1000)
@@ -364,18 +332,19 @@ export const miit = {
         // },1000)
       // } 
       
-      // Initiator checks coords
-      const newSession = (obj && (Date.now() - obj.time) < 30 * 1000);
-      if(obj && obj.accepted && obj.initiator === user && newSession) {
-        console.log("It's your turn")
-        this.getPosition(user, metaRef);
-        this.accepted = true;
-      }
+      // // Initiator checks coords
+      // const newSession = (obj && (Date.now() - obj.time) < 30 * 1000);
+      // if(obj && obj.accepted && obj.initiator === user && newSession) {
+      //   console.log("It's your turn")
+      //   this.getPosition(user, metaRef);
+      //   this.accepted = true;
+      // }
       
-      if(obj && !!obj.coords && newSession) {
-        console.log("You're good to go.")
-        // redirect();
-      }
+      // if(obj && !!obj.coords && newSession) {
+      //   console.log("You're good to go.")
+      //   // redirect();
+      // }
+      
       // #2
       // session is < 30s
       // if(this.accepted && newSession && !obj.redirect) {
@@ -406,9 +375,9 @@ export const miit = {
       // #3
       // Finally, if redirect is set up, redirect.
       if(obj && obj.redirect) {
-        // show back button to conversation
+      //   // show back button to conversation
         window.showMapBack = true;
-        console.log("Time to bounce") // for all
+      //   console.log("Time to bounce") // for all
         redirect();
         metaRef.update({redirect: false})
       }
@@ -416,8 +385,19 @@ export const miit = {
 
   },
   acceptInvite: function(user, roomId) {
+    
+    const metaRef = conversationsRef.child(`${roomId}/meta`);
+    
     console.log("ACCEPTED by: ", user, roomId)
+    // TODO
+    // alert everyone
+    // get position
+    // update db with position
+    // redirect
+    
     // database.child('conversations/' + roomId + '/meta').update({redirect: true})
+    metaRef.update({redirect: true})
+    
     // person accepts, do stuff. coords etc...
     
     // setTimeout(() => {
@@ -460,17 +440,19 @@ export const miit = {
         coords[`/${user}/latitude`] = pos.coords.latitude;
         coords[`/${user}/longitude`] = pos.coords.longitude;
 
+        
+        // Add to db
+        ref.child('coords').update(coords)
+
         this.coordsStore[user] = {
           accuracy: pos.coords.accuracy,
           latitude: pos.coords.latitude,
           longitude: pos.coords.longitude
         };
-        
+
+        // Save to localStorage for later reference
         localStorage.setItem('myLat', pos.coords.latitude.toFixed(7));
         localStorage.setItem('myLng', pos.coords.longitude.toFixed(7));
-
-        // Add to db
-        ref.child('coords').update(coords)
         
       }, error);
     } else {
@@ -491,9 +473,9 @@ export const getPosition = (user, ref, callback) => {
       
       // Single user
       window.map.setZoom(12);
+      
       // group marker? false
       callback(myLatLng, user, false);
-
     }, error);
   } else {
     console.log("Geolocation is not supported by this browser.");

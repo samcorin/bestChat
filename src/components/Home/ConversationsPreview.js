@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import timely from './../../utils/timely';
 import {sortMessages, latestMessages} from './../../utils/objFunctions';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
@@ -12,10 +12,25 @@ import './../App.css';
 class ConversationsPreview extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      redirect: false
+    }
 
+    this.previewMiitAccept = this.previewMiitAccept.bind(this);
+  }
+
+  previewMiitAccept() {
+    this.setState({
+      redirect: true
+    })
   }
 
   render() {
+    // redirect if redirect updated in preview
+    if (this.state.redirect) {
+      return <Redirect push to='/Miit' />;
+    }
+    
     let convLen = Object.keys(this.props.conversations).length;
     let tableLen = Object.keys(this.props.userTable).length;
 
@@ -73,7 +88,7 @@ class ConversationsPreview extends Component {
                     {type === 'like' ? (
                       <p className="previewText">{author}: <FaThumbsOUp className="previewLike" /></p>
                     ) : type === 'miit' ? (
-                      <MeetPreview author={author} createdAt={message.createdAt} text={message.text} roomId={message.roomId} currentUser={this.props.currentUser}/>
+                      <MeetPreview author={author} onClick={this.previewMiitAccept} createdAt={message.createdAt} text={message.text} roomId={message.roomId} currentUser={this.props.currentUser}/>
                     ) : (
                       <p className="previewText">{author}: {trimmedText}</p>
                     )}

@@ -35,8 +35,16 @@ class MiitPreview extends Component {
     this.clickHandler = this.clickHandler.bind(this);
   }
 
+  componentDidMount() {
+    //  listen: function(roomId, user, redirect) {
+    miit.listen()
+  }
+
   clickHandler(e) {
     e.preventDefault();
+    
+    // Set redirect to true from parent, ConversationPreview, then render the map
+    this.props.onClick();
     miit.acceptInvite(this.props.currentUser, this.props.roomId)
   }
 
