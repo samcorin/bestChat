@@ -54,6 +54,7 @@ export const initMap = () => {
   // let center = {lat: myLat, lng: myLng};
   // console.log("YOUR ORIGINAL COORDS: ", myLat, myLng)
   
+  // Tokyo
   let center = {lat: 35.6895, lng: 139.6917};
     
   // Show map
@@ -169,8 +170,8 @@ const error = (err) => {
 
 // =============================================================
 // ========================= setMarker ===========================
-export const setMarker = (coords, id, group) =>{
-  const name = id || 'random';
+export const setMarker = (coords, username, group) =>{
+  const name = username || 'random';
   console.log("SET MARKER COORDS: ", coords)
   window.map.setCenter(coords);
   // var icon = {
@@ -188,19 +189,20 @@ export const setMarker = (coords, id, group) =>{
     strokeOpacity: 1.0,
     strokeColor: '#fff',
     strokeWeight: 3.0,
-    scale: 16 //pixels
+    scale: 14 //pixels
   }
 
   var marker = new window.google.maps.Marker({
     position: coords,
     map: window.map,
     animation: window.google.maps.Animation.DROP,
-    icon: icon
+    icon: icon,
+    title: name
   });
 
-  var infowindow = new window.google.maps.InfoWindow({
-    content: 'Hi'
-  });
+  // var infowindow = new window.google.maps.InfoWindow({
+  //   content: 'Hi'
+  // });
 
   // HOVER?
   // marker.addListener('mouseover', function() {
@@ -377,11 +379,13 @@ export const miit = {
       if(obj && obj.redirect) {
         //   // show back button to conversation
         window.showMapBack = true;
+        window.miitSession = true;
         
         redirect();
         
         // Set to false. What if this stops other people from being redirected? or does it happen automatcally?
         metaRef.update({redirect: false})
+        // metaRef.update({accepted: false})
       }
     })
 
@@ -391,6 +395,7 @@ export const miit = {
     const metaRef = conversationsRef.child(`${roomId}/meta`);
     
     console.log("ACCEPTED by: ", user, roomId)
+    this.started = true;
     // TODO
     // alert everyone
     // get position
@@ -469,13 +474,16 @@ export const getPosition = (user, ref, callback) => {
   if (navigator.geolocation) {
     console.log("Getting your position. Wait a moment...")
     navigator.geolocation.getCurrentPosition((pos) => {
+      
       const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
 
       localStorage.setItem('myLat', pos.coords.latitude);
       localStorage.setItem('myLng', pos.coords.longitude);
       
       // Single user
-      window.map.setZoom(12);
+      setTimeout(() => {
+        window.map.setZoom(12);
+      }, 200)
       
       // group marker? false
       callback(myLatLng, user, false);

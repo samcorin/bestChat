@@ -3,9 +3,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
+import Suggestions from './Suggestions';
 import {database} from './../../firebase/index';
 import './Miit.css';
 import './../App.css';
+import './../../utils/loader.css';
 // import Map from './Map';
 import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
 
@@ -18,7 +20,8 @@ class Miit extends Component {
         longitude: null
       },
       markers: [],
-      loading: false
+      loading: false,
+      roomId: null
     }
     // this.setCoords = this.setCoords.bind(this);
     this.deleteMarker = this.deleteMarker.bind(this);
@@ -214,14 +217,18 @@ class Miit extends Component {
   componentDidMount() {
     // Initial map setup
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
+    
+    if(miit.roomId !== null) {
+      this.setState({
+        roomId: miit.roomId
+      })
 
-    if(miit.roomId) {
       const metaRef = database.child('conversations/' + miit.roomId + '/meta')
       metaRef.on('value', snapshot => {
         
         // listen for coords?
         const data = snapshot.val();
-        // console.log("Miit snapshot, ", data)
+        console.log("Miit snapshot, ", data)
 
 
         // accepted:false
@@ -235,16 +242,31 @@ class Miit extends Component {
         
         // How to make this dynami? based on people in the group?
         if(coordsNum === 2) {
+          // end loader?
+          
+          this.setState({
+            loading: false
+          })
+          
+          // Stop watching /meta
+          metaRef.off()
+          
           console.log("YOU ARE NOW BOTH READY ")
           // render markerS
-          console.log("data.coords: ", data.coords)
           Object.keys(data.coords).map((user,i) => {
-            console.log("user: ", data.coords[user])
             // format then setmarker?
             const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
             setMarker(coords, user, true);
-          
           })
+          window.map.panBy(0, 120);
+
+          this.setState({
+            suggestions: true
+          })
+
+
+          // update your own coord?
+          // console.log("")
         }
 
         // keep listening
@@ -265,15 +287,25 @@ class Miit extends Component {
 
       })
     } else {
-      console.log("You're on on own.")
+      console.log("You're on on own, ", this.props.currentUser)
       // do some loading....
 
-      getPosition(this.props.currentUser, null, setMarker)
+      setTimeout(() => {
+        getPosition(this.props.currentUser, null, setMarker)
+      }, 500);
+      
       // export const setMarker = (coords, 'You') =>{
     }
     // db?
     // database.child('conversations/' + roomId + '/meta').update({redirect: true})
+
   }
+
+  // componentDidUnmount() {
+  //   if(!!this.state.roomId) {
+  //     database.child('conversations/' + miit.roomId).remove('meta');
+  //   }
+  // }
     
     // const pos = getPosition();
     // const promise = new Promise((resolve, reject) => {
@@ -325,6 +357,8 @@ class Miit extends Component {
     return (
       <div id="MiitWrapper">
         {window.showMapBack && <button onClick={this.goBack} id="mapBackBtn"> {`<`} </button>}
+        {this.state.loading && <div id="miitLoader" className="loader">Loading...</div>}
+        {this.state.suggestions && <Suggestions />}
         <div id="map"></div>
         <BottomNav />
       </div>

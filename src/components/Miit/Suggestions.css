@@ -1,0 +1,28 @@
+#Suggestions {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  height: 250px;
+  width: 100%;
+  z-index: 10;
+  bottom: 0;
+  margin: 0 auto;
+  overflow-x: scroll;
+}
+
+.suggestion {
+  height: 220px;
+  background-color: #fff;
+  border-radius: 4px;
+  min-width: 180px;
+  margin-right: 12px;
+}
+
+
+.suggestion:first-of-type {
+  margin-left: 40px; 
+}
+
+.suggestion:last-of-type {
+  margin-right: 40px; 
+}
