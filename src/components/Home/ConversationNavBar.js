@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux'
 import { NavLink, Link, Redirect} from 'react-router-dom'
-import './ConversationNavBar.css'
+import {connect} from 'react-redux'
 import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
 import dropdown from './../../utils/dropdown';
 import {objSwap} from './../../utils/objFunctions';
-import {miit} from './../../utils/mapFunctions.js';
+import {miit, NewRoomMessage} from './../../utils/mapFunctions.js';
+import './ConversationNavBar.css'
 
 class ConversationNavBar extends Component {
   constructor(props) {
@@ -33,20 +33,19 @@ class ConversationNavBar extends Component {
     let timer = setInterval(() => {
       const swapped = objSwap(this.props.userTable);
       const roomId = swapped[this.props.room];
-      
-      let defined = (!!this.props.currentUser && !!roomId && !!swapped);    
 
-      if(defined) {
-        clearInterval(timer);
-        miit.start(roomId, this.props.currentUser, this.props.room, this.props, swapped);
-        console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
-      }
-      
-      // Increment counter. Limit to 3s
-      counter++;
-      if(counter > 30) {
-        console.log("Miit timed out.")
-        clearInterval(timer);
+      console.log("NAV BAR: ", this.props.currentUser, this.props.room, swapped)
+
+      if(!!this.props.currentUser) {
+        if(!!roomId && !!swapped) {
+          clearInterval(timer);
+          miit.start(roomId, this.props.currentUser, this.props.room, this.props, swapped);
+          console.log("Miit started by " + this.props.currentUser + " in " + roomId)
+        } else {
+          clearInterval(timer);
+          NewRoomMessage(this.props.currentUser, this.props.room, this.props);
+          console.log("Room initiated")
+        }
       }
     },100)
   }
@@ -54,14 +53,14 @@ class ConversationNavBar extends Component {
   componentDidMount() {
     dropdown.init();
     
-    const call = document.getElementById('initCall');
+    // const call = document.getElementById('initCall');
     const miitDiv = document.getElementById('initMiit');
 
-    const startCall = () => {
-      console.log("start call to: ", this.props.room)
+    // const startCall = () => {
+      // console.log("start call to: ", this.props.room)
       // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
       // webrtc stuff.
-    }
+    // }
     
     // Setting up main listener, ensure all vars load beforehand
     let counter = 0;
@@ -86,12 +85,12 @@ class ConversationNavBar extends Component {
 
 
     // Event listeners for Calls
-    // call.addEventListener('touchstart', startCall, false);
-    call.addEventListener('click', startCall);
+    // call.addEventListener('touchstart', startCall);
+    // call.addEventListener('click', startCall);
 
     // Event listeners for Miit
-    // miit.addEventListener('touchstart', this.startMiit, false);
     miitDiv.addEventListener('click', this.startMiit);
+    miitDiv.addEventListener('touchstart', this.startMiit);
 
   }
 

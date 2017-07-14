@@ -38,7 +38,7 @@ export const AvatarOnlinePreview = ({user}) => {
           <img alt={user} src={`https://api.adorable.io/avatars/60/${user}@adorable.io.png`} className="activeAvatar" rel='prefetch'/>
           <div className="online"></div>
         </div>
-        <p className="previewAvatarOnlineName"><strong>{user}</strong></p>
+        <p className="previewAvatarOnlineName"><strong>{user.split('-')[0]}</strong></p>
       </li>
     </Link>
   );

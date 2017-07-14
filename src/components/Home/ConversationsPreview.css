@@ -104,8 +104,8 @@
 
 #activeNow {
   margin-top: 16px;
-  padding: 0 13px;
-
+  padding: 0;  
+  position: relative;
 }
 
 #activeNowUl {
@@ -121,10 +121,23 @@
 
 #activeNowUl li {
   /*min-width: 200px;*/
+  width: 46px;
+  font-size: 10px;
 }
 
 .activeNowHeader {
   margin: 0;
-  padding: 0 10px;
+  padding: 0 16px;
   margin: 5px auto;
+}
+
+.activeNowHeader:before {
+  content: "";
+  position: absolute;
+  left: auto;
+  top: -6px;
+  height: 1px;
+  width: 90%;
+  margin: 0 auto;
+  border-top: 1px solid rgba(0,0,0,0.1);
 }

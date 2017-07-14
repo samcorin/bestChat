@@ -3,9 +3,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
+import Suggestions from './Suggestions';
 import {database} from './../../firebase/index';
 import './Miit.css';
 import './../App.css';
+import './../../utils/loader.css';
 // import Map from './Map';
 import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
 
@@ -18,7 +20,8 @@ class Miit extends Component {
         longitude: null
       },
       markers: [],
-      loading: false
+      loading: false,
+      roomId: null
     }
     // this.setCoords = this.setCoords.bind(this);
     this.deleteMarker = this.deleteMarker.bind(this);
@@ -214,18 +217,89 @@ class Miit extends Component {
   componentDidMount() {
     // Initial map setup
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
+    
 
-    if(miit.roomId) {
-      database.child('conversations/' + miit.roomId + '/meta').on('value', snapshot => {
+    // a lot of this, if not all can go into getscript as callbaks.
+    console.log("componentDidMount() {", miit)
+    // need to block  this if session new, restart
+    if(miit.roomId !== null) {
+      this.setState({
+        roomId: miit.roomId
+      })
+
+      const metaRef = database.child('conversations/' + miit.roomId + '/meta')
+      metaRef.on('value', snapshot => {
+        
         // listen for coords?
         const data = snapshot.val();
-        // console.log("DATA: ", data)
+        console.log("Miit snapshot, ", data)
+
+
+        // accepted:false
+        // initiator:"eager-sample"
+        // redirect:false
+        // time:1500009220622
         
+        miit.getPosition(this.props.currentUser, metaRef, setMarker)
+        
+        const coordsNum = data.coords ? Object.keys(data.coords).length : null;
+        
+        // How to make this dynami? based on people in the group?
+        if(coordsNum === 2) {
+          // end loader?
+          
+          this.setState({
+            loading: false
+          })
+          
+          // Stop watching /meta
+          metaRef.off()
+          
+          console.log("YOU ARE NOW BOTH READY ")
+          // render markerS
+          
+          var temp = [];
+          Object.keys(data.coords).map((user,i) => {
+            // format then setmarker?
+            const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
+            miit.setMarker(coords, user, true);
+            
+            temp.push(coords);
+          
+          })
+          // window.map.panBy(0, 100);
+
+          this.setState({
+            suggestions: true
+          })
+
+          function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+            directionsService.route({
+              origin: temp[0],
+              destination: temp[1],
+              travelMode: 'TRANSIT'
+            }, function(response, status) {
+              if (status === 'OK') {
+                window.map.panBy(0, 120);
+                directionsDisplay.setDirections(response);
+              } else {
+                window.alert('Directions request failed due to ' + status);
+              }
+            });
+          }
+
+          calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
+          // // update your own coord?
+        
+        }
+
         // keep listening
-        // check if it's old. 
-        let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
-        if(newSession && !!data.coords) {
-          console.log("DB DATA FOR MIIT: ", data)
+        // let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
+        // if(newSession && !!data.coords) {
+        //   console.log("DB DATA FOR MIIT: ", data)
+          // figure out how to get everyones markers on the page, 
+          // getPosition(this.props.currentUser, null, setMarker)
+          
           // console.log("data.coords[this.props.currentUser]: ", data.coords[this.props.currentUser])
           // ok render the dots
           // render the coords, 
@@ -233,19 +307,32 @@ class Miit extends Component {
       
             //       navigator.geolocation.getCurrentPosition((pos) => {
           // const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};  
-        }
+        // }
 
       })
     } else {
-      console.log("You're on on own.")
+      console.log("You're on on own, ", this.props.currentUser)
       // do some loading....
-
-      getPosition(this.props.currentUser, null, setMarker)
+      // if(!!window.map) {
+      // } else {
+      //   getPosition(this.props.currentUser, null, setMarker)
+      // }
+        // setTimeout(() => {
+        getPosition(this.props.currentUser, null, setMarker)
+        // }, 1500);
+      
       // export const setMarker = (coords, 'You') =>{
     }
     // db?
     // database.child('conversations/' + roomId + '/meta').update({redirect: true})
+
   }
+
+  // componentDidUnmount() {
+  //   if(!!this.state.roomId) {
+  //     database.child('conversations/' + miit.roomId).remove('meta');
+  //   }
+  // }
     
     // const pos = getPosition();
     // const promise = new Promise((resolve, reject) => {
@@ -297,6 +384,8 @@ class Miit extends Component {
     return (
       <div id="MiitWrapper">
         {window.showMapBack && <button onClick={this.goBack} id="mapBackBtn"> {`<`} </button>}
+        {this.state.loading && <div id="miitLoader" className="loader">Loading...</div>}
+        {this.state.suggestions && <Suggestions />}
         <div id="map"></div>
         <BottomNav />
       </div>

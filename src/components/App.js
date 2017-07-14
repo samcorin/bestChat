@@ -9,6 +9,7 @@ import Description from './Description';
 import Games from './Games/Games';
 import UsernameEditor from './../utils/UsernameEditor';
 import './App.css';
+import './../utils/loader.css';
 import HomeEasterEggs from './../utils/EasterEggs/HomeEasterEggs';
 
 import {

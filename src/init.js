@@ -129,6 +129,9 @@ const init = (store) => {
   //   username: username
   // });
   injectTapEventPlugin();
+  
+  // set to false to remove session after refreshing. Maybe a temporary solution
+  window.miitSession = false;
 }
 
 export default init;
