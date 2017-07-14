@@ -86,12 +86,12 @@ class ConversationNavBar extends Component {
 
 
     // Event listeners for Calls
-    // call.addEventListener('touchstart', startCall, false);
+    call.addEventListener('touchstart', startCall);
     call.addEventListener('click', startCall);
 
     // Event listeners for Miit
-    // miit.addEventListener('touchstart', this.startMiit, false);
     miitDiv.addEventListener('click', this.startMiit);
+    miitDiv.addEventListener('touchstart', this.startMiit);
 
   }
 
