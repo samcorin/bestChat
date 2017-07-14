@@ -1,9 +1,10 @@
 import React from 'react';
 import timely , {humanReadable} from './../../utils/timely';
 import {urlify} from './../../utils/message';
-import './Message.css';
 import MessageDivider from './MessageDivider';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
+import {getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
+import './Message.css';
 
 class Message extends React.Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class Message extends React.Component {
 
   handleMiitAccept(e) {
     console.log("YOU CLICKED OK ", e)
+    miit.acceptInvite()
     // do stuff
   }
 

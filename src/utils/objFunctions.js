@@ -22,6 +22,7 @@ export const sortMessages = (obj) => {
 }
 
 // Sort an array of objects "messages", and returns only the latest ones.
+// need to check if miit is old and last message
 export const latestMessages = (obj) => {
   return Object.keys(obj).map((item) => {
     return obj[item][obj[item].length - 1]

@@ -415,6 +415,9 @@ export const miit = {
     })
 
   },
+  acceptInvite: function() {
+    console.log("MAP FUNCITONS: ACCEPTED")
+  },
   updateCoords: function(pos, room) {
     let update = {};
     // update[this.currentUser] = pos.coords;
