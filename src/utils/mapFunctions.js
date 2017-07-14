@@ -1,43 +1,32 @@
 import {database, usersRef, conversationsRef} from './../firebase/index';
 import SendMessage from './../components/Home/Modules/SendMessage'
 
-let coordsListener;
-let coordsStore = {};
-
 // ==================================================
 // Load Google Maps dependency on Miit Component Load
 export const getScript = (source, callback, isMiit) => {
 
-  // return new Promise((resolve, reject) => {
-    // Check to see if google maps dependency already exists. There's got to be a better way.s
-    var newScript = document.getElementById('googleMap');
-    if(newScript === null) {
-      var script = document.createElement('script');
-      script.id = "googleMap";
-      var prior = document.getElementsByTagName('script')[0];
-      script.async = 1;
+  var newScript = document.getElementById('googleMap');
+  if(newScript === null) {
+    var script = document.createElement('script');
+    script.id = "googleMap";
+    var prior = document.getElementsByTagName('script')[0];
+    script.async = 1;
 
-      script.onload = script.onreadystatechange = function( _, isAbort ) {
-        if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
-          script.onload = script.onreadystatechange = null;
-          script = undefined;
+    script.onload = script.onreadystatechange = function( _, isAbort ) {
+      if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+        script.onload = script.onreadystatechange = null;
+        script = undefined;
 
-          if(!isAbort && callback) {
-            // if(isMiit) {
-            //   // getPosition()
-            // }
-            callback();
-            // resolve("Script loaded")
-          }
+        if(!isAbort && callback) {
+          callback();
         }
-      };
-      script.src = source;
-      prior.parentNode.insertBefore(script, prior);
-    } else {
-      callback();
-      // resolve("Script loaded")
-    }
-  // })
+      }
+    };
+    script.src = source;
+    prior.parentNode.insertBefore(script, prior);
+  } else {
+    callback();
+  }
 }
 
 // =============================================================
@@ -168,73 +157,14 @@ const error = (err) => {
 };
 
 
-// =============================================================
-// ========================= setMarker ===========================
-export const setMarker = (coords, username, group) =>{
-  const name = username || 'random';
-  console.log("SET MARKER COORDS: ", coords)
-  window.map.setCenter(coords);
-  // var icon = {
-  //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
-  //   scaledSize: new window.google.maps.Size(50, 50),
-  //   origin: new window.google.maps.Point(0,0),
-  //   anchor: new window.google.maps.Point(0, 0),
-  //   shape: {coords:[17,17,18],type:'circle'}
-  // };
-
-  var icon = {
-    path: window.google.maps.SymbolPath.CIRCLE,
-    fillOpacity: 0.5,
-    fillColor: '#209af7',
-    strokeOpacity: 1.0,
-    strokeColor: '#fff',
-    strokeWeight: 3.0,
-    scale: 14 //pixels
-  }
-
-  var marker = new window.google.maps.Marker({
-    position: coords,
-    map: window.map,
-    animation: window.google.maps.Animation.DROP,
-    icon: icon,
-    title: name
-  });
-
-  // var infowindow = new window.google.maps.InfoWindow({
-  //   content: 'Hi'
-  // });
-
-  // HOVER?
-  // marker.addListener('mouseover', function() {
-  //   infowindow.open(marker.get('map'), marker);
-
-  //   marker.addListener('mouseleave', function() {
-  //     infowindow.close();
-  //   });
-  // });
-
-
-  // this.state.markers.push(marker)
-
- if(group) {
-  var position = new window.google.maps.LatLng(coords.lat, coords.lng);
-  window.bounds.extend(position);
-  window.map.fitBounds(window.bounds);
-
-  // Directions!
-  window.directionsDisplay.setMap(window.map);
-
- } else {
-   window.map.setZoom(14);
- }
-}
-
-
-// ================================= coords Listener ==================================
+// ====================================================================================
+// ======================================= Miit =======================================
+// ====================================================================================
 export const miit = {
   started: false,
   coordsListener: null,
   coordsStore: {},
+  markers: [],
   currentUser: null,
   roomId: null,
   accepted: false,
@@ -246,7 +176,7 @@ export const miit = {
     // Text based on what the initiator chooses, are there options? There might be later.
     const message = {
       sender: user,
-      text: 'Wanna grab a drink? 🍻',
+      text: 'Join me on Miit.',
       createdAt: Date.now(),
       type: 'miit'
     }
@@ -280,112 +210,32 @@ export const miit = {
     }
 
     metaRef.on('value', snapshot => {
-      let obj = snapshot.val() || null;
-      console.log("... changes to /meta ", obj)
-      // is everyone ready , etc...
-
-
-
-      // console.log('obj: ', (Date.now() - obj.time) > 10 * 1000)
+      const obj = snapshot.val() || null;
+      // wrap this in a timer? 30 seconds?
+      const isNew  = (obj && (Date.now() - obj.time) < 30000);
       
-      // first person to join room checks if the last request is old. 30s?
-      // if (!!obj && ((Date.now() - obj.time) > 30000)) {
-      //   this.newSession = true;
-      //   console.log("Clearing session.")
-      //   metaRef.remove();
-      //   // or delete it
-      //   metaRef.update({time: Date.now()})
-      //   let hello = {};
-      //   hello[user] = "HELLO"
-      //   let t = {};
-      //   t['/newref/hello//test'] = "HELLO"
-
-      //   metaRef.set({accepted: false})
-      //   console.log("accepted...")
-      //   metaRef.update({another: true})
-      //   console.log("anotehr...")
-      //   metaRef.update(hello)
-      //   metaRef.update(t)
-
-      // }
-
-      // #1
-      // also check that the invitation is less than 15 seconds old
-      // const fresh = (obj && ((Date.now()) - obj.time) < 15000);
-      // Accepted: only done once, this starts the coords process, etc..
-      // if(!!obj && obj.initiator !== user && fresh && obj.redirect === false && !this.accepted) {
-        // console.log(' *** Invite *** from: ', obj.initiator)
+      
+      // only listen to changes to meta for 30s. why? this only gets us started. 
+      // this is so everyone is synced. then Miit.js handles updateing coords
+      if(obj && isNew) {
+        console.log("... changes to /meta ", obj)
         
-        // Once you get the invite you need to do something about the init thing
-        // setTimeout(() => {
-        //   if (window.confirm(`${obj.initiator} set up a Miit. Want to join?`)) {
-        //     // what if you had a button inside the message?
-        //     this.accepted = true;
-        //     metaRef.update({accepted: true})
-            
-        //     setTimeout(() => {
-        //       database.child('conversations/' + roomId + '/meta').update({redirect: true})
-            
-        //       this.getPosition(user, metaRef);
-            
-        //     }, 1000)
+        if(obj.started) {
+          this.started = true;
+        }
 
-        //   }
-        // },1000)
-      // } 
-      
-      // // Initiator checks coords
-      // const newSession = (obj && (Date.now() - obj.time) < 30 * 1000);
-      // if(obj && obj.accepted && obj.initiator === user && newSession) {
-      //   console.log("It's your turn")
-      //   this.getPosition(user, metaRef);
-      //   this.accepted = true;
-      // }
-      
-      // if(obj && !!obj.coords && newSession) {
-      //   console.log("You're good to go.")
-      //   // redirect();
-      // }
-      
-      // #2
-      // session is < 30s
-      // if(this.accepted && newSession && !obj.redirect) {
-        // then get coords for everyone, then set redirect
-        
-        // this.getPosition(user, metaRef);
-        // if (navigator.geolocation) {
+        // Finally, if redirect is set up, redirect.
+        if(obj.redirect) {
+          //   // show back button to conversation
+          window.showMapBack = true;
+          window.miitSession = true;
           
-        //   console.log("Getting your position. Wait a moment...")
-        //   navigator.geolocation.getCurrentPosition((pos) => {
-            
-        //     console.log("Your coords: ", user, pos.coords)
-            
-        //     let coords = {};
-        //     coords[`/${user}/accuracy`] = pos.coords.accuracy;
-        //     coords[`/${user}/latitude`] = pos.coords.latitude;
-        //     coords[`/${user}/longitude`] = pos.coords.longitude;
-
-        //     metaRef.child('coords').update(coords)
-            
-        //   }, error);
-        // } else {
-        //   console.log("Geolocation is not supported by this browser.");
-        // }
-      
-    // }
-
-      // #3
-      // Finally, if redirect is set up, redirect.
-      if(obj && obj.redirect) {
-        //   // show back button to conversation
-        window.showMapBack = true;
-        window.miitSession = true;
-        
-        redirect();
-        
-        // Set to false. What if this stops other people from being redirected? or does it happen automatcally?
-        metaRef.update({redirect: false})
-        // metaRef.update({accepted: false})
+          redirect();
+          
+          // Set to false. What if this stops other people from being redirected? or does it happen automatcally?
+          metaRef.update({redirect: false})
+          // metaRef.update({accepted: false})
+        }
       }
     })
 
@@ -396,11 +246,6 @@ export const miit = {
     
     console.log("ACCEPTED by: ", user, roomId)
     this.started = true;
-    // TODO
-    // alert everyone
-    // get position
-    // update db with position
-    // redirect
     
     // database.child('conversations/' + roomId + '/meta').update({redirect: true})
     metaRef.update({redirect: true})
@@ -425,15 +270,10 @@ export const miit = {
 
   },
   updateCoords: function(pos, room) {
-    let update = {};
-    // update[this.currentUser] = pos.coords;
-    update[this.currentUser] = "pos.coords";
+    // let update = {};
+    // // update[this.currentUser] = pos.coords;
+    // update[this.currentUser] = "pos.coords";
 
-    // database.child('conversations/' + room + '/meta').set({time: "test"})
-    // var updates = {};
-    // updates['/posts/' + newPostKey] = postData;
-    // updates['/user-posts/' + uid + '/' + newPostKey] = postData;
-    // database.update(update);
   },
   getPosition: function(user, ref, callback) {
     
@@ -466,6 +306,52 @@ export const miit = {
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
+  },
+  setMarker: function(coords, username, group) {
+    const name = username || 'random';
+    console.log("SET MARKER COORDS: ", coords)
+    window.map.setCenter(coords);
+    // var icon = {
+    //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
+    //   scaledSize: new window.google.maps.Size(50, 50),
+    //   origin: new window.google.maps.Point(0,0),
+    //   anchor: new window.google.maps.Point(0, 0),
+    //   shape: {coords:[17,17,18],type:'circle'}
+    // };
+
+    var icon = {
+      path: window.google.maps.SymbolPath.CIRCLE,
+      fillOpacity: 0.5,
+      fillColor: '#209af7',
+      strokeOpacity: 1.0,
+      strokeColor: '#fff',
+      strokeWeight: 3.0,
+      scale: 14 //pixels
+    }
+
+    let marker = new window.google.maps.Marker({
+      position: coords,
+      map: window.map,
+      animation: window.google.maps.Animation.DROP,
+      icon: icon,
+      id: name,
+      title: name
+    });
+    
+    miit.markers.push(marker)
+
+
+    if(group) {
+      var position = new window.google.maps.LatLng(coords.lat, coords.lng);
+      window.bounds.extend(position);
+      window.map.fitBounds(window.bounds);
+
+      // Directions!
+      window.directionsDisplay.setMap(window.map);
+
+    } else {
+      window.map.setZoom(14);
+    }
   }
 }
 
@@ -483,15 +369,80 @@ export const getPosition = (user, ref, callback) => {
       // Single user
       setTimeout(() => {
         window.map.setZoom(12);
+        callback(myLatLng, user, false);
       }, 200)
       
       // group marker? false
-      callback(myLatLng, user, false);
+    
     }, error);
   } else {
     console.log("Geolocation is not supported by this browser.");
   }
 }
+
+// =============================================================
+// ========================= setMarker ===========================
+export const setMarker = (coords, username, group) =>{
+  const name = username || 'random';
+  console.log("SET MARKER COORDS: ", coords)
+  window.map.setCenter(coords);
+  // var icon = {
+  //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
+  //   scaledSize: new window.google.maps.Size(50, 50),
+  //   origin: new window.google.maps.Point(0,0),
+  //   anchor: new window.google.maps.Point(0, 0),
+  //   shape: {coords:[17,17,18],type:'circle'}
+  // };
+
+  var icon = {
+    path: window.google.maps.SymbolPath.CIRCLE,
+    fillOpacity: 0.5,
+    fillColor: '#209af7',
+    strokeOpacity: 1.0,
+    strokeColor: '#fff',
+    strokeWeight: 3.0,
+    scale: 14 //pixels
+  }
+
+  const marker = new window.google.maps.Marker({
+    position: coords,
+    map: window.map,
+    animation: window.google.maps.Animation.DROP,
+    icon: icon,
+    title: name
+  });
+
+  // var infowindow = new window.google.maps.InfoWindow({
+  //   content: 'Hi'
+  // });
+
+  // HOVER?
+  // marker.addListener('mouseover', function() {
+  //   infowindow.open(marker.get('map'), marker);
+
+  //   marker.addListener('mouseleave', function() {
+  //     infowindow.close();
+  //   });
+  // });
+
+
+  // this.state.markers.push(marker)
+
+ if(group) {
+  var position = new window.google.maps.LatLng(coords.lat, coords.lng);
+  window.bounds.extend(position);
+  window.map.fitBounds(window.bounds);
+
+  // Directions!
+  window.directionsDisplay.setMap(window.map);
+
+
+
+ } else {
+   window.map.setZoom(14);
+ }
+}
+
 
 export const updateCoords = (coords) => {
   let obj = {};

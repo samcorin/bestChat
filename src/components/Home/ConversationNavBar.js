@@ -54,14 +54,14 @@ class ConversationNavBar extends Component {
   componentDidMount() {
     dropdown.init();
     
-    const call = document.getElementById('initCall');
+    // const call = document.getElementById('initCall');
     const miitDiv = document.getElementById('initMiit');
 
-    const startCall = () => {
-      console.log("start call to: ", this.props.room)
+    // const startCall = () => {
+      // console.log("start call to: ", this.props.room)
       // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
       // webrtc stuff.
-    }
+    // }
     
     // Setting up main listener, ensure all vars load beforehand
     let counter = 0;
@@ -86,8 +86,8 @@ class ConversationNavBar extends Component {
 
 
     // Event listeners for Calls
-    call.addEventListener('touchstart', startCall);
-    call.addEventListener('click', startCall);
+    // call.addEventListener('touchstart', startCall);
+    // call.addEventListener('click', startCall);
 
     // Event listeners for Miit
     miitDiv.addEventListener('click', this.startMiit);

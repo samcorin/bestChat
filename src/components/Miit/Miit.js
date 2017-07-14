@@ -217,7 +217,8 @@ class Miit extends Component {
   componentDidMount() {
     // Initial map setup
     getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
-    
+    console.log("componentDidMount() {", miit)
+    // need to block  this if session new, restart
     if(miit.roomId !== null) {
       this.setState({
         roomId: miit.roomId
@@ -256,17 +257,14 @@ class Miit extends Component {
           Object.keys(data.coords).map((user,i) => {
             // format then setmarker?
             const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
-            setMarker(coords, user, true);
+            miit.setMarker(coords, user, true);
           })
           window.map.panBy(0, 120);
 
           this.setState({
             suggestions: true
           })
-
-
           // update your own coord?
-          // console.log("")
         }
 
         // keep listening
@@ -290,9 +288,9 @@ class Miit extends Component {
       console.log("You're on on own, ", this.props.currentUser)
       // do some loading....
 
-      setTimeout(() => {
+      // setTimeout(() => {
         getPosition(this.props.currentUser, null, setMarker)
-      }, 500);
+      // }, 500);
       
       // export const setMarker = (coords, 'You') =>{
     }
