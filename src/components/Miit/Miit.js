@@ -216,7 +216,7 @@ class Miit extends Component {
 
   componentDidMount() {
     // Initial map setup
-    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
+    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A&libraries=places", initMap, true);
     
 
     // a lot of this, if not all can go into getscript as callbaks.
@@ -268,6 +268,29 @@ class Miit extends Component {
           
           })
           // window.map.panBy(0, 100);
+
+          
+          // get center of 2+ coords
+          // This can be reused for numerous markers
+          
+          // fn: getMiddle(arr)
+          // arr: array of marker positions [{lat:... lng:...}, {...}]
+          miit.getMiddle(temp);
+          // window.bound = new window.google.maps.LatLngBounds();
+
+          // for (var i = 0; i < temp.length; i++) {
+          //   window.bound.extend( new window.google.maps.LatLng(temp[i].lat, temp[i].lng) );
+
+          // //   // OTHER CODE
+          // }
+          
+          // console.log( "WINDOW BOUND: ", window.bound.getCenter() );
+          // window.suggestionBounds = new window.google.maps.LatLngBounds(window.bound.getCenter().lat(), window.bound.getCenter().lng());
+          // Center point between points
+          // window.bound.getCenter().lat()
+          // window.bound.getCenter().lng()
+
+
 
           this.setState({
             suggestions: true

@@ -12,6 +12,13 @@
   overflow-scrolling: touch;
 }
 
+#Suggestions ul {
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+}
+
 .suggestion {
   height: 220px;
   background-color: #fff;

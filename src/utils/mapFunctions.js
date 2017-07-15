@@ -303,6 +303,68 @@ export const miit = {
     // },1000)
 
   },
+  getMiddle: function(array) {
+    console.log("GET MIDDLE:", array)
+    var bound = new window.google.maps.LatLngBounds();
+
+    for (var i = 0; i < array.length; i++) {
+      bound.extend( new window.google.maps.LatLng(array[i].lat, array[i].lng) );
+    }
+    //   // OTHER CODE
+    console.log("******************* ALL GOOD: ", bound.getCenter(), bound.getCenter().lat())
+    // console.log( "WINDOW BOUND: ", window.bound.getCenter() );
+    // window.suggestionBounds = new window.google.maps.LatLngBounds(window.bound.getCenter().lat(), window.bound.getCenter().lng());
+    // Center point between points
+    // window.bound.getCenter().lat()
+    // window.bound.getCenter().lng()
+    
+    
+    
+    // Middle place
+    let center = {}
+    center.lat = bound.getCenter().lat();
+    center.lng = bound.getCenter().lng()
+    // bound.getCenter().lat()
+    // {lat: bound.getCenter().lat(), lng: bound.getCenter().lng()}
+
+    // infowindow = new google.maps.InfoWindow();
+    // window.PlacesService = new window.google.maps.PlacesService(window.map);
+    window.service = new window.google.maps.places.PlacesService(window.map);
+    window.service.nearbySearch({
+      location: center,
+      radius: 100,
+      type: ['restaurant']
+    }, callback);
+
+    // add filter for only top rated ??
+    window.infowindow = new window.google.maps.InfoWindow()
+    
+    function callback(results, status) {
+      console.log("STATUS: ", results, status)
+      if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        for (var i = 0; i < results.length; i++) {
+          createMarker(results[i]);
+        }
+      }
+    }
+
+    function createMarker(place) {
+      var placeLoc = place.geometry.location;
+      var marker = new window.google.maps.Marker({
+        map: window.map,
+        position: place.geometry.location
+      });
+
+      window.google.maps.event.addListener(marker, 'click', function() {
+        window.infowindow.setContent(place.name);
+        window.infowindow.open(window.map, this);
+      });
+    }
+
+
+
+    // miit.getSuggestions()
+  },
   updateCoords: function(pos, room) {
     // let update = {};
     // // update[this.currentUser] = pos.coords;
