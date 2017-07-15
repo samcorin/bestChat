@@ -4,7 +4,7 @@ import SendMessage from './../components/Home/Modules/SendMessage'
 
 // ==================================================
 // Load Google Maps dependency on Miit Component Load
-export const getScript = (source, callback, isMiit) => {
+export const getScript = (source, callback) => {
 
   var newScript = document.getElementById('googleMap');
   if(newScript === null) {
@@ -193,6 +193,11 @@ export const NewRoomMessage = (currentUser, room, thatProps) => {
 // ======================================= Miit =======================================
 // ====================================================================================
 export const miit = {
+  Map: null,
+  bounds: null,
+  directionsService: null,
+  directionsDisplay: null,
+  showMapBack: false,
   started: false,
   coordsListener: null,
   coordsStore: {},
@@ -202,9 +207,56 @@ export const miit = {
   accepted: false,
   newSession: false,
   redirect: null,
-  start: function(roomId, user, roomName, thatProps, swapped) {
-    var metaRef = conversationsRef.child(`${roomId}`);
+  getScript: function() {
+    console.log("MIIT get stcitp", this)
+    const that = this;
+    
+    var newScript = document.getElementById('googleMap');
+    if(newScript === null) {
+      var script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A&libraries=places';
+      script.id = "googleMap";
+      var prior = document.getElementsByTagName('script')[0];
+      script.async = 0;
+      script.onload = script.onreadystatechange = function( _, isAbort ) {
+        if(isAbort || !script.readyState || /loaded|complete/.test(script.readyState) ) {
+          script.onload = script.onreadystatechange = null;
+          script = undefined;
+          if(!isAbort) {
+              that.initMap();
+          } else {
+            console.log("getScript: Aborted.")
+          }
+        }
+      };
+      prior.parentNode.insertBefore(script, prior);
+    } else {
+      that.initMap();
+    }
+  },
+  initMap: function() {
+    // Tokyo
+    const center = {lat: 35.6895, lng: 139.6917};
+    
+    this.Map = new window.google.maps.Map(document.getElementById('map'), {
+      zoom: 6,
+      center: center,
+      streetViewControl: false,
+      zoomControl: false,
+      mapTypeControl: false
+    });
 
+    // Initiate bounds object
+    this.bounds = new window.google.maps.LatLngBounds();
+
+    // Used to show directions
+    this.directionsService = new window.google.maps.DirectionsService;
+    this.directionsDisplay = new window.google.maps.DirectionsRenderer({suppressMarkers: true});
+    
+  },
+  start: function(roomId, user, roomName, thatProps, swapped) {
+    let metaRef = conversationsRef.child(`${roomId}`);
+    
     // Text based on what the initiator chooses, are there options? There might be later.
     const message = {
       sender: user,
@@ -226,8 +278,7 @@ export const miit = {
     // - new coords
     // - 
 
-    console.log("Listening...")
-    var metaRef = conversationsRef.child(`${roomId}/meta`);
+    let metaRef = conversationsRef.child(`${roomId}/meta`);
     
     // Set username
     if(this.currentUser === null) {
@@ -305,9 +356,9 @@ export const miit = {
   },
   getMiddle: function(array) {
     console.log("GET MIDDLE:", array)
-    var bound = new window.google.maps.LatLngBounds();
+    let bound = new window.google.maps.LatLngBounds();
 
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
       bound.extend( new window.google.maps.LatLng(array[i].lat, array[i].lng) );
     }
     //   // OTHER CODE
@@ -342,15 +393,15 @@ export const miit = {
     function callback(results, status) {
       console.log("STATUS: ", results, status)
       if (status === window.google.maps.places.PlacesServiceStatus.OK) {
-        for (var i = 0; i < results.length; i++) {
+        for (let i = 0; i < results.length; i++) {
           createMarker(results[i]);
         }
       }
     }
 
     function createMarker(place) {
-      var placeLoc = place.geometry.location;
-      var marker = new window.google.maps.Marker({
+      let placeLoc = place.geometry.location;
+      let marker = new window.google.maps.Marker({
         map: window.map,
         position: place.geometry.location
       });
@@ -361,9 +412,6 @@ export const miit = {
       });
     }
 
-
-
-    // miit.getSuggestions()
   },
   updateCoords: function(pos, room) {
     // let update = {};
@@ -465,7 +513,7 @@ export const getPosition = (user, ref, callback) => {
       
       // Single user
       setTimeout(() => {
-        window.map.setZoom(12);
+        miit.Map.setZoom(12);
         callback(myLatLng, user, false);
       }, 200)
       
@@ -482,7 +530,7 @@ export const getPosition = (user, ref, callback) => {
 export const setMarker = (coords, username, group) =>{
   const name = username || 'random';
   console.log("SET MARKER COORDS: ", coords)
-  window.map.setCenter(coords);
+  miit.Map.setCenter(coords);
   // var icon = {
   //   url: `https://api.adorable.io/avatars/60/${name}@adorable.io.png`,
   //   scaledSize: new window.google.maps.Size(50, 50),
@@ -536,7 +584,7 @@ export const setMarker = (coords, username, group) =>{
 
 
  } else {
-   window.map.setZoom(14);
+   miit.Map.setZoom(14);
  }
 }
 

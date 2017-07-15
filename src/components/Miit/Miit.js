@@ -10,6 +10,8 @@ import './../App.css';
 import './../../utils/loader.css';
 // import Map from './Map';
 import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
+// import getScript from './map/getScript';
+import map from './map/index';
 
 class Miit extends Component {
   constructor(props) {
@@ -23,14 +25,6 @@ class Miit extends Component {
       loading: false,
       roomId: null
     }
-    // this.setCoords = this.setCoords.bind(this);
-    this.deleteMarker = this.deleteMarker.bind(this);
-    this.updateMarker = this.updateMarker.bind(this);
-    // this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
-    // this.autoCenter = this.autoCenter.bind(this);
-    // this.getDirections = this.getDirections.bind(this);
-    // this.convertCoords = this.convertCoords.bind(this);
-    this.watchPosition = this.watchPosition.bind(this);
     this.goBack = this.goBack.bind(this);
   }
 
@@ -47,20 +41,20 @@ class Miit extends Component {
   //   })
   // }
 
-  watchPosition() {
-    return navigator.geolocation.watchPosition((position) => {
-      console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
-      // update your marker position.
-      this.state.markers.map((marker, i) => {
-        if(marker.id === this.props.currentUser) {
-          console.log("Your new location: ")
+  // watchPosition() {
+  //   return navigator.geolocation.watchPosition((position) => {
+  //     console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
+  //     // update your marker position.
+  //     this.state.markers.map((marker, i) => {
+  //       if(marker.id === this.props.currentUser) {
+  //         console.log("Your new location: ")
 
-          var latlng = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
-          this.state.markers[i].setPosition(latlng);
-        }
-      })
-    });
-  }
+  //         var latlng = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
+  //         this.state.markers[i].setPosition(latlng);
+  //       }
+  //     })
+  //   });
+  // }
 
   // convertCoords() {
   //   return new Promise((resolve, reject) => {
@@ -153,36 +147,36 @@ class Miit extends Component {
 
 
   // Remove marker from array
-  deleteMarker(id) {
-    //Find and remove the marker from the Array
-    for (var i = 0; i < this.state.markers.length; i++) {
-      if (this.state.markers[i].id == id) {
-        //Remove the marker from Map
-        this.state.markers[i].setMap(null);
+  // deleteMarker(id) {
+  //   //Find and remove the marker from the Array
+  //   for (var i = 0; i < this.state.markers.length; i++) {
+  //     if (this.state.markers[i].id == id) {
+  //       //Remove the marker from Map
+  //       this.state.markers[i].setMap(null);
 
-        //Remove the marker from array.
-        this.state.markers.splice(i, 1);
-        return;
-      }
-    }
-  };
+  //       //Remove the marker from array.
+  //       this.state.markers.splice(i, 1);
+  //       return;
+  //     }
+  //   }
+  // };
 
   // updateMarkers() {
-  updateMarker(id, coords) {
-    // coords: lat: ..., lng: ...
+  // updateMarker(id, coords) {
+  //   // coords: lat: ..., lng: ...
 
-    for (var i = 0; i < this.state.markers.length; i++) {
-      if (this.state.markers[i].id == id) {
+  //   for (var i = 0; i < this.state.markers.length; i++) {
+  //     if (this.state.markers[i].id == id) {
 
-        var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
-        this.state.markers[i].setPosition(latlng);
-        // update maker on map
+  //       var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
+  //       this.state.markers[i].setPosition(latlng);
+  //       // update maker on map
 
 
-        return;
-      }
-    }
-  }
+  //       return;
+  //     }
+  //   }
+  // }
 
 
     // Try deleting marker: OK! OK! OK!
@@ -214,10 +208,18 @@ class Miit extends Component {
 
   // ================================================================================================================
 
-  componentDidMount() {
-    // Initial map setup
-    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A&libraries=places", initMap, true);
-    
+  componentDidMount() {    
+    // Initial setup. Add username to map
+    map.getScript(this.props.currentUser);
+
+    // Initiate Miit
+    if(miit.roomId !== null) {
+      // do stuff
+    } else {
+      // One person
+      // map.getPosition()
+      // getPosition(this.props.currentUser, null, setMarker)
+    }
 
     // a lot of this, if not all can go into getscript as callbaks.
     console.log("componentDidMount() {", miit)
@@ -274,15 +276,14 @@ class Miit extends Component {
           // This can be reused for numerous markers
           
           // fn: getMiddle(arr)
-          // arr: array of marker positions [{lat:... lng:...}, {...}]
-          miit.getMiddle(temp);
-          // window.bound = new window.google.maps.LatLngBounds();
+          // arr: array of marker positions ({lat:... lng:...})
+          window.bound = new window.google.maps.LatLngBounds();
 
-          // for (var i = 0; i < temp.length; i++) {
-          //   window.bound.extend( new window.google.maps.LatLng(temp[i].lat, temp[i].lng) );
+          for (var i = 0; i < temp.length; i++) {
+            window.bound.extend( new window.google.maps.LatLng(temp[i].lat, temp[i].lng) );
 
-          // //   // OTHER CODE
-          // }
+          //   // OTHER CODE
+          }
           
           // console.log( "WINDOW BOUND: ", window.bound.getCenter() );
           // window.suggestionBounds = new window.google.maps.LatLngBounds(window.bound.getCenter().lat(), window.bound.getCenter().lng());

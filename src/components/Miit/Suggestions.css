@@ -9,7 +9,6 @@
   margin: 0 auto;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
-  overflow-scrolling: touch;
 }
 
 #Suggestions ul {

@@ -72,7 +72,7 @@ class ConversationNavBar extends Component {
       if(defined) {
         clearInterval(timer);
         defined = false;
-        miit.listen(roomId, this.props.currentUser, this.setRedirect);
+        miit.miit.listen(roomId, this.props.currentUser, this.setRedirect);
       }
       
       // Increment counter. Limit to 3s
