@@ -20,9 +20,9 @@ class Conversation extends React.Component{
     super(props);
 
     this.state = {
-      redirect: false
+      redirect: false,
+      roomName: this.props.match.params.room
     }
-
 
     this.sendHandler = this.sendHandler.bind(this);
     this.roomOnline = this.roomOnline.bind(this);
@@ -31,34 +31,12 @@ class Conversation extends React.Component{
   }
 
   componentDidMount() {
-    // Ensure props are loaded
-    let counter = 0;
-    let timer = setInterval(() => {
-      if(counter >= 50) {
-        clearInterval(timer);
-        console.log("Error loading props.")
-      }
-
-      const swapped = objSwap(this.props.userTable);
-      const roomId = swapped[this.props.match.params.room];
-      console.log("PROPS: ", this.props.match.params.room, swapped[this.props.match.params.room])
-      
-      // Check if the conversation exists
-      if(!!this.props.currentUser) {
-        if(!!roomId && !!swapped) {
-          this.setState({
-            roomId: roomId,
-            swapped: swapped,
-            roomName: this.props.match.params.room
-          })
-          console.log("STATE LOADED")
-          clearInterval(timer);
-          miit.listen(roomId, this.props.currentUser, this.setRedirect)
-        }
-        counter++;
-
-      }
-    },20);
+    // Not sure I need this
+    const swapped = objSwap(this.props.userTable);
+    const roomId = swapped[this.props.match.params.room];
+    this.setState({
+      roomId: roomId
+    })
   }
 
   startMiit() {
@@ -69,6 +47,7 @@ class Conversation extends React.Component{
     } else {
       // clearInterval(timer);
       console.log("NEW USER MESSAGE: ", this.props.currentUser, this.props.match.params.room)
+      // SendMessage(this.props.currentUser, message, this.state.roomName, this.state.roomId, this.props.dispatch);
       NewRoomMessage(this.props.currentUser, this.state.roomName, this.props.dispatch);
     }
   }
@@ -79,11 +58,13 @@ class Conversation extends React.Component{
     })
   }
 
-  sendHandler(message, room) {
+  sendHandler(message) {
     const messageObject = {
       sender: this.props.currentUser,
       text: '',
       createdAt: Date.now(),
+      roomId: this.state.roomId,
+      roomName: this.state.roomName
     }
 
     // add appropriate message type. Later add to this.
@@ -98,8 +79,10 @@ class Conversation extends React.Component{
   }
 
   addMessage(message) {
-    console.log("ADD MESSAGE : " , this.props.currentUser, this.state.roomName, this.state.roomId)
-    SendMessage(this.props.currentUser, message, this.state.roomName, this.state.roomId, this.props.dispatch);
+    // shouldn't we check here if it exists?
+    console.log("addmessage: message: ", message)
+    SendMessage(this.props.currentUser, message, this.props.dispatch);
+    
     this.setState({
       lastMessage: message
     })
@@ -114,14 +97,15 @@ class Conversation extends React.Component{
       return <Redirect push to='/Miit' />;
     }
     
-    const room = this.props.match.params.room;
-    const swapped = objSwap(this.props.userTable);
-    
     return (
       <div className="ConversationScreen">
-        <ConversationNavBar online={this.roomOnline()} room={room} setRedirect={this.setRedirect} startMiit={this.startMiit}/>
-        <MessagesView room={room} />
-        <ChatInput onSend={this.sendHandler} room={room} />
+        <ConversationNavBar 
+          online={this.roomOnline()} 
+          room={this.state.roomName} 
+          setRedirect={this.setRedirect} 
+          startMiit={this.startMiit}/>
+        <MessagesView room={this.state.roomName} />
+        <ChatInput onSend={this.sendHandler}/>
       </div>
     )
   }

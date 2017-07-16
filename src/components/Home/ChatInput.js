@@ -1,9 +1,7 @@
 import React from 'react';
-import {connect} from 'react-redux'
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import FaPaperPlane from 'react-icons/lib/fa/paper-plane';
 import './ChatInput.css';
-// import EmojiDependency from './../../utils/EmojiDependency';
 
 class ChatInput extends React.Component {
   constructor(props) {
@@ -19,10 +17,6 @@ class ChatInput extends React.Component {
     this.focusUpdate = this.focusUpdate.bind(this);
     this.blurInput = this.blurInput.bind(this);
   }
-
-  // componentWillUnmount() {
-    // remove unecessary listeners, et...
-  // }
 
   scrollToBottom() {
     const messageDiv = document.getElementById('messageList');
@@ -56,18 +50,6 @@ class ChatInput extends React.Component {
 
     // Add listener for when chat input is focused, keyboard pops up, you want last message to be visible.
     this.focusUpdate(this.scrollToBottom)
-
-    // do the same for the keybaord
-    // on update and on focus, push keyboard up
-
-    // EmojiDependency().then((library) => {
-    //   console.log("Emojione loaded?: ", !!library)
-    //   // this.marked = deps.marked.setOptions({
-    //   //   highlight: (code) => deps.hljs.highlightAuto(code).value
-    //   // });
-
-    //   this.forceUpdate();
-    // });
   }
 
   componentDidUpdate() {
@@ -94,12 +76,12 @@ class ChatInput extends React.Component {
     document.getElementById("chat-input").focus();
     this.fade()
     this.setState({ chatInput: '' });
-    this.props.onSend(this.state.chatInput, this.props.room);
+    this.props.onSend(this.state.chatInput);
   }
 
   likeHandler(event) {
     event.preventDefault();
-    this.props.onSend('like', this.props.room);
+    this.props.onSend('like');
   }
 
   render() {
@@ -128,9 +110,9 @@ class ChatInput extends React.Component {
 }
 
 // autoFocus
+export default ChatInput;
+// const mapStateToProps = (state) => ({
+//   currentUser: state.currentUser
+// });
 
-const mapStateToProps = (state) => ({
-  currentUser: state.currentUser
-});
-
-export default connect(mapStateToProps)(ChatInput);
+// export default connect(mapStateToProps)(ChatInput);

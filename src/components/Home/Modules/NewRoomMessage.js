@@ -1,6 +1,7 @@
 import {addMessageToStore, updateUserTable} from './../../../actions/index';
 import { usersRef, conversationsRef } from './../../../firebase'
 
+// (currentUser, message, roomName, roomId, dispatch
 export const NewRoomMessage = (currentUser, room, dispatch) => {
   console.log("fn: ", currentUser, room)
   let message = {

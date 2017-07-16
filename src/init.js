@@ -34,6 +34,10 @@ const getConversations = (user, store) => {
           store.dispatch(startFetchMessages({ id: conversationsObj[roomId], data: messageArray }));
         })
       })
+      
+      // Call listener
+      listener(store);
+    
     } else {
       // Start fresh
       setUsername(store)
@@ -70,22 +74,14 @@ const setUsername = (store) => {
   store.dispatch(startFetchMessages({ id: 'admin-bot', data: [message] }));
 
   console.log(`Welcome, ${currentUser}!`);
+  
+  // Listen for changes
+  listener(store);
 }
 
-const init = (store) => {
+const listener = (store) => {
+  // Listeners
   
-  // username found in localStorage?
-  if(lsUsername) {
-    currentUser = lsUsername;
-    getConversations(lsUsername, store);
-  } else {
-    // New User
-    setUsername(store)
-  }
-
-  // ======================= activeUsers =========================
-  userStatus(currentUser, store);
-
   // ======================== userList ===========================
   usersRef.on('value', snapshot => {
     const users = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
@@ -116,24 +112,37 @@ const init = (store) => {
   });
 
   // ======================= USER TABLE =========================
-  usersRef.child(currentUser).on('value', snapshot => {
-    const meta = snapshot.val()
-    console.log("META: ", meta)
-  })
+  // usersRef.child(currentUser).on('value', snapshot => {
+  //   const meta = snapshot.val()
+  //   console.log("META: ", meta)
+  // })
 
 
   // ===================== LAST CONNECT ======================
   // var userLastOnlineRef = firebase.database().ref("users/joe/lastOnline");
   // userLastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+}
+
+const init = (store) => {
+  
+  // username found in localStorage?
+  if(lsUsername) {
+    currentUser = lsUsername;
+    getConversations(lsUsername, store, listener);
+  } else {
+    // New User
+    setUsername(store)
+  }
+
+  // ======================= activeUsers =========================
+  userStatus(currentUser, store);
+
 
   // ====================== RESET USER =======================
   // database.ref('users/' + userId).set({
   //   username: username
   // });
   injectTapEventPlugin();
-  
-  // set to false to remove session after refreshing. Maybe a temporary solution
-  window.miitSession = false;
 }
 
 export default init;
