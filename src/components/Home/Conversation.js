@@ -39,8 +39,21 @@ class Conversation extends React.Component{
     } else {
       // clearInterval(timer);
       console.log("NEW USER MESSAGE: ", this.props.currentUser, this.props.match.params.room)
-      // SendMessage(this.props.currentUser, message, this.state.roomName, this.state.roomId, this.props.dispatch);
-      NewRoomMessage(this.props.currentUser, this.state.roomName, this.props.dispatch);
+      
+      const swapped = objSwap(this.props.userTable);
+      const roomId = swapped[this.props.match.params.room];
+      
+      let message = {
+        sender: this.props.currentUser,
+        text: 'Join me on Miit',
+        createdAt: Date.now(),
+        type: 'miit',
+        roomName: this.props.match.params.room
+      }
+      console.log("this.props.currentUser, message ", this.props.currentUser, message)
+      SendMessage(this.props.currentUser, message, this.props.dispatch);
+      // miit.start(this.state.roomId, this.props.currentUser, this.props.match.params.room, this.props, this.state.swapped);
+
     }
   }
 

@@ -42,8 +42,6 @@ class MessagesView extends React.Component {
   };
 
   render() {
-    console.log("this.props.conversations: ", this.props.conversations)
-    console.log("this.props.conversations[this.props.room]", this.props.conversations[this.props.room])
     if(this.props.conversations[this.props.room] === undefined) {
       // Empty room
       return (

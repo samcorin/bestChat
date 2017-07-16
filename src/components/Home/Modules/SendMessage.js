@@ -12,7 +12,7 @@ export const SendMessage = (currentUser, message, dispatch) => {
       dispatch(addMessageToStore(message));
       conversationsRef.child(message.roomId).push(message);
     } else {
-
+      console.log("FIRST TIME:")
       // No reference exists, so one needs to be created.
       const cRef = usersRef.child(currentUser + '/conversations/' + message.roomId).push().key;
       message.roomId = cRef;
@@ -33,6 +33,7 @@ export const SendMessage = (currentUser, message, dispatch) => {
       conversationsRef.child(cRef).push(message)
 
       // Add a reference to this conversation for both users
+      console.log("usersRef: ", currentUser, cRef, message)
       usersRef.child(currentUser + '/conversations/' + cRef).set(message.roomName);
       usersRef.child(message.roomName + '/conversations/' + cRef).set(currentUser);
     }
