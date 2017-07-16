@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {miit} from './../../utils/mapFunctions';
+import {miit} from './../../components/Miit';
 
 const styles = {
   previewMiit: {

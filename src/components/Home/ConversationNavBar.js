@@ -1,105 +1,31 @@
 import React, {Component} from 'react';
-import { NavLink, Link, Redirect} from 'react-router-dom'
-import {connect} from 'react-redux'
+import { NavLink } from 'react-router-dom'
 import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
 import dropdown from './../../utils/dropdown';
 import {objSwap} from './../../utils/objFunctions';
-import {miit, NewRoomMessage} from './../../utils/mapFunctions.js';
 import './ConversationNavBar.css'
 
+// Show users image:
+// <img src={`https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`} className="previewPhoto" />
+
 class ConversationNavBar extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      redirect: false,
-      roomId: ''
-    }
-    this.setRedirect = this.setRedirect.bind(this);
-    this.startMiit = this.startMiit.bind(this);
-  }
-
-  // <img src={`https://api.adorable.io/avatars/60/${propsRef.roomId}@adorable.io.png`} className="previewPhoto" />
-
-  setRedirect() {
-    this.setState({
-      redirect: true
-    })
-  }
-
-// This user isthe initiator, that means that you need to push your coords to the db
-  startMiit() {
-    // Ensure values are defined
-    let counter = 0;
-    let timer = setInterval(() => {
-      const swapped = objSwap(this.props.userTable);
-      const roomId = swapped[this.props.room];
-
-      console.log("NAV BAR: ", this.props.currentUser, this.props.room, swapped)
-
-      if(!!this.props.currentUser) {
-        if(!!roomId && !!swapped) {
-          clearInterval(timer);
-          miit.start(roomId, this.props.currentUser, this.props.room, this.props, swapped);
-          console.log("Miit started by " + this.props.currentUser + " in " + roomId)
-        } else {
-          clearInterval(timer);
-          NewRoomMessage(this.props.currentUser, this.props.room, this.props);
-          console.log("Room initiated")
-        }
-      }
-    },100)
-  }
-
   componentDidMount() {
     dropdown.init();
-    
+
     // const call = document.getElementById('initCall');
-    const miitDiv = document.getElementById('initMiit');
-
-    // const startCall = () => {
-      // console.log("start call to: ", this.props.room)
-      // <NavLink className="LinkStyle" to="/Miit"><FaArrowLeft /></NavLink>
-      // webrtc stuff.
-    // }
-    
-    // Setting up main listener, ensure all vars load beforehand
-    let counter = 0;
-    let timer = setInterval(() => {
-      const swapped = objSwap(this.props.userTable);
-      const roomId = swapped[this.props.room];
-      let defined = (!!swapped && !!roomId && !!this.props.currentUser);   
-      
-      if(defined) {
-        clearInterval(timer);
-        defined = false;
-        miit.listen(roomId, this.props.currentUser, this.setRedirect);
-      }
-      
-      // Increment counter. Limit to 3s
-      counter++;
-      if(counter > 30) {
-        console.log("Listener timed out.")
-        clearInterval(timer);
-      }
-    },100)
-
+    const miitDiv = document.getElementById('startMiit');
 
     // Event listeners for Calls
     // call.addEventListener('touchstart', startCall);
     // call.addEventListener('click', startCall);
 
     // Event listeners for Miit
-    miitDiv.addEventListener('click', this.startMiit);
-    miitDiv.addEventListener('touchstart', this.startMiit);
-
+    // - tried doing onMouseDown on the list element, didn't work
+    miitDiv.addEventListener('click', this.props.startMiit);
+    miitDiv.addEventListener('touchstart', this.props.startMiit);
   }
 
-
-
   render() {
-    if (this.state.redirect) {
-      return <Redirect push to='/Miit' />;
-    }
     return (
       <div style={{backgroundColor: '#2196F3'}} id="ConversationNavBar">
         <NavLink id="backButton" className="LinkStyle" to="/"><FaArrowLeft /></NavLink>
@@ -113,7 +39,7 @@ class ConversationNavBar extends Component {
           <div className="dropdownMenu">
             <ul>
               <li id="initCall">Call {this.props.room}</li>
-              <li id="initMiit">Miit {this.props.room}</li>
+              <li id="startMiit">Miit {this.props.room}</li>
             </ul>
           </div>
         </div>
@@ -122,10 +48,4 @@ class ConversationNavBar extends Component {
   }
 }
 
-// export default ConversationNavBar;
-const mapStateToProps = (state) => ({
-  currentUser: state.currentUser,
-  userTable: state.userTable
-});
-
-export default connect(mapStateToProps)(ConversationNavBar);
+export default ConversationNavBar;

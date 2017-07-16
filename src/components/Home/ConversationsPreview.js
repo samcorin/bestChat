@@ -19,10 +19,6 @@ class ConversationsPreview extends Component {
     this.previewMiitAccept = this.previewMiitAccept.bind(this);
   }
 
-  componentDidMount() {
-    
-  }
-
   previewMiitAccept() {
     this.setState({
       redirect: true
@@ -37,10 +33,15 @@ class ConversationsPreview extends Component {
     
     let convLen = Object.keys(this.props.conversations).length;
     let tableLen = Object.keys(this.props.userTable).length;
+    // console.log("START: ", convLen, tableLen, this.props)
 
     // if(previewMessages.length > 0 && Object.keys(this.props.userTable).length) {
     // THIS BREAKS IF YOU MESSAGE SOMEONE NEW< table !== conv
-    if(convLen > 0 && tableLen === convLen) {
+    // if(convLen > 0 && tableLen === convLen) {
+    // if(convLen > 0) {
+      
+    // minor delay in loading admin-bot when resetting db
+    if(this.props.currentUser && convLen > 0) {
       let previewMessages = latestMessages(this.props.conversations)
 
       // Clean up this code

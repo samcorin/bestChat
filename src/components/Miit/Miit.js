@@ -5,11 +5,11 @@ import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
 import Suggestions from './Suggestions';
 import {database} from './../../firebase/index';
+import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
+import map from './map/index';
 import './Miit.css';
 import './../App.css';
 import './../../utils/loader.css';
-// import Map from './Map';
-import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
 
 class Miit extends Component {
   constructor(props) {
@@ -23,14 +23,6 @@ class Miit extends Component {
       loading: false,
       roomId: null
     }
-    // this.setCoords = this.setCoords.bind(this);
-    this.deleteMarker = this.deleteMarker.bind(this);
-    this.updateMarker = this.updateMarker.bind(this);
-    // this.calculateAndDisplayRoute = this.calculateAndDisplayRoute.bind(this);
-    // this.autoCenter = this.autoCenter.bind(this);
-    // this.getDirections = this.getDirections.bind(this);
-    // this.convertCoords = this.convertCoords.bind(this);
-    this.watchPosition = this.watchPosition.bind(this);
     this.goBack = this.goBack.bind(this);
   }
 
@@ -47,20 +39,20 @@ class Miit extends Component {
   //   })
   // }
 
-  watchPosition() {
-    return navigator.geolocation.watchPosition((position) => {
-      console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
-      // update your marker position.
-      this.state.markers.map((marker, i) => {
-        if(marker.id === this.props.currentUser) {
-          console.log("Your new location: ")
+  // watchPosition() {
+  //   return navigator.geolocation.watchPosition((position) => {
+  //     console.log("Your current position: ", position.coords.latitude, position.coords.longitude);
+  //     // update your marker position.
+  //     this.state.markers.map((marker, i) => {
+  //       if(marker.id === this.props.currentUser) {
+  //         console.log("Your new location: ")
 
-          var latlng = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
-          this.state.markers[i].setPosition(latlng);
-        }
-      })
-    });
-  }
+  //         var latlng = new window.google.maps.LatLng(this.state.markers[i].position.lat(), this.state.markers[i].position.lng());
+  //         this.state.markers[i].setPosition(latlng);
+  //       }
+  //     })
+  //   });
+  // }
 
   // convertCoords() {
   //   return new Promise((resolve, reject) => {
@@ -153,36 +145,36 @@ class Miit extends Component {
 
 
   // Remove marker from array
-  deleteMarker(id) {
-    //Find and remove the marker from the Array
-    for (var i = 0; i < this.state.markers.length; i++) {
-      if (this.state.markers[i].id == id) {
-        //Remove the marker from Map
-        this.state.markers[i].setMap(null);
+  // deleteMarker(id) {
+  //   //Find and remove the marker from the Array
+  //   for (var i = 0; i < this.state.markers.length; i++) {
+  //     if (this.state.markers[i].id == id) {
+  //       //Remove the marker from Map
+  //       this.state.markers[i].setMap(null);
 
-        //Remove the marker from array.
-        this.state.markers.splice(i, 1);
-        return;
-      }
-    }
-  };
+  //       //Remove the marker from array.
+  //       this.state.markers.splice(i, 1);
+  //       return;
+  //     }
+  //   }
+  // };
 
   // updateMarkers() {
-  updateMarker(id, coords) {
-    // coords: lat: ..., lng: ...
+  // updateMarker(id, coords) {
+  //   // coords: lat: ..., lng: ...
 
-    for (var i = 0; i < this.state.markers.length; i++) {
-      if (this.state.markers[i].id == id) {
+  //   for (var i = 0; i < this.state.markers.length; i++) {
+  //     if (this.state.markers[i].id == id) {
 
-        var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
-        this.state.markers[i].setPosition(latlng);
-        // update maker on map
+  //       var latlng = new window.google.maps.LatLng(coords.lat, coords.lng);
+  //       this.state.markers[i].setPosition(latlng);
+  //       // update maker on map
 
 
-        return;
-      }
-    }
-  }
+  //       return;
+  //     }
+  //   }
+  // }
 
 
     // Try deleting marker: OK! OK! OK!
@@ -214,115 +206,157 @@ class Miit extends Component {
 
   // ================================================================================================================
 
-  componentDidMount() {
-    // Initial map setup
-    getScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyDuH6Zfh5uYlMJA6FuihhHlTMfrue7Au9A", initMap, true);
-    
+  componentDidMount() {    
+    // Initial setup. Add username to map
+
+    // Initiate Miit
+    // if no session is found, start a new one?
+    if(miit.roomId !== null) {
+      map.getScript(this.props.currentUser, true);
+      // miit.listen(roomId, this.props.currentUser, redirect) {
+      
+      // this.setState({
+      //   roomId: miit.roomId
+      // })
+
+      // new Promise((resolve, reject) => {
+      //     //do something for 5 seconds
+      //     resolve();
+      // }).then(function(result){
+      //   console.log("result: ", result)
+      //     // return new Promise(function(fulfill, reject){
+      //     //     //do something for 5 seconds
+      //     //     fulfill(result);
+      //     // });
+      // });
+
+      // do stuff
+    } else {
+      // One person
+      console.log("You're on on own, ", this.props.currentUser)
+      map.getScript(this.props.currentUser, false);
+      // map.showCurrentUser(); 
+    }
 
     // a lot of this, if not all can go into getscript as callbaks.
-    console.log("componentDidMount() {", miit)
-    // need to block  this if session new, restart
-    if(miit.roomId !== null) {
-      this.setState({
-        roomId: miit.roomId
-      })
+    // console.log("componentDidMount() {", miit)
+    // // need to block  this if session new, restart
+    // if(miit.roomId !== null) {
+    //   this.setState({
+    //     roomId: miit.roomId
+    //   })
 
-      const metaRef = database.child('conversations/' + miit.roomId + '/meta')
-      metaRef.on('value', snapshot => {
+    //   const metaRef = database.child('conversations/' + miit.roomId + '/meta')
+    //   metaRef.on('value', snapshot => {
         
-        // listen for coords?
-        const data = snapshot.val();
-        console.log("Miit snapshot, ", data)
+    //     // listen for coords?
+    //     const data = snapshot.val();
+    //     console.log("Miit snapshot, ", data)
 
 
-        // accepted:false
-        // initiator:"eager-sample"
-        // redirect:false
-        // time:1500009220622
+    //     // accepted:false
+    //     // initiator:"eager-sample"
+    //     // redirect:false
+    //     // time:1500009220622
         
-        miit.getPosition(this.props.currentUser, metaRef, setMarker)
+    //     miit.getPosition(this.props.currentUser, metaRef, setMarker)
         
-        const coordsNum = data.coords ? Object.keys(data.coords).length : null;
+    //     const coordsNum = data.coords ? Object.keys(data.coords).length : null;
         
-        // How to make this dynami? based on people in the group?
-        if(coordsNum === 2) {
-          // end loader?
+    //     // How to make this dynami? based on people in the group?
+    //     if(coordsNum === 2) {
+    //       // end loader?
           
-          this.setState({
-            loading: false
-          })
+    //       this.setState({
+    //         loading: false
+    //       })
           
-          // Stop watching /meta
-          metaRef.off()
+    //       // Stop watching /meta
+    //       metaRef.off()
           
-          console.log("YOU ARE NOW BOTH READY ")
-          // render markerS
+    //       console.log("YOU ARE NOW BOTH READY ")
+    //       // render markerS
           
-          var temp = [];
-          Object.keys(data.coords).map((user,i) => {
-            // format then setmarker?
-            const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
-            miit.setMarker(coords, user, true);
+    //       var temp = [];
+    //       Object.keys(data.coords).map((user,i) => {
+    //         // format then setmarker?
+    //         const coords = {lat: data.coords[user].latitude, lng: data.coords[user].longitude}
+    //         miit.setMarker(coords, user, true);
             
-            temp.push(coords);
+    //         temp.push(coords);
           
-          })
-          // window.map.panBy(0, 100);
+    //       })
+    //       // window.map.panBy(0, 100);
 
-          this.setState({
-            suggestions: true
-          })
+          
+    //       // get center of 2+ coords
+    //       // This can be reused for numerous markers
+          
+    //       // fn: getMiddle(arr)
+    //       // arr: array of marker positions ({lat:... lng:...})
+    //       window.bound = new window.google.maps.LatLngBounds();
 
-          function calculateAndDisplayRoute(directionsService, directionsDisplay) {
-            directionsService.route({
-              origin: temp[0],
-              destination: temp[1],
-              travelMode: 'TRANSIT'
-            }, function(response, status) {
-              if (status === 'OK') {
-                window.map.panBy(0, 120);
-                directionsDisplay.setDirections(response);
-              } else {
-                window.alert('Directions request failed due to ' + status);
-              }
-            });
-          }
+    //       for (var i = 0; i < temp.length; i++) {
+    //         window.bound.extend( new window.google.maps.LatLng(temp[i].lat, temp[i].lng) );
 
-          calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
-          // // update your own coord?
+    //       //   // OTHER CODE
+    //       }
+          
+    //       // console.log( "WINDOW BOUND: ", window.bound.getCenter() );
+    //       // window.suggestionBounds = new window.google.maps.LatLngBounds(window.bound.getCenter().lat(), window.bound.getCenter().lng());
+    //       // Center point between points
+    //       // window.bound.getCenter().lat()
+    //       // window.bound.getCenter().lng()
+
+
+
+    //       this.setState({
+    //         suggestions: true
+    //       })
+
+    //       function calculateAndDisplayRoute(directionsService, directionsDisplay) {
+    //         directionsService.route({
+    //           origin: temp[0],
+    //           destination: temp[1],
+    //           travelMode: 'TRANSIT'
+    //         }, function(response, status) {
+    //           if (status === 'OK') {
+    //             window.map.panBy(0, 120);
+    //             directionsDisplay.setDirections(response);
+    //           } else {
+    //             window.alert('Directions request failed due to ' + status);
+    //           }
+    //         });
+    //       }
+
+    //       calculateAndDisplayRoute(window.directionsService, window.directionsDisplay);
+    //       // // update your own coord?
         
-        }
+    //     }
 
-        // keep listening
-        // let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
-        // if(newSession && !!data.coords) {
-        //   console.log("DB DATA FOR MIIT: ", data)
-          // figure out how to get everyones markers on the page, 
-          // getPosition(this.props.currentUser, null, setMarker)
+    //     // keep listening
+    //     // let newSession = (Date.now() - data.time) < 60 * 1000; // 1 minute
+    //     // if(newSession && !!data.coords) {
+    //     //   console.log("DB DATA FOR MIIT: ", data)
+    //       // figure out how to get everyones markers on the page, 
+    //       // getPosition(this.props.currentUser, null, setMarker)
           
-          // console.log("data.coords[this.props.currentUser]: ", data.coords[this.props.currentUser])
-          // ok render the dots
-          // render the coords, 
-          // export const setMarker = (coords, id) =>{
+    //       // console.log("data.coords[this.props.currentUser]: ", data.coords[this.props.currentUser])
+    //       // ok render the dots
+    //       // render the coords, 
+    //       // export const setMarker = (coords, id) =>{
       
-            //       navigator.geolocation.getCurrentPosition((pos) => {
-          // const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};  
-        // }
+    //         //       navigator.geolocation.getCurrentPosition((pos) => {
+    //       // const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};  
+    //     // }
 
-      })
-    } else {
-      console.log("You're on on own, ", this.props.currentUser)
-      // do some loading....
-      // if(!!window.map) {
-      // } else {
-      //   getPosition(this.props.currentUser, null, setMarker)
-      // }
-        // setTimeout(() => {
-        getPosition(this.props.currentUser, null, setMarker)
-        // }, 1500);
-      
-      // export const setMarker = (coords, 'You') =>{
-    }
+    //   })
+    // } else {
+    //   // console.log("You're on on own, ", this.props.currentUser)
+    //   // map.showCurrentUser(); 
+    //   // get users location, should be setLocation, 
+    //   // getPosition(this.props.currentUser, null, setMarker) 
+    // }
     // db?
     // database.child('conversations/' + roomId + '/meta').update({redirect: true})
 
