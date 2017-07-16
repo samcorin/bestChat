@@ -18,7 +18,7 @@ export const map = {
   // accepted: false,
   // newSession: false,
   // redirect: null,
-  getScript: function(user) {
+  getScript: function(user, group) {
     this.currentUser = user;
     const _this = this;
     
@@ -34,7 +34,7 @@ export const map = {
           script = undefined;
           if(!isAbort) {
             // check if google... ok
-            _this.initMap();
+            _this.initMap(group);
           } else {
             console.log("getScript: Aborted.")
           }
@@ -44,13 +44,13 @@ export const map = {
       prior.parentNode.insertBefore(script, prior);
     } else {
       // check if google... ok
-      _this.initMap();
+      _this.initMap(group);
     }
   },
-  initMap: function() {
+  initMap: function(group) {
     // Tokyo
     const center = {lat: 35.6895, lng: 139.6917};
-    
+    console.log("MAP INITIATED")
     this.Map = new window.google.maps.Map(document.getElementById('map'), {
       zoom: 7,
       center: center,
@@ -66,32 +66,67 @@ export const map = {
     this.directionsService = new window.google.maps.DirectionsService;
     this.directionsDisplay = new window.google.maps.DirectionsRenderer({suppressMarkers: true});
     
+    if(!group) {
+      console.log('hey, loading your marker')
+      this.showCurrentUser();
+    }
+
   },
-  getPosition: function() {
+  showCurrentUser: function() {
     // Gets user coordinates
+    const _this = this;
+    console.log("MAPS???< ", this.Map)
     if (navigator.geolocation) {
       console.log("Getting your position. Wait a moment...")
       navigator.geolocation.getCurrentPosition((pos) => {
-      
-        const myLatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+        const LatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};        
+        console.log("_this: ", _this)
+        
+        // wait for it to load.
+        // let counter = 0;
+        // setInterval(() => {
+                  
+          _this.Map.setZoom(12);
+          _this.addMarker(LatLng, _this.currentUser);
+
+        // },20)
+
         // localStorage.setItem('myLat', pos.coords.latitude);
         // localStorage.setItem('myLng', pos.coords.longitude);
-        map.Map.setZoom(12);
-        // map.setmarker();
       }, error);
     } else {
       console.log("Geolocation is not supported by this browser.");
     }
+
     const error = (err) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     };
 
   },
-  setMarker: function(pos, user) {
+  addMarker: function(pos, username) {
     // places maker for a user
     // This has to be dynamic
-    // callback(myLatLng, user, false);
+    // theres a marker array, do I add everything to it?, 
+    let marker = new window.google.maps.Marker({
+      map: this.Map,
+      draggable: true,
+      animation: window.google.maps.Animation.DROP,
+      position: pos,
+      title: username
+    });
 
+    // const infowindow = new window.google.maps.InfoWindow({
+    //   content: '<div id="content">YO</div>'
+    // });
+
+    // marker.addListener('mouseover', () => {
+    //   console.log("mouseover")
+    //   infowindow.open(this.Map, this);
+    // });
+
+    // marker.addListener('mouseout', function() {
+    //     infowindow.close();
+    // });
   }
 }
 

@@ -1,24 +1,64 @@
 import React from 'react';
 import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import {objSwap} from './../../utils/objFunctions';
-// import {addMessageToStore, updateUserTable} from './../../actions/index';
 import MessagesView from './MessagesView';
 import ConversationNavBar from './ConversationNavBar';
 import ChatInput from './ChatInput';
 import SendMessage from './Modules/SendMessage';
 import {usersRef, conversationsRef} from './../../firebase/index';
+import miit from './../Miit'
 import './Conversation.css';
 
 // render()
 // if(this.props.userList.indexOf(match.params.room) == -1)
 // location.assign("http://www.mozilla.org");
-// const Conversation = ({ match }) => (
+
 class Conversation extends React.Component{
   constructor(props) {
     super(props);
+    
+    this.state = {
+      redirect: false
+    }
 
     this.sendHandler = this.sendHandler.bind(this);
     this.roomOnline = this.roomOnline.bind(this);
+    this.setRedirect = this.setRedirect.bind(this);
+    this.startMiit = this.startMiit.bind(this);
+  }
+
+  // This user isthe initiator, that means that you need to push your coords to the db
+  startMiit() {
+    // Ensure values are defined
+    
+    let counter = 0;
+    let timer = setInterval(() => {
+      if(counter >= 50) {
+        clearInterval(timer);
+        console.log("Error loading props.")
+      }
+
+      const swapped = objSwap(this.props.userTable);
+      const roomId = swapped[this.props.match.params.room];
+      
+      // Check if the conversation exists
+      if(!!roomId && !!swapped) {
+        clearInterval(timer);
+        miit.start(roomId, this.props.currentUser, this.props.room, this.props, swapped);
+        console.log("Miit started by " + this.props.currentUser + " in " + roomId)
+      } else {
+        clearInterval(timer);
+        // NewRoomMessage(this.props.currentUser, this.props.room, this.props);
+        console.log("Room initiated")
+      }
+    },10);
+  }
+
+  setRedirect() {
+    this.setState({
+      redirect: true
+    })
   }
 
   sendHandler(message, room) {
@@ -54,16 +94,21 @@ class Conversation extends React.Component{
   }
 
   render() {
+    if (this.state.redirect) {
+      return <Redirect push to='/Miit' />;
+    }
+    
     const room = this.props.match.params.room;
     const swapped = objSwap(this.props.userTable);
     
     return (
       <div className="ConversationScreen">
-        <ConversationNavBar online={this.roomOnline()} room={room} />
+        <ConversationNavBar online={this.roomOnline()} room={room} setRedirect={this.setRedirect} startMiit={this.startMiit}/>
         <MessagesView room={room} />
         <ChatInput onSend={this.sendHandler} room={room} />
       </div>
-    )  }
+    )
+  }
 }
 
 // export default Conversation;

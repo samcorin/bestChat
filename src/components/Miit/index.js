@@ -1,6 +1,6 @@
 import {database, usersRef, conversationsRef} from './../../firebase/index';
 // import {addMessageToStore, updateUserTable} from './../actions/index';
-// import SendMessage from './../components/Home/Modules/SendMessage'
+import SendMessage from './../Home/Modules/SendMessage'
 
 // miit
 export const miit = {

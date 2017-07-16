@@ -28,6 +28,7 @@ export const SendMessage = (currentUser, message, swapped, room, usersRef, conve
           name: room
       };
 
+      // Update store
       thatProps.dispatch(updateUserTable(userTableObj));
 
       // Push message to db

@@ -73,6 +73,8 @@ const setUsername = (store) => {
 }
 
 const init = (store) => {
+  
+  // username found in localStorage?
   if(lsUsername) {
     currentUser = lsUsername;
     getConversations(lsUsername, store);
