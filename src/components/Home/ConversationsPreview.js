@@ -37,7 +37,11 @@ class ConversationsPreview extends Component {
 
     // if(previewMessages.length > 0 && Object.keys(this.props.userTable).length) {
     // THIS BREAKS IF YOU MESSAGE SOMEONE NEW< table !== conv
-    if(convLen > 0 && tableLen === convLen) {
+    // if(convLen > 0 && tableLen === convLen) {
+    // if(convLen > 0) {
+      
+    // minor delay in loading admin-bot when resetting db
+    if(this.props.currentUser && convLen > 0) {
       let previewMessages = latestMessages(this.props.conversations)
 
       // Clean up this code

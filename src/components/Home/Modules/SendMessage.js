@@ -1,14 +1,15 @@
 import {usersRef, conversationsRef} from './../../../firebase';
 import {addMessageToStore, updateUserTable} from './../../../actions/index';
 
-export const SendMessage = (currentUser, message, dispatch) => {
+export const SendMessage = (currentUser, message, dispatch, callback) => {
 
   usersRef.child(currentUser + '/conversations/' + message.roomId).once('value', snapshot => {
     // here we check if message exists.
     const listed = snapshot.val();
 
     // If a reference exists in currentUser/conversations/:id, send the message there.
-    if(!!listed || message.roomName == 'admin-bot') {      
+    if(!!listed || message.roomName == 'admin-bot') {
+      console.log("message exitsts")      
       dispatch(addMessageToStore(message));
       conversationsRef.child(message.roomId).push(message);
     } else {
@@ -36,6 +37,12 @@ export const SendMessage = (currentUser, message, dispatch) => {
       console.log("usersRef: ", currentUser, cRef, message)
       usersRef.child(currentUser + '/conversations/' + cRef).set(message.roomName);
       usersRef.child(message.roomName + '/conversations/' + cRef).set(currentUser);
+
+      if(callback) {
+        let metaRef = conversationsRef.child(`${cRef}`);
+        metaRef.child('meta').set({initiator: currentUser, time: Date.now(), redirect: false, accepted: false});
+      }
+
     }
   })
 }

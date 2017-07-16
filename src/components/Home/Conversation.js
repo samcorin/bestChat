@@ -29,32 +29,20 @@ class Conversation extends React.Component{
     this.roomOnline = this.roomOnline.bind(this);
     this.setRedirect = this.setRedirect.bind(this);
     this.startMiit = this.startMiit.bind(this);
+    this.getRoomId = this.getRoomId.bind(this);
+  }
+
+  componentDidMount() {
+    const roomId = this.getRoomId();
+    miit.listen(roomId, this.props.currentUser, this.setRedirect);
+    this.setState({
+      roomId: roomId
+    })
   }
 
   startMiit() {
-    if(!!this.state.roomId) {
-      // clearInterval(timer);
-      miit.start(this.state.roomId, this.props.currentUser, this.props.match.params.room, this.props, this.state.swapped);
-      console.log("Miit started by " + this.props.currentUser + " in " + this.state.roomId)
-    } else {
-      // clearInterval(timer);
-      console.log("NEW USER MESSAGE: ", this.props.currentUser, this.props.match.params.room)
-      
-      const swapped = objSwap(this.props.userTable);
-      const roomId = swapped[this.props.match.params.room];
-      
-      let message = {
-        sender: this.props.currentUser,
-        text: 'Join me on Miit',
-        createdAt: Date.now(),
-        type: 'miit',
-        roomName: this.props.match.params.room
-      }
-      console.log("this.props.currentUser, message ", this.props.currentUser, message)
-      SendMessage(this.props.currentUser, message, this.props.dispatch);
-      // miit.start(this.state.roomId, this.props.currentUser, this.props.match.params.room, this.props, this.state.swapped);
-
-    }
+    const roomId = this.getRoomId();
+    miit.start(roomId, this.props.currentUser, this.props.match.params.room, this.props.dispatch);
   }
 
   setRedirect() {
@@ -63,9 +51,14 @@ class Conversation extends React.Component{
     })
   }
 
-  sendHandler(message) {
+  getRoomId() {
+    // return roomId
     const swapped = objSwap(this.props.userTable);
-    const roomId = swapped[this.props.match.params.room];
+    return swapped[this.props.match.params.room];
+  }
+
+  sendHandler(message) {
+    const roomId = this.getRoomId();
 
     const messageObject = {
       sender: this.props.currentUser,
@@ -87,7 +80,6 @@ class Conversation extends React.Component{
   }
 
   addMessage(message) {
-    console.log("ADD MESSAGE: ", this.props, message, this.state)
     SendMessage(this.props.currentUser, message, this.props.dispatch);
     
     this.setState({
@@ -100,6 +92,7 @@ class Conversation extends React.Component{
   }
 
   render() {
+    console.log('PROPS: ', this.props)
     if (this.state.redirect) {
       return <Redirect push to='/Miit' />;
     }

@@ -77,6 +77,7 @@ const setUsername = (store) => {
   
   // Listen for changes
   // listener(store);
+  store.dispatch(addCurrentUser(currentUser));
 }
 
 const init = (store) => {
