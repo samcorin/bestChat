@@ -1,6 +1,6 @@
 import {database, usersRef, conversationsRef} from './../../firebase/index';
-// import {addMessageToStore, updateUserTable} from './../actions/index';
-import SendMessage from './../Home/Modules/SendMessage'
+import SendMessage from './../Home/Modules/SendMessage';
+import map from './map/index';
 
 // miit
 export const miit = {
@@ -13,22 +13,20 @@ export const miit = {
       text: 'Join me on Miit.',
       createdAt: Date.now(),
       type: 'miit'
-    }
-    console.log("START: ", arguments)
+    };
+    
     // check if room is new here:
-    //   NewRoomMessage(this.props.currentUser, this.props.room, usersRef, conversationsRef, this.props);
-    SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
+    SendMessage(user, message, swapped, roomName, thatProps);
 
     // Initiate the contract
     metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false});
-
   },
   listen: function(roomId, user, redirect) {
+    console.log("Listening...")
     // Listening for what?
     // - new coords
     // - 
 
-    console.log("Listening... ", this, this.map.a.Map, this.Map)
     let metaRef = conversationsRef.child(`${roomId}/meta`);
     
     // Set username
@@ -54,7 +52,7 @@ export const miit = {
       // only listen to changes to meta for 30s. why? this only gets us started. 
       // this is so everyone is synced. then Miit.js handles updateing coords
       if(obj && isNew) {
-        console.log("... changes to /meta ", obj)
+        console.log("... changes to /meta ", obj);
         
         if(obj.started) {
           this.started = true;

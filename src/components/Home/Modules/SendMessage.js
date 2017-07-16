@@ -1,42 +1,50 @@
+import {usersRef, conversationsRef} from './../../../firebase';
 import {addMessageToStore, updateUserTable} from './../../../actions/index';
 
-export const SendMessage = (currentUser, message, swapped, room, usersRef, conversationsRef, thatProps) => {
-  usersRef.child(currentUser + '/conversations/' + swapped[room]).once('value', snapshot => {
-    const roomName = snapshot.val();
+export const SendMessage = (currentUser, message, roomName, roomId, dispatch) => {
+  
+  // check if room is new
+  console.log("CHECK: ", currentUser, message, roomName, roomId, dispatch);
+  usersRef.child(currentUser + '/conversations/' + roomName).once('value', snapshot => {
 
+    const listed = snapshot.val();
+    
+    console.log("snap: ", listed);
+    console.log("SENDDDD: ", currentUser, message, roomId, roomName );
+    
     // If a reference exists in currentUser/conversations/:id, send the message there.
-    if(roomName) {
-      message.roomId = swapped[roomName];
+    if(!!listed) {
+      message.roomId = roomId;
 
       // add username..
       message.roomName = roomName;
-      thatProps.dispatch(addMessageToStore(message));
+      dispatch(addMessageToStore(message));
       conversationsRef.child(message.roomId).push(message);
     } else {
 
       // No reference exists, so one needs to be created.
-      const cRef = usersRef.child(currentUser + '/conversations/' + room).push().key;
+      const cRef = usersRef.child(currentUser + '/conversations/' + roomName).push().key;
       message.roomId = cRef;
 
       // Push message to store
-      message.roomName = room;
-      thatProps.dispatch(addMessageToStore(message));
+      message.roomName = roomName;
+      dispatch(addMessageToStore(message));
 
       // Update userTable with -> { ID: NAME }
       var userTableObj = {
           id: cRef,
-          name: room
+          name: roomName
       };
 
       // Update store
-      thatProps.dispatch(updateUserTable(userTableObj));
+      dispatch(updateUserTable(userTableObj));
 
       // Push message to db
       conversationsRef.child(cRef).push(message)
 
       // Add a reference to this conversation for both users
-      usersRef.child(currentUser + '/conversations/' + cRef).set(room);
-      usersRef.child(room + '/conversations/' + cRef).set(currentUser);
+      usersRef.child(currentUser + '/conversations/' + cRef).set(roomName);
+      usersRef.child(roomName + '/conversations/' + cRef).set(currentUser);
     }
   })
 }

@@ -5,13 +5,11 @@ import {connect} from 'react-redux'
 import BottomNav from './../BottomNav';
 import Suggestions from './Suggestions';
 import {database} from './../../firebase/index';
+import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
+import map from './map/index';
 import './Miit.css';
 import './../App.css';
 import './../../utils/loader.css';
-// import Map from './Map';
-import {getScript, initMap, getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
-// import getScript from './map/getScript';
-import map from './map/index';
 
 class Miit extends Component {
   constructor(props) {

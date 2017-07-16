@@ -1,9 +1,11 @@
 import {addMessageToStore, updateUserTable} from './../../../actions/index';
+import { usersRef, conversationsRef } from './../../../firebase'
 
-export const NewRoomMessage = (currentUser, room, usersRef, conversationsRef, thatProps) => {
+export const NewRoomMessage = (currentUser, room, dispatch) => {
+  console.log("fn: ", currentUser, room)
   let message = {
     sender: currentUser,
-    text: '',
+    text: 'Join me on Miit',
     createdAt: Date.now(),
     type: 'miit'
   }
@@ -13,7 +15,7 @@ export const NewRoomMessage = (currentUser, room, usersRef, conversationsRef, th
 
   // Push message to store
   message.roomName = room;
-  thatProps.dispatch(addMessageToStore(message));
+  dispatch(addMessageToStore(message));
 
   // Update userTable with -> { ID: NAME }
   var userTableObj = {
@@ -21,7 +23,7 @@ export const NewRoomMessage = (currentUser, room, usersRef, conversationsRef, th
       name: room
   };
 
-  thatProps.dispatch(updateUserTable(userTableObj));
+  dispatch(updateUserTable(userTableObj));
 
   // Push message to db
   conversationsRef.child(cRef).push(message)

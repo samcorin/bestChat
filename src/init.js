@@ -116,7 +116,7 @@ const init = (store) => {
   });
 
   // ======================= USER TABLE =========================
-  usersRef.child(currentUser + '/meta').on('value', snapshot => {
+  usersRef.child(currentUser).on('value', snapshot => {
     const meta = snapshot.val()
     console.log("META: ", meta)
   })

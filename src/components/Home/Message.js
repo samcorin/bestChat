@@ -3,7 +3,8 @@ import timely , {humanReadable} from './../../utils/timely';
 import {urlify} from './../../utils/message';
 import MessageDivider from './MessageDivider';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
-import {getPos, getPosition, miit, setMarker} from './../../utils/mapFunctions';
+import {getPos, getPosition, setMarker} from './../../utils/mapFunctions';
+import miit from './../Miit';
 import './Message.css';
 
 class Message extends React.Component {

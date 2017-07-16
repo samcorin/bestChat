@@ -267,7 +267,7 @@ export const miit = {
     console.log("START: ", arguments)
     // check if room is new here:
     //   NewRoomMessage(this.props.currentUser, this.props.room, usersRef, conversationsRef, this.props);
-    SendMessage(user, message, swapped, roomName, usersRef, conversationsRef, thatProps)
+    SendMessage(user, message, swapped, roomName, thatProps)
 
     // Initiate the contract
     metaRef.child('meta').set({initiator: user, time: Date.now(), redirect: false, accepted: false});

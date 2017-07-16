@@ -75,12 +75,10 @@ export const map = {
   showCurrentUser: function() {
     // Gets user coordinates
     const _this = this;
-    console.log("MAPS???< ", this.Map)
     if (navigator.geolocation) {
       console.log("Getting your position. Wait a moment...")
       navigator.geolocation.getCurrentPosition((pos) => {
         const LatLng = {lat: pos.coords.latitude, lng: pos.coords.longitude};        
-        console.log("_this: ", _this)
         
         // wait for it to load.
         // let counter = 0;
