@@ -37,6 +37,7 @@ class ConversationsPreview extends Component {
 
     // if(previewMessages.length > 0 && Object.keys(this.props.userTable).length) {
     // THIS BREAKS IF YOU MESSAGE SOMEONE NEW< table !== conv
+    console.log("PREVIEW: ", this.props, convLen, tableLen)
     if(convLen > 0 && tableLen === convLen) {
       let previewMessages = latestMessages(this.props.conversations)
 

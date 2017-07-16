@@ -2,24 +2,21 @@ import {usersRef, conversationsRef} from './../../../firebase';
 import {addMessageToStore, updateUserTable} from './../../../actions/index';
 
 export const SendMessage = (currentUser, message, dispatch) => {
-  console.log("CHECK: ", currentUser, message.roomName, message.roomId, dispatch);
 
-  usersRef.child(currentUser + '/conversations/' + message.roomName).once('value', snapshot => {
+  usersRef.child(currentUser + '/conversations/' + message.roomId).once('value', snapshot => {
     // here we check if message exists.
     const listed = snapshot.val();
-    
+
     // If a reference exists in currentUser/conversations/:id, send the message there.
-    if(!!listed || message.roomName == 'admin-bot') {
-      console.log("ROOM EXISTS > ", message)
-      
+    if(!!listed || message.roomName == 'admin-bot') {      
       dispatch(addMessageToStore(message));
       conversationsRef.child(message.roomId).push(message);
     } else {
-      console.log("ROOM DOESNT EXIST")
-      // No reference exists, so one needs to be created.
-      const cRef = usersRef.child(currentUser + '/conversations/' + message.roomName).push().key;
-      message.roomId = cRef;
 
+      // No reference exists, so one needs to be created.
+      const cRef = usersRef.child(currentUser + '/conversations/' + message.roomId).push().key;
+      message.roomId = cRef;
+      
       // Push message to store
       dispatch(addMessageToStore(message));
 

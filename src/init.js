@@ -36,7 +36,7 @@ const getConversations = (user, store) => {
       })
       
       // Call listener
-      listener(store);
+      // listener(store);
     
     } else {
       // Start fresh
@@ -76,51 +76,7 @@ const setUsername = (store) => {
   console.log(`Welcome, ${currentUser}!`);
   
   // Listen for changes
-  listener(store);
-}
-
-const listener = (store) => {
-  // Listeners
-  
-  // ======================== userList ===========================
-  usersRef.on('value', snapshot => {
-    const users = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
-    store.dispatch(updateUserList(users))
-  });
-
-  // ======================= USER TABLE ==========================
-  usersRef.child(currentUser + '/conversations').on('child_added', snapshot => {
-    const addedUser = snapshot.val();
-    usersRef.child(currentUser + '/conversations').once('value', snapshot => {
-
-      const tempUserTable = objSwap(snapshot.val())
-      const tempUserObj = {id: tempUserTable[addedUser], name: addedUser};
-      store.dispatch(updateUserTable(tempUserObj));
-
-      // -------------- CONVERSATION LISTENER ------------------
-      conversationsRef.child(tempUserTable[addedUser]).on('child_added', snapshot => {
-        const newMessage = snapshot.val();
-
-        // currentUser stores the message in Conversation.js
-        if(newMessage.roomName === currentUser) {
-          newMessage.roomName = tempUserObj.name;
-          store.dispatch(addMessageToStore(newMessage));
-        }
-
-      })
-    })
-  });
-
-  // ======================= USER TABLE =========================
-  // usersRef.child(currentUser).on('value', snapshot => {
-  //   const meta = snapshot.val()
-  //   console.log("META: ", meta)
-  // })
-
-
-  // ===================== LAST CONNECT ======================
-  // var userLastOnlineRef = firebase.database().ref("users/joe/lastOnline");
-  // userLastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+  // listener(store);
 }
 
 const init = (store) => {
@@ -128,7 +84,7 @@ const init = (store) => {
   // username found in localStorage?
   if(lsUsername) {
     currentUser = lsUsername;
-    getConversations(lsUsername, store, listener);
+    getConversations(lsUsername, store);
   } else {
     // New User
     setUsername(store)
@@ -136,6 +92,50 @@ const init = (store) => {
 
   // ======================= activeUsers =========================
   userStatus(currentUser, store);
+
+  // const listener = (store) => {
+    // Listeners
+    
+    // ======================== userList ===========================
+    usersRef.on('value', snapshot => {
+      const users = objKeysToArray(snapshot.val()).filter((user) => user !== currentUser);
+      store.dispatch(updateUserList(users))
+    });
+
+    // ======================= USER TABLE ==========================
+    usersRef.child(currentUser + '/conversations').on('child_added', snapshot => {
+      const addedUser = snapshot.val();
+      usersRef.child(currentUser + '/conversations').once('value', snapshot => {
+
+        const tempUserTable = objSwap(snapshot.val())
+        const tempUserObj = {id: tempUserTable[addedUser], name: addedUser};
+        store.dispatch(updateUserTable(tempUserObj));
+
+        // -------------- CONVERSATION LISTENER ------------------
+        conversationsRef.child(tempUserTable[addedUser]).on('child_added', snapshot => {
+          const newMessage = snapshot.val();
+
+          // currentUser stores the message in Conversation.js
+          if(newMessage.roomName === currentUser) {
+            newMessage.roomName = tempUserObj.name;
+            store.dispatch(addMessageToStore(newMessage));
+          }
+
+        })
+      })
+    });
+
+    // ======================= USER TABLE =========================
+    // usersRef.child(currentUser).on('value', snapshot => {
+    //   const meta = snapshot.val()
+    //   console.log("META: ", meta)
+    // })
+
+
+    // ===================== LAST CONNECT ======================
+    // var userLastOnlineRef = firebase.database().ref("users/joe/lastOnline");
+    // userLastOnlineRef.onDisconnect().set(firebase.database.ServerValue.TIMESTAMP);
+  // }
 
 
   // ====================== RESET USER =======================

@@ -42,15 +42,17 @@ class MessagesView extends React.Component {
   };
 
   render() {
+    console.log("this.props.conversations: ", this.props.conversations)
+    console.log("this.props.conversations[this.props.room]", this.props.conversations[this.props.room])
     if(this.props.conversations[this.props.room] === undefined) {
+      // Empty room
       return (
         <ul id='messageList' className="messageList"></ul>
       )
     } else {
+      // Iterate through the messages and show them
       const messages = Object.keys(this.props.conversations[this.props.room]).map((message, i) => {
         const msg = this.props.conversations[this.props.room][message];
-        const swapped = objSwap(this.props.userTable);
-        const roomId = swapped[this.props.room];
         
         let prevMsg = null;
         if(i > 0) {
@@ -62,7 +64,7 @@ class MessagesView extends React.Component {
             key={i}
             currentUser={this.props.currentUser}
             sender={msg.sender}
-            roomId={roomId}
+            roomId={msg.roomId}
             text={msg.text}
             createdAt={msg.createdAt}
             type={msg.type}
@@ -80,9 +82,7 @@ class MessagesView extends React.Component {
 }
 // export default MessagesView;
 const mapStateToProps = (state) => ({
-  conversations: state.conversations,
-  currentUser: state.currentUser,
-  userTable: state.userTable
+  conversations: state.conversations
 });
 
 export default connect(mapStateToProps)(MessagesView);

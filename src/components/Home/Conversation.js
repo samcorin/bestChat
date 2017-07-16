@@ -21,22 +21,14 @@ class Conversation extends React.Component{
 
     this.state = {
       redirect: false,
-      roomName: this.props.match.params.room
+      roomName: this.props.match.params.room,
+      roomId: null
     }
 
     this.sendHandler = this.sendHandler.bind(this);
     this.roomOnline = this.roomOnline.bind(this);
     this.setRedirect = this.setRedirect.bind(this);
     this.startMiit = this.startMiit.bind(this);
-  }
-
-  componentDidMount() {
-    // Not sure I need this
-    const swapped = objSwap(this.props.userTable);
-    const roomId = swapped[this.props.match.params.room];
-    this.setState({
-      roomId: roomId
-    })
   }
 
   startMiit() {
@@ -59,12 +51,15 @@ class Conversation extends React.Component{
   }
 
   sendHandler(message) {
+    const swapped = objSwap(this.props.userTable);
+    const roomId = swapped[this.props.match.params.room];
+
     const messageObject = {
       sender: this.props.currentUser,
       text: '',
       createdAt: Date.now(),
-      roomId: this.state.roomId,
-      roomName: this.state.roomName
+      roomId: roomId,
+      roomName: this.props.match.params.room
     }
 
     // add appropriate message type. Later add to this.
@@ -79,8 +74,7 @@ class Conversation extends React.Component{
   }
 
   addMessage(message) {
-    // shouldn't we check here if it exists?
-    console.log("addmessage: message: ", message)
+    console.log("ADD MESSAGE: ", this.props, message, this.state)
     SendMessage(this.props.currentUser, message, this.props.dispatch);
     
     this.setState({
@@ -104,7 +98,7 @@ class Conversation extends React.Component{
           room={this.state.roomName} 
           setRedirect={this.setRedirect} 
           startMiit={this.startMiit}/>
-        <MessagesView room={this.state.roomName} />
+        <MessagesView room={this.state.roomName} currentUser={this.props.currentUser}/>
         <ChatInput onSend={this.sendHandler}/>
       </div>
     )
