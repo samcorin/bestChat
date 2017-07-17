@@ -2,10 +2,12 @@ import React from 'react';
 import {connect} from 'react-redux'
 import {Redirect} from 'react-router-dom'
 import {objSwap} from './../../utils/objFunctions';
+import {bot} from './../../utils/bot';
 import ConversationNavBar from './ConversationNavBar';
 import MessagesView from './MessagesView';
 import ChatInput from './ChatInput';
-import SendMessage from './Modules/SendMessage';
+// import SendMessage from './Modules/SendMessage';
+import SendMessage from './../../utils/SendMessage';
 import NewRoomMessage from './Modules/NewRoomMessage';
 import {usersRef, conversationsRef} from './../../firebase/index';
 import miit from './../Miit'
@@ -85,6 +87,16 @@ class Conversation extends React.Component{
     this.setState({
       lastMessage: message
     })
+
+    // Check if message is to bot, do bot stuff
+    if(this.props.match.params.room === 'admin-bot') {
+      const roomId = this.getRoomId();
+      bot.roomId = roomId;
+      bot.currentUser = this.props.currentUser;
+      bot.dispatch = this.props.dispatch;
+      bot.parseRequest(message);
+    }
+
   }
 
   roomOnline() {
@@ -92,7 +104,6 @@ class Conversation extends React.Component{
   }
 
   render() {
-    console.log('PROPS: ', this.props)
     if (this.state.redirect) {
       return <Redirect push to='/Miit' />;
     }
