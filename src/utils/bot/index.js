@@ -38,31 +38,28 @@ export const bot = {
     // response should be obj {isQ: true/false, response: "..."}
     const response = this.questionParser(message.text);
 
-    if(response !== '') {
-      this.performTask(response);
-    }
+    this.performTask(response);
 
   },
   performTask: function(request) {
     console.log("PERFORM: ", request)
     
-    
-    // default response
-    if(request.action === '') {
-      // pick random response
-      // make sure it's different from last
-      
-      let reply;      
-      do {
-         reply = this.responseArr[Math.floor(Math.random() * this.responseArr.length)];
-      } while (reply === this.prevReply);
-      
-      this.prevReply = reply;
-      
-      this.sendMessage(reply);
-
+    switch (request.action) {
+      case 'get weather':
+        console.log("GETTING THE WEAHER")
+        this.getWeather();
+        break;
+      case 'get reddit':
+        console.log("GETTING reddits")
+        break;
+      default:
+        let reply;      
+        do {
+          reply = this.responseArr[Math.floor(Math.random() * this.responseArr.length)];
+        } while (reply === this.prevReply);        
+        this.prevReply = reply;
+        this.sendMessage(reply);
     }
-
   },
   questionParser: function questionParser(string) {
     let response = {action: ''};
@@ -110,13 +107,15 @@ export const bot = {
     fetch('http://ip-api.com/json')
       .then(res => res.json())
       .then((location) => {
-        // console.log('City location: ', location.city)
+        console.log('City location: ', location.city)
         fetch(`http://api.openweathermap.org/data/2.5/weather?q=tokyo&units=metric&appid=${this.weatherApi}`)
         .then(res => res.json())
         .then((response) => {
+          console.log("OK")
           var temp = Math.round(response.main.temp);
           let text = `The temperature is around ${temp}ºC`
           console.log("weather result: ", text)
+          this.sendMessage(text);
           // bot.sendAdminMessage(io, data, time, adminResponse);
         }).catch((error) => {
           console.log(error)
@@ -156,10 +155,11 @@ export const bot = {
       fetch('http://ip-api.com/json')
       .then(res => res.json())
       .then((location) => {
-        // console.log('City location: ', location.city)
+        console.log('City location: ', location.city)
         fetch(`http://api.openweathermap.org/data/2.5/weather?q=tokyo&units=metric&appid=${weatherApi}`)
         .then(res => res.json())
         .then((response) => {
+          console.log('weather API: ', response)
           var temp = Math.round(response.main.temp);
           adminResponse.text = `The temperature is around ${temp}ºC`
           bot.sendAdminMessage(io, data, time, adminResponse);

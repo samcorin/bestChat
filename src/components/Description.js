@@ -88,17 +88,20 @@ class Description extends Component {
           </div>
 
           <h4>Features</h4>
-          <ul>
-            <li> - Lightweight. ~140kb</li>
-            <li> - Self-updating. </li>
-            <li> - It's fast.</li>
-            <li> - Video and audio calls. (Coming soon... iOS11...)</li>
-            <li> - <em>Miit</em>. Convenient venue recommendations for you and your friends.</li>
-            <li> - Fully compatible across all (95%) desktop and mobile browsers.</li>
-            <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
-            <li> - 100% JavaScript. </li>
-            <li> - Emojis! Thanks to <a href="https://www.emojione.com/" rel="noopener noreferrer" target="_blank">emojione</a> (Coming soon)</li>
-          </ul>
+        <ul>
+          <li> - It's fast.</li>
+          <li> - Lightweight.</li>
+          <li> - Evergreen, self-updating.</li>
+          <li> - Video and audio calls.</li>
+          <li> - Chat bot. 'admin-bot' responds to basic questions about the weather for now..</li>
+          <li> - Compatible across all browsers desktop and mobile.</li>
+          <li> - 100% awesome.</li>
+          <br/>  
+          <li> <em>Experimental:</em></li>
+
+          <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
+          <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts.</li>
+        </ul>
 
           <div className="dSubHeader">
             <h3>Cool thing</h3>

@@ -93,11 +93,14 @@ class Description extends Component {
           <li> - Lightweight.</li>
           <li> - Evergreen, self-updating.</li>
           <li> - Video and audio calls.</li>
+          <li> - Chat bot. 'admin-bot' responds to basic questions about the weather for now..</li>
+          <li> - Compatible across all browsers desktop and mobile.</li>
           <li> - <em>Miit</em>. Venue recommendation based on your group's whereabouts.</li>
-          <li> - Compatible across all browsers (90%).</li>
+          <li> <em>Experimental:</em></li>
+
           <li> - Login-less. No passwords to remember. Each instance is tied to your device. (experimental)</li>
           <li> - It's fast.</li>
-          <li> - 100% JavaScript (back and front end).</li>
+          <li> - 100% awesome.</li>
         </ul>
 
         <div className="dSubHeader">
@@ -130,7 +133,7 @@ class Description extends Component {
 
         <p>Thanks to web sockets, changes to the database are pushed to the client so there is no need for the user to reload or refresh the app, only receiving little messages instead of downloading big chunks of data. Events like new messages, users connecting and disconnecting all happen real-time.</p>
         <p>Initially, I only used Firebase to store user and message data, and used another layer of websockets for communication. There are times that writing code is hard and you end up wasting a lot of time. Investing in the wrong technology is one example. For the communication part of this project it went like this: <a href="https://socket.io" className="strikethrough">socket.io</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" className="strikethrough">WebSockets</a> then Firebase.</p>
-        <p>The whole process took a lot of time. It meant rewriting large parts of the application, twice. Socket.io is a simple solution for real-time bidirectional event-based communication. But it's just an additional layer of abstraction that took up valuable space. As for WebSockets, all browsers, with the exception of IE, offer full RFC 6455 support, and were an improvement in size and performance on the client side. But seeing as Firebase was already handling data storage and it's capable of real-time bidirectional event-based communication, I used that instead.</p>
+        <p>The whole process took a lot of time. It meant rewriting large parts of the application, twice. Socket.io is a simple solution for real-time bidirectional event-based communication. But it's just an additional layer of abstraction that took up valuable space. As for WebSockets, all browsers, with the exception of IE, offer full RFC 6455 support, and were an improvement in size and performance on the client side. But seeing as Firebase was already handling data storage and it's capable of real-time bidirectional event-based communication, I switched to that instead.</p>
         <p>One downside though, it's a little heavy. The database module takes up 54kb~ of the bundle file. If you want to user any other modules, say 'auth', you're going to pay.</p>
 
         <div className="dSubHeader">
