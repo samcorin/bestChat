@@ -30,6 +30,7 @@ export const bot = {
     "Bah!",
     "Blah blah blah.."
   ],
+  prevReply: '',
   // APIs
   weatherApi: '2faa25f2cdd71388d4f7d4314ab808e5',
   parseRequest: function(message) {    
@@ -44,16 +45,21 @@ export const bot = {
   },
   performTask: function(request) {
     console.log("PERFORM: ", request)
+    
+    
+    // default response
     if(request.action === '') {
       // pick random response
-      // const responseArr = [
-      //   "What was the question?",
-      //   "Are you trying to confuse me?",
-      //   "Questions... I know it's a difficult concept for some."
-      // ];
+      // make sure it's different from last
       
-      const chosenResponse = this.responseArr[Math.floor(Math.random() * this.responseArr.length)]
-      this.sendMessage(chosenResponse);
+      let reply;      
+      do {
+         reply = this.responseArr[Math.floor(Math.random() * this.responseArr.length)];
+      } while (reply === this.prevReply);
+      
+      this.prevReply = reply;
+      
+      this.sendMessage(reply);
 
     }
 
@@ -86,13 +92,6 @@ export const bot = {
     return response;
   },
   sendMessage: function(text) {
-    // const messageObject = {
-    //   sender: this.props.currentUser,
-    //   text: '',
-    //   createdAt: Date.now(),
-    //   roomId: roomId,
-    //   roomName: this.props.match.params.room
-    // }
     var message = {
       sender: 'admin-bot',
       text: text,
@@ -101,8 +100,11 @@ export const bot = {
       roomName: 'admin-bot',
       type: 'default'
     }
-    // export const SendMessage = (currentUser, message, dispatch, callback) => {
-    SendMessage(this.currentUser, message, this.dispatch)
+    
+    // add random delay
+      setTimeout(() => {
+        SendMessage(this.currentUser, message, this.dispatch)
+      }, 50)
   },
   getWeather: function() {
     fetch('http://ip-api.com/json')
@@ -171,19 +173,6 @@ export const bot = {
       var time = Date.now();
       bot.sendAdminMessage(io, data, time, adminResponse);
     }
-  },
-  sendAdminMessage: function sendAdminMessage(io, data, time, adminResponse) {
-    var message = {
-      username: 'Admin bot',
-      text: adminResponse.text,
-      medyaType: adminResponse.medyaType,
-      createdAt: time,
-      roomId: data.id.toString(),
-      currentUser: data.currentUser
-    }
-    return setTimeout(function() {
-      io.sockets.emit('admin:response', message);
-    }, 100)
   }
 }
 
