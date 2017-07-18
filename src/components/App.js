@@ -5,12 +5,12 @@ import Conversation from './Home/Conversation';
 import Calls from './Calls/Calls';
 import Miit from './Miit/Miit';
 import Settings from './Settings';
-import Description from './Description';
 import Games from './Games/Games';
 import UsernameEditor from './../utils/UsernameEditor';
+import HomeEasterEggs from './../utils/EasterEggs/HomeEasterEggs';
 import './App.css';
 import './../utils/loader.css';
-import HomeEasterEggs from './../utils/EasterEggs/HomeEasterEggs';
+import Description from './Description/index';
 
 import {
   BrowserRouter as Router,

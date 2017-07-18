@@ -104,7 +104,8 @@ export const bot = {
       }, 50)
   },
   getWeather: function() {
-    fetch('http://ip-api.com/json')
+    // fetch('http://ip-api.com/json')
+    fetch('https://ipapi.co/json')
       .then(res => res.json())
       .then((location) => {
         console.log('City location: ', location.city)

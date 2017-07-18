@@ -1,7 +1,7 @@
 .dText {
   box-sizing: border-box;
   height: 100%;
-  padding: 40px 50px 40px 0;
+  padding: 0 50px 40px 0;
   overflow-y: scroll;
   font-weight: 400;
   font-size: 17px;
@@ -80,8 +80,8 @@ ul {
 }
 
 .tech svg, .compatability svg {
-  width: 65px;
-  height: 65px;
+  width: 60px;
+  height: 60px;
   margin-bottom: 25px;
 }
 
@@ -119,4 +119,27 @@ ul {
 .feature {
   width: 100%;
   margin: 20px 25px;
+}
+
+.welcome {
+  display: flex;
+   align-content: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%; 
+}
+
+.welcomeWrapper {
+  margin: auto 0;
+}
+
+.title1 {
+  font-weight: 200;
+  font-size: 2.5rem;
+  color: #000;
+}
+
+.title2 {
+  font-size: 1.5rem;
+  font-weight: 100;
 }

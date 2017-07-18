@@ -28,6 +28,7 @@
   left: 10px;
   vertical-align: middle;
   font-size: 30px;
+  line-height: 40px;
   color: rgba(255, 255, 255, 0.7);
 }
 
@@ -62,6 +63,9 @@
   user-select: none;
   height: 100%;
   box-sizing: border-box;
+  font-size: 26px;
+  line-height: 45px;
+  margin-right: 5px;
 }
 .dropdown p {
   margin: 0;
