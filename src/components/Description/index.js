@@ -73,9 +73,9 @@ export class Description extends Component {
             <li> - It's fast.</li>
             <li> - Lightweight.</li>
             <li> - Evergreen, self-updating.</li>
-            <li> - Video and audio calls.</li>
-            <li> - Chat bot. 'admin-bot' responds to basic questions about the weather for now..</li>
-            <li> - Compatible across all browsers desktop and mobile.</li>
+            <li> - Video and audio calls. (Soon)</li>
+            <li> - A chatbot with the IQ of a pet rock.</li>
+            <li> - Compatible across all browsers, desktop and mobile.</li>
             <li> - 100% awesome.</li>
             <br/>  
             <li> <em>Experimental:</em></li>
@@ -84,9 +84,9 @@ export class Description extends Component {
           </ul>
 
           <div className="dSubHeader">
-            <h3>Cool thing</h3>
+            <h3>Some words</h3>
           </div>
-          <p>As an aspiring software developer, I decided to challenge myself and build something interesting. I wanted to avoid the iOS vs Android, Desktop vs mobile line of argumentation and just make something that would work across devices. All of them, new or old. It needed to be a challenge, so it's as close to a full featured chat application I could make in a short time.</p>
+          <p>As an aspiring software developer, I need to push myself to improve, so I challenged myself to build something ambitious (for me). I wanted to avoid the iOS vs Android, Desktop vs mobile line of argumentation and just make something that would work across devices. All of them, new or old. It needed to be a challenge, so it's as close to a full featured chat application I could make in a short time.</p>
           <p>It needed to fulfill several criteria. It had to be interesting and hard to work on. It needed to take into account the differing states of API adoption across mobile browsers.</p>
 
           <div className="dSubHeader">
@@ -149,7 +149,7 @@ export class Description extends Component {
         <div className="welcome">
           <div className="welcomeWrapper">
             <h1 className="title1">Performance and functionality in the browser</h1>
-            <p className="title2">the future is here...</p>
+            <p className="title2">Resize the window or open this page on a smartphone.</p>
           </div>
         </div>
       )

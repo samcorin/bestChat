@@ -143,3 +143,15 @@ ul {
   font-size: 1.5rem;
   font-weight: 100;
 }
+
+@media (max-width: 1030px) {
+  .welcomeWrapper h1 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 1180px) {
+  .welcomeWrapper h1 {
+    font-size: 2rem;
+  }
+}
