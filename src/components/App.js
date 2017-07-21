@@ -25,7 +25,6 @@ class App extends Component {
     state = {
       Miit: null,
       HomeEasterEggs: null,
-      Description: null,
       Calls: null,
       Settings: null,
       Games: null
@@ -36,10 +35,10 @@ class App extends Component {
   async componentDidMount() {
     const { default: Miit } = await import('./Miit/Miit');
     const { default: HomeEasterEggs } = await import('./../utils/EasterEggs/HomeEasterEggs');
-    // const { default: Description } = await import('./Description/index');
     const { default: Calls } = await import('./Calls/Calls');
     const { default: Settings } = await import('./Settings');
     const { default: Games } = await import('./Games/Games');
+    // const { default: Description } = await import('./Description/index');
     
     // Description: <Description />,
     this.setState({
