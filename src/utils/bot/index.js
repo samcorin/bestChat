@@ -34,11 +34,27 @@ export const bot = {
   // APIs
   weatherApi: '2faa25f2cdd71388d4f7d4314ab808e5',
   parseRequest: function(message) {    
+    let response = {action: ''};
     // what if it's not a question?
     // response should be obj {isQ: true/false, response: "..."}
-    const response = this.questionParser(message.text);
+    
+    // is it a 'special command'
+    if(message.text[0] === '/') {
+        console.log("First letter: ", message.text[0])
+        // console.log("parsed reuqest: ", message.text.substr(1))
+        let subReddit = message.text.split('-')[1]
+        let redditResponse = this.getReddit(subReddit);
+        console.log("reddit res", redditResponse)
+        response['action'] = 'get reddit';
+        response['text'] = redditResponse;
+        // return this.performTask(response);
 
-    this.performTask(response);
+        // console.log("subreddit: ", message.text.split('-')[1])
+    } else {
+      response = this.questionParser(message.text);
+      this.performTask(response);
+    }
+
 
   },
   performTask: function(request) {
@@ -50,7 +66,8 @@ export const bot = {
         this.getWeather();
         break;
       case 'get reddit':
-        console.log("GETTING reddits")
+        console.log("GETTING reddits: ", request)
+        this.sendMessage(request.text, 'media');
         break;
       default:
         let reply;      
@@ -88,16 +105,16 @@ export const bot = {
     })
     return response;
   },
-  sendMessage: function(text) {
+  sendMessage: function(text, type) {
     var message = {
       sender: 'admin-bot',
       text: text,
       createdAt: Date.now(),
       roomId: this.roomId,
       roomName: 'admin-bot',
-      type: 'default'
+      type: type || 'default'
     }
-    
+    console.log("MESSAGE: ", message)
     // add random delay
       setTimeout(() => {
         SendMessage(this.currentUser, message, this.dispatch)
@@ -127,53 +144,29 @@ export const bot = {
         // bot.sendAdminMessage(io, data, time, 'Your location is a mystery.');
       });
   },
-  requestType: function requestType(io, bot, data, time, fetch) {
-    var weatherApi = '2faa25f2cdd71388d4f7d4314ab808e5';
-    // what about if the user sends a picture??
+  getReddit: function(sub) {
+    // fetch('https://www.reddit.com/live/thread/about.json')
+    fetch(`https://www.reddit.com/r/${sub}/.json`)
+    .then(res => res.json())
+    .then((item) => {
+      // console.log("REDDIT: ", item)
+      // let author = item.data.children[0].data.author
+      // let imgUrl = item.data.children[0].data.thumbnail;
+      // let imgUrl = item.data.children[0].data.thumbnail;
+      
+      // let obj = {};
+      // obj['imgUrl'] = imgUrl;
+      // obj['author'] = author;
 
 
-    // default admin response
-    var adminResponse = {
-      text: "That's great!",
-      mediaType: "default"
-    };
+      // JSON.stringify(obj)
 
-    if(data.userText == 'reddit') {
-      fetch('https://www.reddit.com/.json')
-      .then(res => res.json())
-      .then((response) => {
-        console.log(response.data.children[0].data)
-        adminResponse.text = "Here's the top story: \n" + response.data.children[0].data.title;
-        adminResponse.mediaType = "article";
-        // if image
-        // response.data.children[0].data.preview.images.source.url
-
-        bot.sendAdminMessage(io, data, time, adminResponse);
-      }).catch((e) => {
-        console.log(e)
-      })
-    } else if(data.userText == 'weather') {
-      fetch('http://ip-api.com/json')
-      .then(res => res.json())
-      .then((location) => {
-        console.log('City location: ', location.city)
-        fetch(`http://api.openweathermap.org/data/2.5/weather?q=tokyo&units=metric&appid=${weatherApi}`)
-        .then(res => res.json())
-        .then((response) => {
-          console.log('weather API: ', response)
-          var temp = Math.round(response.main.temp);
-          adminResponse.text = `The temperature is around ${temp}ºC`
-          bot.sendAdminMessage(io, data, time, adminResponse);
-        }).catch((error) => {
-          bot.sendAdminMessage(io, data, time, 'There was a problem with the weather API');
-        })
-      }).catch((error) => {
-        bot.sendAdminMessage(io, data, time, 'Your location is a mystery.');
-      });
-    } else {
-      var time = Date.now();
-      bot.sendAdminMessage(io, data, time, adminResponse);
-    }
+      // this.sendMessage(obj, 'media');
+      // response['action'] = 'get reddit';
+      // response['text'] = redditResponse;
+      // return image url
+      return item.data.children[0].data.thumbnail;
+    })
   }
 }
 

@@ -39,7 +39,7 @@ class Conversation extends React.Component{
     miit.listen(roomId, this.props.currentUser, this.setRedirect);
     this.setState({
       roomId: roomId
-    })
+    });
   }
 
   startMiit() {
@@ -48,6 +48,7 @@ class Conversation extends React.Component{
   }
 
   setRedirect() {
+    console.log("Conversation: redirect")
     this.setState({
       redirect: true
     })

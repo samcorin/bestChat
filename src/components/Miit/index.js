@@ -57,12 +57,14 @@ export const miit = {
         this.roomId = roomId;
       }
 
+      // Necessary?
       if(this.redirect === null) {
         this.redirect = redirect;
       }
 
       metaRef.on('value', snapshot => {
         const obj = snapshot.val() || null;
+        console.log("value: ", obj)
         // wrap this in a timer? 30 seconds?
         const isNew  = (obj && (Date.now() - obj.time) < 30000);
         
@@ -85,7 +87,7 @@ export const miit = {
             redirect();
             
             // Set to false. What if this stops other people from being redirected? or does it happen automatcally?
-            metaRef.update({redirect: false})
+            metaRef.update({redirect: true})
             // metaRef.update({accepted: false})
           }
         }
@@ -94,15 +96,15 @@ export const miit = {
 
   },
   acceptInvite: function(user, roomId) {
-    
     const metaRef = conversationsRef.child(`${roomId}/meta`);
     
     console.log("ACCEPTED by: ", user, roomId)
     this.started = true;
     
+    metaRef.update({redirect: true})
     metaRef.update({accepted: true})
     // database.child('conversations/' + roomId + '/meta').update({accepted: true})
-    // metaRef.update({redirect: true})
+    // database.child('conversations/' + roomId + '/meta').update({redirect: true})
     
     // person accepts, do stuff. coords etc...
     

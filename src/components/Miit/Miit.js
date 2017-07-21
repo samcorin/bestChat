@@ -207,8 +207,6 @@ class Miit extends Component {
   // ================================================================================================================
 
   componentDidMount() {    
-    // Initial setup. Add username to map
-
     // Initiate Miit
     // if no session is found, start a new one?
     if(miit.roomId !== null) {
