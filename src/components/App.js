@@ -22,7 +22,7 @@ import {
 class App extends Component {
   constructor(props) {
     super(props);
-    state = {
+    this.state = {
       width: window.innerWidth,
       currentUser: ''
     //   Miit: null,
