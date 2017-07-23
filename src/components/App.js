@@ -79,12 +79,13 @@ class App extends Component {
                      alt="iPhone6s"
                      className="iphoneImg" />}
               {!isMobile && <HomeEasterEggs />}
+              
               <Switch>
                 <Route exact path="/" component={Home}/>
-                <Route exact path="/calls" component={<Calls />}/>
-                <Route exact path="/Miit" component={<Miit />}/>
-                <Route exact path="/games" component={<Games />}/>
-                <Route exact path="/settings" component={<Settings />}/>
+                <Route exact path="/calls" component={Calls}/>
+                <Route exact path="/Miit" component={Miit}/>
+                <Route exact path="/games" component={Games}/>
+                <Route exact path="/settings" component={Settings}/>
                 <Route path="/:room" render={(params) => (
                   <Conversation {...params} />
                 )}/>
