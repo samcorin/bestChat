@@ -1,6 +1,42 @@
+/* Updated Description Styles: 24 July, 2017  */
+.description {
+  width: 100%;
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  background-color: green;
+}
+
+.welcome {
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100%; 
+  background-color: yellow;
+}
+
+.welcomeWrapper {
+  margin: auto 0;
+}
+
+.readMore {
+  
+}
+
+#Features {
+  width: 100%;
+  min-height: 100vh;
+}
+
+
+
+
+/* ----------------------------- OLD STYLES ------------------------------  */
 .dText {
   box-sizing: border-box;
-  height: 100%;
+  height: 100vh;
   padding: 0 50px 40px 0;
   overflow-y: scroll;
   font-weight: 400;
@@ -119,18 +155,6 @@ ul {
 .feature {
   width: 100%;
   margin: 20px 25px;
-}
-
-.welcome {
-  display: flex;
-   align-content: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%; 
-}
-
-.welcomeWrapper {
-  margin: auto 0;
 }
 
 .title1 {

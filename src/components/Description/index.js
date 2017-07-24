@@ -19,10 +19,18 @@ export const Description = () => {
   // }
 
   return (
-    <div className="welcome">
-      <div className="welcomeWrapper">
-        <h1 className="title1">Performance and functionality in the browser</h1>
-        <p className="title2">Resize the window or open this page on a smartphone.</p>
+    <div className="description">
+      <div className="welcome">
+        <div className="welcomeWrapper">
+          <h1 className="title1">Performance and functionality in the browser</h1>
+          <p className="title2">Resize the window or open this page on a smartphone.</p>
+        </div>
+        <div className="readMore">
+          Read More...
+        </div>
+      </div>
+      <div id="Features">
+        test
       </div>
     </div>
   )
