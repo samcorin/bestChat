@@ -1,5 +1,5 @@
-import {usersRef, conversationsRef} from './../../../firebase';
-import {addMessageToStore, updateUserTable} from './../../../actions/index';
+import {usersRef, conversationsRef} from './../firebase';
+import {addMessageToStore, updateUserTable} from './../actions';
 
 export const SendMessage = (currentUser, message, dispatch, callback) => {
 

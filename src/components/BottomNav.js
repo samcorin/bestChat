@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
 import './BottomNav.css';
 // Icons
@@ -8,12 +8,13 @@ import FaMapO from 'react-icons/lib/fa/map-o';
 import FaUser from 'react-icons/lib/fa/user';
 import FaGamepad from 'react-icons/lib/fa/gamepad';
 
-class BottomNav extends React.Component {
+class BottomNav extends Component {
   constructor(props) {
     super(props);
     this.state = {
       slideIndex: 0,
-      slide: ''
+      slide: '',
+      FaHome: null
     };
 
     this.handleChange = this.handleChange.bind(this);

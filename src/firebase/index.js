@@ -1,5 +1,6 @@
-import firebase from 'firebase/app';
-require('firebase/database');
+// import firebase from 'firebase/app';
+// require('firebase/database');
+const firebase = window.firebase;
 
 try {
   var config = {

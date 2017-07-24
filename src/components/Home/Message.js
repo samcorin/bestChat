@@ -1,7 +1,9 @@
 import React from 'react';
+import {Redirect} from 'react-router-dom'
 import timely , {humanReadable} from './../../utils/timely';
 import {urlify} from './../../utils/message';
 import MessageDivider from './MessageDivider';
+import RedditMessage from './RedditMessage';
 import FaThumbsOUp from 'react-icons/lib/fa/thumbs-o-up';
 import {getPos, getPosition, setMarker} from './../../utils/mapFunctions';
 import miit from './../Miit';
@@ -10,17 +12,17 @@ import './Message.css';
 class Message extends React.Component {
   constructor(props) {
     super(props)
-    // set state for individual messages?
 
     this.handleMiitAccept = this.handleMiitAccept.bind(this);
   }
-
+  
   handleMiitAccept(e) {
     // function takes username and roomId
     miit.acceptInvite(this.props.currentUser, this.props.roomId)
   }
 
   render() {
+
     const msgDate = new Date(this.props.createdAt);
     const prevMsgDate = new Date(this.props.prevMsg);
     const type = this.props.type;
@@ -43,6 +45,11 @@ class Message extends React.Component {
                 <div>
                   <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
                   <span className='myMessageBody' id="MessageBody">You sent an invite</span>
+                </div>
+              ) : type === 'reddit' ? (
+                <div>
+                  <span className='myMessageTime'>{ timely(this.props.createdAt) }</span>
+                  <span className='myMessageBody' id="MessageBody"><img src={this.props.text}/></span>
                 </div>
               ) : (
                 <div>
@@ -71,6 +78,8 @@ class Message extends React.Component {
                   </span>
                   <span className='theirMessageTime'>{ timely(this.props.createdAt) }</span>
                 </div>
+              ) : type === 'reddit' ? (
+                <RedditMessage text={this.props.text} createdAt={this.props.createdAt} />
               ) : (
                 <div>
                   <span className='theirMessageBody' id="MessageBody" dangerouslySetInnerHTML={{__html: urlify(this.props.text)}}></span>

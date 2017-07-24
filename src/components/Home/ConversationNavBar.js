@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom'
 import FaArrowLeft from 'react-icons/lib/fa/arrow-left';
+import FaBars from 'react-icons/lib/fa/bars';
 import dropdown from './../../utils/dropdown';
 import {objSwap} from './../../utils/objFunctions';
 import './ConversationNavBar.css'
@@ -35,7 +36,7 @@ class ConversationNavBar extends Component {
         </div>
 
         <div className="dropdown">
-          <p>menu</p>
+          <FaBars />
           <div className="dropdownMenu">
             <ul>
               <li id="initCall">Call {this.props.room}</li>
