@@ -3,34 +3,61 @@ import React, {Component} from 'react';
 import './Description.css';
 
 export const Description = () => {
-  // componentDidMount() {
-  //   var _this = this;
-  //   window.onload = function(){
-  //     setTimeout(function(){
-  //       const t = performance.timing;
-  //       const domComplete = t.domComplete - t.responseEnd;
-  //       const navigationStart = t.loadEventEnd - t.navigationStart;
-  //       _this.setState({
-  //         domLoadTime: domComplete,
-  //         navigationStart: navigationStart
-  //       })
-  //     }, 0)
-  //   };
-  // }
-
   return (
     <div className="description">
       <div className="welcome">
         <div className="welcomeWrapper">
-          <h1 className="title1">Performance and functionality in the browser</h1>
-          <p className="title2">Resize the window or open this page on a smartphone.</p>
+          <h1 className="head">bestChat</h1>
+          <h2 className="title1">Performance and functionality in the browser</h2>
         </div>
         <div className="readMore">
-          Read More...
+          Scroll for more...
         </div>
+        <a href="https://github.com/samcorin/bestchat" className="repo">samcorin/bestchat</a> 
       </div>
-      <div id="Features">
-        test
+      <div className="Features">
+        <p className="featuresText">Building web apps generally means forfeiting some features, most notably a rich UI/UX. Yet, it is possible to develop something that closely resembles a native application. This can be accomplished by proper planning, the right choice of tooling, libraries and frameworks.</p>
+        <p className="featuresText">bestChat is an attempt to replicate a feature rich native application, while at the same time remain performant across a range of mobile devices.</p>
+        
+        <p className="title4">Features</p>
+        <ul className="featureList">
+          <li> - Mobile first</li>
+          <li> - Lightweight</li>
+          <li> - Superfast. Interactive in less than 2 seconds</li>
+          <li> - Evergreen (self-updating)</li>
+          <li> - Real-time, bidirectional, event-based communication with Firebase</li>
+          <li> - Miit: convenient venue recommendation for you and your friends</li>
+          <li> - WebRTC enabled video and audio calls</li>
+          <li> - A chatbot with the worlds lowest IQ</li>
+          <li> - Compatible and performant across all browsers, desktop and mobile.</li>
+          <li> - Login-less. No passwords to remember. Each instance is tied to your device. <em>*experimental*</em></li>
+          <li> - ~90kb bundle size</li>
+        </ul>
+        
+        <br/>
+        
+        <p className="title4">Calls</p>
+        <p className="featuresText">Video and audio calls are possible across a range of Android phones and all browsers with the use of WebRTC. Just waiting on mobile Safari to adopt the standard. That's coming with iOS11.</p>
+
+        <p className="title4">Miit</p>
+        <p className="featuresText">The idea for this is simple: convenient and cool venue recommendations for everyone in your group. This module leverages the power of Google Maps API.</p>
+        <p className="featuresText">To improve the initial load, bestChat lazy loads Google Maps.</p>
+
+        <p className="title4">Games</p>
+        <p className="featuresText">The potential here is almost limitless. You could add almost any web game that exists, even multiplayer.</p>
+        
+        <p className="title4">Easter eggs</p>
+        <p className="featuresText">There are several easter eggs hidden throughout the app, from the obvious to the near impossible to find.</p>
+        
+        <br/>
+        
+        {/* <div className="journey">
+          <p className="title4">The Journey: Part I</p>
+          <p className="featuresText">This project began as a way to practice using Socket.io. But it quickly grew into a playground to test out some of the latest tech and tools in web development.</p> 
+          <p className="featuresText">Firebase was only used to store user and message data. So a separate layer for WebSockets was used for communication. There are times that writing code is hard and you end up wasting a lot of time. For the communication part of this project it went like this: <a href="https://socket.io" className="strikethrough">socket.io</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" className="strikethrough">WebSockets</a> then Firebase.</p>
+          <p className="featuresText">Changes to the database are pushed to the client so there is no need for the user to reload or refresh the app, only receiving little messages instead of downloading big chunks of data. Events like new messages and changes in user connection status all happen in real-time.</p>
+        </div> */}
+      
       </div>
     </div>
   )
