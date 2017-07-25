@@ -130,6 +130,14 @@ a:visited {
   padding-bottom: 30px;
 }
 
+.appHeader {
+  display: flex;
+  align-items: baseline;
+}
+
+.headVer {
+  margin-left: 6px;
+}
 /* ----------------------------- OLD STYLES ------------------------------  */
 /* .dText {
   box-sizing: border-box;

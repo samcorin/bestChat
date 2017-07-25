@@ -7,7 +7,10 @@ export const Description = () => {
     <div className="description">
       <div className="welcome">
         <div className="welcomeWrapper">
-          <h1 className="head">bestChat</h1>
+          <div className="appHeader">
+            <h1 className="head">bestChat</h1>
+            <p className="headVer">v0.5</p>
+          </div>
           <h2 className="title1">Performance and functionality in the browser</h2>
         </div>
         <div className="readMore">
