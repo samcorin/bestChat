@@ -1,0 +1,62 @@
+/* #canvas {
+  position: absolute;
+} */
+
+.WebRTC {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+   /* width: 100%;
+  height: 100%;   */
+}
+
+#localVideo {
+  width: 250px;
+}
+
+#remoteVideo {
+  width: 250px;
+}
+
+#videoCapture {
+  width: inherit;
+  height: 194px;
+}
+
+#takeSnapshot {
+  width: inherit;
+  height: 194px;
+}
+
+.canvasWrapper {
+  width: inherit;
+}
+
+#canvasOverlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 194px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.6rem;
+  color: gray;
+  pointer-events: none;
+}
+
+.hidden {
+  display: none;
+}
+
+/* @media (min-width: 600px) {
+  #videoCapture {
+    width: inherit;
+    height: 50%;
+  }
+
+  #takeSnapshot {
+    width: inherit;
+    height: 50%;
+  } 
+} */

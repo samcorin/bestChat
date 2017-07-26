@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { NavLink } from 'react-router-dom';
-import './BottomNav.css';
+import './style.css';
+
 // Icons
 import FaHome from 'react-icons/lib/fa/home';
 import FaCalls from 'react-icons/lib/fa/phone';
