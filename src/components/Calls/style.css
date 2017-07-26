@@ -2,12 +2,15 @@
   position: absolute;
 } */
 
+.WebRTCwrapper {
+  height: calc(100% - 40px);
+}
+
 .WebRTC {
   margin-top: 40px;
   display: flex;
   flex-direction: column;
-   /* width: 100%;
-  height: 100%;   */
+  height: calc(100% - 40px);
 }
 
 #localVideo {
@@ -19,44 +22,53 @@
 }
 
 #videoCapture {
-  width: inherit;
-  height: 194px;
+  width: 100%;
+  height: 51%;
 }
 
 #takeSnapshot {
   width: inherit;
-  height: 194px;
+  height: 100%;
 }
 
 .canvasWrapper {
-  width: inherit;
+  width: 100%;
+  height: 50%;
 }
 
 #canvasOverlay {
   position: absolute;
   z-index: 10;
   width: 100%;
-  height: 194px;
+  height: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.6rem;
+  font-size: 2.2rem;
   color: gray;
   pointer-events: none;
+  user-select: none;
 }
 
 .hidden {
-  display: none;
+  visibility: hidden;
 }
 
-/* @media (min-width: 600px) {
-  #videoCapture {
-    width: inherit;
-    height: 50%;
+@media (max-width: 600px) {
+  .WebRTCwrapper {
+    height: calc(100% - 50px);
   }
 
-  #takeSnapshot {
+  .WebRTC {
+    height: calc(100% - 40px);
+  }
+  /* #videoCapture {
     width: inherit;
     height: 50%;
-  } 
-} */
+  } */
+
+  /* #takeSnapshot {
+    width: inherit;
+    height: 50%;
+  }  */
+ }

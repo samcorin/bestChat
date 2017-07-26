@@ -16,7 +16,6 @@ export const Description = () => {
         <div className="readMore">
           Scroll for more...
         </div>
-        <a href="https://github.com/samcorin/bestchat" className="repo">samcorin/bestchat</a> 
       </div>
       <div className="Features">
         <p className="featuresText">Building web apps generally means forfeiting some features, most notably a rich UI/UX. Yet, it is possible to develop something that closely resembles a native application. This can be accomplished by proper planning, the right choice of tooling, libraries and frameworks.</p>
