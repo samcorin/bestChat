@@ -6,11 +6,11 @@ import {bot} from './../../utils/bot';
 import ConversationNavBar from './ConversationNavBar';
 import MessagesView from './MessagesView';
 import ChatInput from './ChatInput';
-// import SendMessage from './Modules/SendMessage';
 import SendMessage from './../../utils/SendMessage';
 import NewRoomMessage from './Modules/NewRoomMessage';
 import {usersRef, conversationsRef} from './../../firebase/index';
 import miit from './../Miit'
+import { peerConnection } from './../../utils/WebRTC/peerConnection';
 import './Conversation.css';
 
 // render()
@@ -32,11 +32,13 @@ class Conversation extends React.Component{
     this.setRedirect = this.setRedirect.bind(this);
     this.startMiit = this.startMiit.bind(this);
     this.getRoomId = this.getRoomId.bind(this);
+    this.initCall = this.initCall.bind(this);
   }
 
   componentDidMount() {
     const roomId = this.getRoomId();
     miit.listen(roomId, this.props.currentUser, this.setRedirect);
+    peerConnection.listen(roomId);
     this.setState({
       roomId: roomId
     });
@@ -45,6 +47,11 @@ class Conversation extends React.Component{
   startMiit() {
     const roomId = this.getRoomId();
     miit.start(roomId, this.props.currentUser, this.props.match.params.room, this.props.dispatch);
+  }
+
+  initCall() {
+    const roomId = this.getRoomId();
+    peerConnection.init(roomId);
   }
 
   setRedirect() {
@@ -115,7 +122,8 @@ class Conversation extends React.Component{
           online={this.roomOnline()} 
           room={this.state.roomName} 
           setRedirect={this.setRedirect} 
-          startMiit={this.startMiit}/>
+          startMiit={this.startMiit}
+          initCall={this.initCall}/>
         <MessagesView room={this.state.roomName} currentUser={this.props.currentUser}/>
         <ChatInput onSend={this.sendHandler}/>
       </div>

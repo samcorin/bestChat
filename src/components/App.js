@@ -3,6 +3,7 @@ import {connect} from 'react-redux'
 import Home from './Home/Home';
 import Conversation from './Home/Conversation';
 import Calls from './Calls';
+import PreCall from './Calls/PreCall';
 import Miit from './Miit/Miit';
 import BottomNav from './BottomNav';
 import Settings from './Settings';
@@ -25,7 +26,8 @@ class App extends Component {
     super(props);
     this.state = {
       width: window.innerWidth,
-      currentUser: ''
+      currentUser: '',
+      call: true
     //   Miit: null,
     //   HomeEasterEggs: null,
     //   Calls: null,
@@ -83,7 +85,7 @@ class App extends Component {
                      alt="iPhone6s"
                      className="iphoneImg" />}
               {!isMobile && <HomeEasterEggs />}
-              
+              {this.state.call ? <PreCall /> :
               <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/calls" component={Calls}/>
@@ -94,7 +96,7 @@ class App extends Component {
                   <Conversation {...params} />
                 )}/>
                 <Route component={Home}/>
-              </Switch>
+              </Switch>}
             </div>
           </Router>
         </div>

@@ -62,13 +62,71 @@
   .WebRTC {
     height: calc(100% - 40px);
   }
-  /* #videoCapture {
-    width: inherit;
-    height: 50%;
-  } */
-
-  /* #takeSnapshot {
-    width: inherit;
-    height: 50%;
-  }  */
  }
+
+ /* Pre-Call  */
+.preCallWrapper {
+  position: relative;
+  justify-content: space-around;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.callerInfo {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  font-weight: 200;
+}
+
+.callerName {
+  font-size: 2.1rem;
+}
+
+.isCalling {
+  font-size: 1rem;
+  color: #b3b3b3;
+}
+
+.callResponseWrapper {
+  margin: 0 auto;
+  color: #fff;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 140px;
+  bottom: 0;
+}
+
+.responseButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  font-size: 30px;
+}
+
+.responseButtonText {
+  color: black;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 4px auto;
+}
+
+.callAccept {
+  background-color: green;
+}
+
+.callDecline {
+  background-color: red;
+}
