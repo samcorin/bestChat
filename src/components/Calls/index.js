@@ -6,10 +6,26 @@ import { peerConnection } from './../../utils/WebRTC/peerConnection';
 import './style.css';
 
 class Calls extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      redirect: false
+    }
+    
+    this.setRedirect = this.setRedirect.bind(this);
+  }
 
   componentDidMount() {
-    // screenTest();
-    peerConnection();
+    screenTest();
+    // peerConnection();
+    // peerConnection.listen(roomId);
+  }
+
+  setRedirect() {
+    console.log("Redirect")
+    this.setState({
+      redirect: true
+    })
   }
 
   render() {

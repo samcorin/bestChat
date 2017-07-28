@@ -1,24 +1,15 @@
 import React, { Component } from 'react';
-// import BottomNav from './../BottomNav';
-// import CallsNavBar from './CallsNavBar';
-// import { screenTest } from './../../utils/WebRTC/screenTest';
-// import { peerConnection } from './../../utils/WebRTC/peerConnection';
 import FaPhone from 'react-icons/lib/fa/phone';
-
+import {AvatarCalling} from './../Home/Modules/Avatars';
 import './style.css';
 
-class PreCall extends Component {
-
-  componentDidMount() {
-    // screenTest();
-    // peerConnection();
-  }
-
+class PreCall extends Component {s
   render() {
     return (
       <div className="preCallWrapper">
         <div className="callerInfo">
           <div className="callerInfo">
+            <AvatarCalling />
             <span className="callerName">username</span>
             <span className="isCalling">is calling</span>
           </div>

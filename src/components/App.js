@@ -27,7 +27,7 @@ class App extends Component {
     this.state = {
       width: window.innerWidth,
       currentUser: '',
-      call: true
+      call: false
     //   Miit: null,
     //   HomeEasterEggs: null,
     //   Calls: null,
@@ -39,7 +39,6 @@ class App extends Component {
 
   
   // Code Splitting:
-  
   // async componentDidMount() {
   //   const { default: Miit } = await import('./Miit/Miit');
   //   const { default: HomeEasterEggs } = await import('./../utils/EasterEggs/HomeEasterEggs');
