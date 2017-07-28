@@ -26,38 +26,36 @@ class Home extends Component {
     });
   };
 
-  // if you want to replace material tabs, do it here.
-  // Could use dragendjs?
   render() {
     return (
-        <div className="homeView">
-          <ul id="nav-tab" className="nav">
-            <li id="tab-content1" className="active">
-              <p className="aLink active">Messages</p>
-            </li>
-            <li id="tab-content2">
-              <p className="aLink">
-                {this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
-              </p>
-            </li>
-            <li id="tab-content3">
-              <p className="aLink">Groups</p>
-            </li>
-          </ul>
+      <div className="homeView">
+        <ul id="nav-tab" className="nav">
+          <li id="tab-content1" className="active">
+            <p className="aLink active">Messages</p>
+          </li>
+          <li id="tab-content2">
+            <p className="aLink">
+              {this.props.activeUsers.length > 0 ? `Active (${(this.props.activeUsers.length)})` : 'Active'}
+            </p>
+          </li>
+          <li id="tab-content3">
+            <p className="aLink">Groups</p>
+          </li>
+        </ul>
 
-          <div className="tab-content">
-            <div className="tab-pane active" id="content1">
-              <ConversationsPreview slideIndex={this.state.slideIndex} />
-            </div>
-            <div className="tab-pane" id="content2">
-              <ActiveUsers slideIndex={this.state.slideIndex} />
-            </div>
-            <div className="tab-pane" id="content3">
-              <Groups />
-            </div>
+        <div className="tab-content">
+          <div className="tab-pane active" id="content1">
+            <ConversationsPreview slideIndex={this.state.slideIndex} />
           </div>
-          <BottomNav />
+          <div className="tab-pane" id="content2">
+            <ActiveUsers slideIndex={this.state.slideIndex} />
+          </div>
+          <div className="tab-pane" id="content3">
+            <Groups />
+          </div>
         </div>
+        <BottomNav />
+      </div>
     );
   }
 }

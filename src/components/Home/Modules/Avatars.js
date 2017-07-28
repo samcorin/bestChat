@@ -43,3 +43,12 @@ export const AvatarOnlinePreview = ({user}) => {
     </Link>
   );
 }
+
+export const AvatarCalling = ({user}) => {
+  return (
+    <div className="previewAvatarWrapper">
+      <img alt={user} src={`https://api.adorable.io/avatars/60/${user}@adorable.io.png`} className="callAvatar" rel='prefetch'/>
+      <div className="online callOnline"></div>
+    </div>
+  );
+}

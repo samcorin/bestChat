@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux'
 import Home from './Home/Home';
 import Conversation from './Home/Conversation';
-import Calls from './Calls/Calls';
+import Calls from './Calls';
+import PreCall from './Calls/PreCall';
 import Miit from './Miit/Miit';
+import BottomNav from './BottomNav';
 import Settings from './Settings';
 import Games from './Games/Games';
 import HomeEasterEggs from './../utils/EasterEggs/HomeEasterEggs';
@@ -24,7 +26,8 @@ class App extends Component {
     super(props);
     this.state = {
       width: window.innerWidth,
-      currentUser: ''
+      currentUser: '',
+      call: false
     //   Miit: null,
     //   HomeEasterEggs: null,
     //   Calls: null,
@@ -34,6 +37,8 @@ class App extends Component {
     this.handleWindowSizeChange = this.handleWindowSizeChange.bind(this);
   }
 
+  
+  // Code Splitting:
   // async componentDidMount() {
   //   const { default: Miit } = await import('./Miit/Miit');
   //   const { default: HomeEasterEggs } = await import('./../utils/EasterEggs/HomeEasterEggs');
@@ -79,7 +84,7 @@ class App extends Component {
                      alt="iPhone6s"
                      className="iphoneImg" />}
               {!isMobile && <HomeEasterEggs />}
-              
+              {this.state.call ? <PreCall /> :
               <Switch>
                 <Route exact path="/" component={Home}/>
                 <Route exact path="/calls" component={Calls}/>
@@ -89,10 +94,8 @@ class App extends Component {
                 <Route path="/:room" render={(params) => (
                   <Conversation {...params} />
                 )}/>
-
                 <Route component={Home}/>
-              </Switch>
-
+              </Switch>}
             </div>
           </Router>
         </div>

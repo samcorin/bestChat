@@ -1,4 +1,4 @@
-import {usersRef, conversationsRef, database} from './firebase/index';
+import firebase, {usersRef, conversationsRef, database} from './firebase/index';
 import {startFetchMessages, addCurrentUser, updateUserList, updateUserTable, addMessageToStore} from './actions/index';
 import nameGen from './utils/nameGen'
 import {objKeysToArray, objToArray} from './utils/objFunctions';
@@ -14,6 +14,18 @@ let currentUser = '';
 // let usernameID = '';
 
 const getConversations = (user, store) => {
+  
+  // Use ID
+  const userKey = usersRef.push().key;
+
+  
+  // conversationsRef.child(newPostKey).push(message);
+  
+  usersRef.child(userKey).update({username: 'billy'})
+  console.log('REF: ', userKey)
+
+  // ----------------------------------------------------------- TEST
+
   usersRef.child(user + "/conversations").once('value', snapshot => {
 
     // Check if DB is not empty. If it is, it deletes the user

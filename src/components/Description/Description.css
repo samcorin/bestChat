@@ -98,7 +98,7 @@ a:visited {
 }
 
 .Features {
-  padding: 30px !important;
+  padding: 30px 30px 30px 0 !important;
   box-sizing: border-box;
   width: 100%;
   font-weight: 100;

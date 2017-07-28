@@ -13,12 +13,12 @@ class ConversationNavBar extends Component {
   componentDidMount() {
     dropdown.init();
 
-    // const call = document.getElementById('initCall');
+    const callDiv = document.getElementById('initCall');
     const miitDiv = document.getElementById('startMiit');
 
     // Event listeners for Calls
-    // call.addEventListener('touchstart', startCall);
-    // call.addEventListener('click', startCall);
+    callDiv.addEventListener('touchstart', this.props.initCall);
+    callDiv.addEventListener('click', this.props.initCall);
 
     // Event listeners for Miit
     // - tried doing onMouseDown on the list element, didn't work

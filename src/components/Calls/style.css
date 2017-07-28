@@ -1,0 +1,142 @@
+/* #canvas {
+  position: absolute;
+} */
+
+.WebRTCwrapper {
+  height: calc(100% - 40px);
+}
+
+.WebRTC {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 40px);
+}
+
+#localVideo {
+  width: 250px;
+}
+
+#remoteVideo {
+  width: 250px;
+}
+
+#videoCapture {
+  width: 100%;
+  height: 51%;
+}
+
+#takeSnapshot {
+  width: inherit;
+  height: 100%;
+}
+
+.canvasWrapper {
+  width: 100%;
+  height: 50%;
+}
+
+#canvasOverlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: gray;
+  pointer-events: none;
+  user-select: none;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+@media (max-width: 600px) {
+  .WebRTCwrapper {
+    height: calc(100% - 50px);
+  }
+
+  .WebRTC {
+    height: calc(100% - 40px);
+  }
+ }
+
+ /* Pre-Call  */
+.preCallWrapper {
+  position: relative;
+  justify-content: space-around;
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+.callerInfo {
+  width: 100%;
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.1rem;
+  font-weight: 200;
+}
+
+@media (max-width: 600px) {
+  .callerInfo {
+    height: 50%;
+  }
+}
+
+.callerName {
+  font-size: 2.1rem;
+}
+
+.isCalling {
+  font-size: 1rem;
+  color: #b3b3b3;
+}
+
+.callResponseWrapper {
+  margin: 0 auto;
+  color: #fff;
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  height: 140px;
+  bottom: 0;
+}
+
+.responseButton {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+  font-size: 30px;
+}
+
+.responseButtonText {
+  color: black;
+  font-size: 0.8rem;
+  text-align: center;
+  margin: 4px auto;
+}
+
+.callAccept {
+  background-color: #4DCC22;
+}
+
+.callDecline {
+  background-color: #F03C25;
+  
+  transform: rotate(135deg);
+  -ms-transform: rotate(135deg);
+  -webkit-transform:rotate(135deg);
+}

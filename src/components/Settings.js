@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux'
-import BottomNav from './BottomNav';
+import BottomNav from './../components/BottomNav';
 import './App.css';
 
 class Settings extends React.Component {
