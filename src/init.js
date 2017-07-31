@@ -15,14 +15,14 @@ let currentUser = '';
 
 const getConversations = (user, store) => {
   
-  // Use ID
-  const userKey = usersRef.push().key;
+  // // Use ID
+  // const userKey = usersRef.push().key;
 
   
-  // conversationsRef.child(newPostKey).push(message);
+  // // conversationsRef.child(newPostKey).push(message);
   
-  usersRef.child(userKey).update({username: 'billy'})
-  console.log('REF: ', userKey)
+  // usersRef.child(userKey).update({username: 'billy'})
+  // console.log('REF: ', userKey)
 
   // ----------------------------------------------------------- TEST
 
