@@ -1,6 +1,11 @@
 # bestChat
-Fast and full featured chat application in the browser.
 
+<p align="center">
+ <img src="https://github.com/samcorin/bestChat/blob/0c693c5fb6a30e26fccdf454e092bf20cfafee1c/screenshot.png" width="800">
+</p>
+
+
+_*Made this back in 2017 to learn React._
 
 ### Progress:
 
